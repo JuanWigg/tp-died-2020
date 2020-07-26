@@ -14,18 +14,13 @@ import java.util.function.Predicate;
  */
 public class CamionDAOImplSQL implements CamionDAO{
 
-	public Camion buscarCamion(List<Predicate> criterios) {
-		// TODO
-		return null;
-	}
 
 	public Optional<Camion> consultarCamion(List<Predicate> criterios) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void altaCamion(String patente, Modelo modelo, LocalDate fechaCompra, double costoPorHora,
-			double costoPorKilometro) {
+	public void altaCamion(Camion camion) {
 		// TODO Auto-generated method stub
 		
 	}

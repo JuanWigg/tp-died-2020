@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 public interface CamionDAO {
 	
 	public Optional<Camion> consultarCamion(List<Predicate> criterios);
-	public void altaCamion(String patente, Modelo modelo, LocalDate fechaCompra, double costoPorHora, double costoPorKilometro);
+	public void altaCamion(Camion camion);
 	public void bajaCamion(Camion camion);
 	
 }
