@@ -6,7 +6,7 @@ public interface PlantaDAO {
 
 	
 	public void AltaPlanta(Planta p);
-	public void BajaPlanta(String nombrePlanta);
+	public void BajaPlanta(Planta p);
 	public Optional<Planta> consultarPlanta(String nombrePlanta);
 	
 	

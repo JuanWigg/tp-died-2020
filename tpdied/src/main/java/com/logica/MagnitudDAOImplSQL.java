@@ -1,20 +1,27 @@
+/** 
+ * 
+ */
 package com.logica;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Optional;
 
-public class PlantaDAOImplSQL implements PlantaDAO{
+/**
+ * @author juanwigg
+ *
+ */
+public class MagnitudDAOImplSQL implements MagnitudDAO {
 
-	public void AltaPlanta(Planta p) {
+	public void altaMagnitud(Magnitud m) {
+		// TODO Auto-generated method stub
 		Connection conn = null;
 		try {
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
 			Statement stmt = conn.createStatement();
-			stmt.execute("INSERT INTO tpdied.planta VALUES (\"" + p.getNombre() + " \");");
+			stmt.execute("INSERT INTO tpdied.magnitud (valor, unidad) VALUES (" + m.getValue() + ", \"" + m.getUnidad().getNombre() + "\");");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -22,25 +29,22 @@ public class PlantaDAOImplSQL implements PlantaDAO{
 		}
 	}
 
-	public void BajaPlanta(Planta p) {
+	public void modificarMagnitud(Magnitud viejaMag, Magnitud nuevaMag) {
+		// TODO Auto-generated method stub
 		Connection conn = null;
 		try {
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
 			Statement stmt = conn.createStatement();
-			stmt.execute("DELETE FROM tpdied.planta WHERE nombre=" + p.getNombre() + ";");
+			stmt.execute("UPDATE tpdied.magnitud "
+					+ "SET valor=" + nuevaMag.getValue() + 
+					", unidad=" + nuevaMag.getUnidad().getNombre() + 
+					" WHERE id=" + viejaMag.getId() + ";");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}		
+		}
 	}
-
-	public Optional<Planta> consultarPlanta(String nombrePlanta) {
-		//Metodo consulta
-		return null;
-	}
-
 	
-
 }

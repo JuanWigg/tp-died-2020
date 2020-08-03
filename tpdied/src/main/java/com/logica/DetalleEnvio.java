@@ -1,6 +1,7 @@
 package com.logica;
 
 public class DetalleEnvio {
+	private int id_envio;
 	private double costo;
 	private Camion camion;
 	private Ruta ruta;
@@ -22,6 +23,10 @@ public class DetalleEnvio {
 	
 	public double getCosto() {
 		return this.costo;
+	}
+	
+	public int getId() {
+		return this.id_envio;
 	}
 }
 
