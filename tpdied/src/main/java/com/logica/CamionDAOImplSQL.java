@@ -24,13 +24,18 @@ public class CamionDAOImplSQL implements CamionDAO{
 	public List<Camion> consultarCamion(Camion c) {
 		int cont = 0;
 		Connection conn = null;
+		if(c.getFechaCompra()!=null) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-dd-MM");
 		LocalDate fecha = LocalDate.parse(c.getFechaCompra().toString(), formatter);
+		}
 		
 		try{
 		Class.forName("org.postgresql.Driver");
 		conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
-		PreparedStatement pstm = conn.prepareStatement("SELECT * FROM tpdied.camion ");
+
+		
+		
+		
 		
 		} catch(ClassNotFoundException e) {
 			

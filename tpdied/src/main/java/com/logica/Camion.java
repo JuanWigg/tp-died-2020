@@ -4,9 +4,9 @@ import java.time.LocalDate;
 
 public class Camion {
 	private String patente;
-	private int kilometrosRecorridos;
-	private double costoPorKilometro;
-	private double costoPorHora;
+	private Integer kilometrosRecorridos;
+	private Double costoPorKilometro;
+	private Double costoPorHora;
 	private LocalDate fechaCompra;
 	private Modelo modelo;
 	
@@ -49,11 +49,15 @@ public class Camion {
 		this.modelo = new Modelo(modelo, marca);
 	}
 	
-	public double getCostoPorKilometro() {
+	public Camion() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Double getCostoPorKilometro() {
 		return this.costoPorKilometro;
 	}
 	
-	public double getCostoPorHora() {
+	public Double getCostoPorHora() {
 		return this.costoPorHora;
 	}
 	
@@ -61,7 +65,7 @@ public class Camion {
 		this.kilometrosRecorridos += km;
 	}
 
-	public int getKilometrosRecorridos() {
+	public Integer getKilometrosRecorridos() {
 		return kilometrosRecorridos;
 	}
 
