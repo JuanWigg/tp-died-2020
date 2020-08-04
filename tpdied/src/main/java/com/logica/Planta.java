@@ -10,16 +10,24 @@ public class Planta  {
 	public String nombre;
 	private List stocks;
 	
-	public Planta(String nombre) {
-		this.nombre = nombre;
-	}
+	
 	public Planta() {
 		super();
 		this.nombre=null;
 	}
+	public Planta(String nombreP) {
+		super();
+		this.nombre=nombreP;
+	}
+	
 	public String getNombre() {
 		return this.nombre;
 	}
+	
+	public void setNombre(String nombreP) {
+		this.nombre=nombreP;
+	}
+	
 	public List getStocks() {
 		return this.stocks;
 	}

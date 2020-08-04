@@ -5,13 +5,15 @@ import java.time.LocalTime;
  Cambiar tipo de dato de pesoMaximo
   */
 public class Tramo {
+	private Integer idTramo;
 	private Planta plantaOrigen;
 	private Planta plantaDestino;
 	private Integer distancia;
 	private Double duracionEstimada;
 	private Integer pesoMaximoPermitido; 
-	
+	private String unidadPesoMax;
 	public Tramo() {
+		idTramo=null;
 		plantaOrigen= new Planta();
 		plantaDestino= new Planta();
 		distancia=0;
@@ -19,16 +21,26 @@ public class Tramo {
 		pesoMaximoPermitido=0;
 	}
 
-	public Tramo(Planta plantaOrigen, Planta plantaDestino, Integer distancia, Double duracionEstimada,
-			Integer pesoMaximoPermitido) {
+	public Tramo(Integer idT,Planta plantaOrigen, Planta plantaDestino, Integer distancia, Double duracionEstimada,
+			Integer pesoMaximoPermitido,String unidad) {
 		super();
+		this.idTramo=idT;
 		this.plantaOrigen = plantaOrigen;
 		this.plantaDestino = plantaDestino;
 		this.distancia = distancia;
 		this.duracionEstimada = duracionEstimada;
 		this.pesoMaximoPermitido = pesoMaximoPermitido;
+		this.unidadPesoMax=unidad;
+	}
+	
+	public Integer getIdTramo() {
+		return idTramo;
 	}
 
+	public void setIdTramo(Integer id) {
+		this.idTramo = id;
+	}
+	
 	public Planta getPlantaOrigen() {
 		return plantaOrigen;
 	}
@@ -68,6 +80,15 @@ public class Tramo {
 	public void setPesoMaximoPermitido(Integer pesoMaximoPermitido) {
 		this.pesoMaximoPermitido = pesoMaximoPermitido;
 	}
+	
+	public String getUnidad() {
+		return unidadPesoMax;
+	}
+
+	public void setUnidad(String unidad) {
+		this.unidadPesoMax = unidad;
+	}
+	
 	
 	@Override
 	public String toString() {
