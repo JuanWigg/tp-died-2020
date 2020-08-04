@@ -9,7 +9,7 @@ public class DetalleEnvio {
 	public DetalleEnvio(Camion camion, Ruta ruta) {
 		this.camion = camion;
 		this.ruta = ruta;
-		costo = (ruta.getDistanciaTotal()*camion.getCostoPorKilometro()) + ruta.getDuracionTotal()*camion.getCostoPorHora();
+		//costo = (ruta.getDistanciaTotal()*camion.getCostoPorKilometro()) + ruta.getDuracionTotal()*camion.getCostoPorHora();
 	}
 	
 	

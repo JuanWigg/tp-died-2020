@@ -24,22 +24,27 @@ public class ModeloDAOImplSQL implements ModeloDAO {
 		Connection conn = null;
 		try {
 			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection("tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
+			conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
 			Statement stmt = conn.createStatement();
-			stmt.execute("INSERT INTO tpdied.modelo VALUES (\"" + m.getNombre() + " \", \"" + m.getMarca().getNombre() + "\");");
+			stmt.execute("INSERT INTO tpdied.modelo(nombre, marca) VALUES ('" + m.getNombre() + "', '" + m.getMarca().getNombre() + "');");
+			stmt.close();
+			conn.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+	
 	public void bajaModelo(Modelo m) {
 		Connection conn = null;
 		try {
 			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection("tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
+			conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
 			Statement stmt = conn.createStatement();
 			stmt.execute("DELETE FROM tpdied.modelo WHERE nombre=" + m.getNombre() + " AND marca=" + m.getMarca().getNombre() + ";");
+			stmt.close();
+			conn.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

@@ -20,8 +20,8 @@ public class DetalleEnvioDAOImplSQL implements DetalleEnvioDAO{
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
 			Statement stmt = conn.createStatement();
-			stmt.execute("INSERT INTO tpdied.detalle_envio (id_ruta, costo, patente_camion) VALUES ( " + 
-			de.getRuta().getId() + ", " + de.getCosto() + ",\"" + de.getCamion().getPatente() + "\");");
+			//stmt.execute("INSERT INTO tpdied.detalle_envio (id_ruta, costo, patente_camion) VALUES ( " + 
+			//de.getRuta().getId() + ", " + de.getCosto() + ",\"" + de.getCamion().getPatente() + "\");");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

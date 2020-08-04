@@ -14,7 +14,9 @@ public class PlantaDAOImplSQL implements PlantaDAO{
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
 			Statement stmt = conn.createStatement();
-			stmt.execute("INSERT INTO tpdied.planta VALUES (\"" + p.getNombre() + " \");");
+			stmt.execute("INSERT INTO tpdied.planta VALUES ('" + p.getNombre() + "');");
+			stmt.close();
+			conn.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -28,7 +30,7 @@ public class PlantaDAOImplSQL implements PlantaDAO{
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
 			Statement stmt = conn.createStatement();
-			stmt.execute("DELETE FROM tpdied.planta WHERE nombre=" + p.getNombre() + ";");
+			stmt.execute("DELETE FROM tpdied.planta WHERE nombre='" + p.getNombre() + "';");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

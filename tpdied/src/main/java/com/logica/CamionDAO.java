@@ -13,7 +13,7 @@ import java.util.function.Predicate;
  */
 public interface CamionDAO {
 	
-	public Optional<Camion> consultarCamion(List<Predicate<Camion>> criterios);
+	public List<Camion> consultarCamion(Camion c);
 	public void altaCamion(Camion camion);
 	public void bajaCamion(Camion camion);
 	

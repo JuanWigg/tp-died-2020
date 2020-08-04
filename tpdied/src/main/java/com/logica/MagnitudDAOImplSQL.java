@@ -21,7 +21,7 @@ public class MagnitudDAOImplSQL implements MagnitudDAO {
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
 			Statement stmt = conn.createStatement();
-			stmt.execute("INSERT INTO tpdied.magnitud (valor, unidad) VALUES (" + m.getValue() + ", \"" + m.getUnidad().getNombre() + "\");");
+			stmt.execute("INSERT INTO tpdied.magnitud (valor, unidad) VALUES (" + m.getValue() + ", '" + m.getUnidad().getNombre() + "');");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -38,8 +38,8 @@ public class MagnitudDAOImplSQL implements MagnitudDAO {
 			Statement stmt = conn.createStatement();
 			stmt.execute("UPDATE tpdied.magnitud "
 					+ "SET valor=" + nuevaMag.getValue() + 
-					", unidad=" + nuevaMag.getUnidad().getNombre() + 
-					" WHERE id=" + viejaMag.getId() + ";");
+					", unidad='" + nuevaMag.getUnidad().getNombre() + 
+					"' WHERE id=" + viejaMag.getId() + ";");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
