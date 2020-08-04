@@ -12,7 +12,7 @@ public class PlantaDAOImplSQL implements PlantaDAO{
 		Connection conn = null;
 		try {
 			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection("tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
+			conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
 			Statement stmt = conn.createStatement();
 			stmt.execute("INSERT INTO tpdied.planta VALUES ('" + p.getNombre() + "');");
 			stmt.close();
@@ -28,7 +28,7 @@ public class PlantaDAOImplSQL implements PlantaDAO{
 		Connection conn = null;
 		try {
 			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection("tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
+			conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
 			Statement stmt = conn.createStatement();
 			stmt.execute("DELETE FROM tpdied.planta WHERE nombre='" + p.getNombre() + "';");
 		} catch (ClassNotFoundException e) {
