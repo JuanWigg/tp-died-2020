@@ -8,18 +8,18 @@ public class Tramo {
 	private Planta plantaOrigen;
 	private Planta plantaDestino;
 	private Integer distancia;
-	private LocalTime duracionEstimada;
+	private Double duracionEstimada;
 	private Integer pesoMaximoPermitido; 
 	
 	public Tramo() {
 		plantaOrigen= new Planta();
 		plantaDestino= new Planta();
 		distancia=0;
-		duracionEstimada=LocalTime.MIN;
+		duracionEstimada=Double.MIN_VALUE;
 		pesoMaximoPermitido=0;
 	}
 
-	public Tramo(Planta plantaOrigen, Planta plantaDestino, Integer distancia, LocalTime duracionEstimada,
+	public Tramo(Planta plantaOrigen, Planta plantaDestino, Integer distancia, Double duracionEstimada,
 			Integer pesoMaximoPermitido) {
 		super();
 		this.plantaOrigen = plantaOrigen;
@@ -53,11 +53,11 @@ public class Tramo {
 		this.distancia = distancia;
 	}
 
-	public LocalTime getDuracionEstimada() {
+	public Double getDuracionEstimada() {
 		return duracionEstimada;
 	}
 
-	public void setDuracionEstimada(LocalTime duracionEstimada) {
+	public void setDuracionEstimada(Double duracionEstimada) {
 		this.duracionEstimada = duracionEstimada;
 	}
 

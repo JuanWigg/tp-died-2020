@@ -9,6 +9,7 @@ import java.util.List;
  * Agregar Pesos maximos
  * */
 public class Ruta {
+	private Integer id;
 	private List<Tramo> listaTramos;
 	private LocalTime duracionTotal;
 	private Integer distanciaTotal;
