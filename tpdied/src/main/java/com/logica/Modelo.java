@@ -13,4 +13,15 @@ public class Modelo {
 		this.nombre = nombre;
 		this.marca = new Marca(marca);
 	}
+	
+	
+	
+	public String getNombre() {
+		return this.nombre;
+	}
+	
+	public Marca getMarca() {
+		return this.marca;
+	}
+	
 }

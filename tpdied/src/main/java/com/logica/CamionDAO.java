@@ -3,7 +3,6 @@
  */
 package com.logica;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -14,7 +13,7 @@ import java.util.function.Predicate;
  */
 public interface CamionDAO {
 	
-	public Optional<Camion> consultarCamion(List<Predicate> criterios);
+	public List<Camion> consultarCamion(Camion c);
 	public void altaCamion(Camion camion);
 	public void bajaCamion(Camion camion);
 	

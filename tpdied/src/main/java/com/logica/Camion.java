@@ -65,6 +65,30 @@ public class Camion {
 		return kilometrosRecorridos;
 	}
 
+	public String getPatente() {
+		return patente;
+	}
+
+	public void setPatente(String patente) {
+		this.patente = patente;
+	}
+
+	public LocalDate getFechaCompra() {
+		return fechaCompra;
+	}
+
+	public void setFechaCompra(LocalDate fechaCompra) {
+		this.fechaCompra = fechaCompra;
+	}
+
+	public Modelo getModelo() {
+		return modelo;
+	}
+
+	public void setModelo(Modelo modelo) {
+		this.modelo = modelo;
+	}
+
 	public void setKilometrosRecorridos(int kilometrosRecorridos) {
 		this.kilometrosRecorridos = kilometrosRecorridos;
 	}
