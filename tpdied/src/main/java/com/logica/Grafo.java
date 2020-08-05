@@ -1,11 +1,8 @@
 package com.logica;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-/*Falta:
- *Ver si hace falta la funcion hayCamino,se usara para algo?
- **/
+
 public class Grafo {
 	private List<Tramo> tramos;
 	private List<Planta> plantas;
@@ -35,8 +32,8 @@ public class Grafo {
 		this.tramos.add(t);
 	}
 	
-	public void conectar(Planta p1,Planta p2,Integer dist,double tEstimado,Integer pesoM) {
-		Tramo t1 = new Tramo(p1,p2,dist,tEstimado,pesoM);
+	public void conectar(Planta p1,Planta p2,Integer dist,double tEstimado,Integer pesoM,Integer idT,String uPmax) {
+		Tramo t1 = new Tramo(idT,p1,p2,dist,tEstimado,pesoM,uPmax);
 		this.tramos.add(t1);
 	}
 	public void conectar(Planta p1,Planta p2,Tramo t) {
