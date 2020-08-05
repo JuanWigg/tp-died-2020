@@ -1,9 +1,6 @@
 package com.logica;
 
-import java.time.LocalTime;
-/*TO-DO
- Cambiar tipo de dato de pesoMaximo
-  */
+ 
 public class Tramo {
 	private Integer idTramo;
 	private Planta plantaOrigen;
