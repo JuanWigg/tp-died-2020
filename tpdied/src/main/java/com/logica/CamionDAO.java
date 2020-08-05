@@ -12,8 +12,8 @@ import java.util.function.Predicate;
  *
  */
 public interface CamionDAO {
-	
-	public List<Camion> consultarCamion(Camion c);
+	public void modificarCamion(Camion camionNuevo, Camion camionViejo);
+	public List<Camion> buscarCamiones();
 	public void altaCamion(Camion camion);
 	public void bajaCamion(Camion camion);
 	

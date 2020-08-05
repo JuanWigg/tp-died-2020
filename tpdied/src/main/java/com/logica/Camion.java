@@ -1,6 +1,7 @@
 package com.logica;
 
 import java.time.LocalDate;
+import java.util.function.Predicate;
 
 public class Camion {
 	private String patente;
@@ -9,7 +10,7 @@ public class Camion {
 	private Double costoPorHora;
 	private LocalDate fechaCompra;
 	private Modelo modelo;
-	
+
 	
 	
 	public Camion(String patente, int kmReco, double costoXKm, double costoXHora, LocalDate fechaCompra, Modelo modelo) {
@@ -31,6 +32,9 @@ public class Camion {
 		
 	}
 	
+	public Camion(String patente) {
+		this.patente = patente;
+	}
 	public Camion(String patente, double costoXKm, double costoXHora, Modelo modelo) {
 		this.patente = patente;
 		kilometrosRecorridos = 0;
