@@ -6,7 +6,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 
 import com.interfaces.PanelGestionCamiones;
-import com.interfaces.PanelGestionInsumos;
+
 import com.interfaces.PanelPrincipal;
 
 public class App {
@@ -28,14 +28,7 @@ public class App {
 			e.printStackTrace();
 		}
 		
-		JFrame ventana = new JFrame("Mi frame");
-		ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		ventana.setTitle("App Java");
-		PanelGestionInsumos panel = new PanelGestionInsumos();
-		ventana.setContentPane(panel);
-		ventana.pack();
-		ventana.setSize(1280, 720);
-		ventana.setVisible(true);
+
 		
 	}
 

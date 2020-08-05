@@ -30,6 +30,7 @@ public class Tramo {
 		this.unidadPesoMax=unidad;
 	}
 	
+	
 	public Integer getIdTramo() {
 		return idTramo;
 	}
