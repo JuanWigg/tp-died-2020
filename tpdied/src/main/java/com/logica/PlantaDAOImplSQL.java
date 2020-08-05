@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class PlantaDAOImplSQL implements PlantaDAO{
@@ -66,7 +68,42 @@ public class PlantaDAOImplSQL implements PlantaDAO{
 		}
 		return p;	
 		}
-
+	
+	public String[] buscarNombresPlanta() {
+		ArrayList<String> plantasList = new ArrayList<String>();
+		String[] plantas;
+		Connection conn = null;
+		ResultSet res = null;
+		try{
+			Class.forName("org.postgresql.Driver");
+			conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
+			PreparedStatement pstm = conn.prepareStatement("SELECT nombre FROM tpdied.planta;");
+			res = pstm.executeQuery();
+			if(!res.next()) {
+				return null;
+			}
+			else {
+				
+				do {
+					
+					plantasList.add(res.getString(1));
+					
+				} while (res.next());
+			}
+			
+		} catch(ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		plantas = new  String[plantasList.size()+1];
+		plantas[0] = "<Ninguna>";
+		for(int i=1; i<plantas.length; i++)
+			plantas[i] = plantasList.get(i-1);
+		
+		return plantas;
+	}
 	
 
 }
