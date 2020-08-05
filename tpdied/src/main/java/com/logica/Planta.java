@@ -6,6 +6,7 @@ import java.util.Optional;
  * Corregir el tipo de la lista stocks
  * 
 */ 
+
 public class Planta  {
 	public String nombre;
 	private List stocks;
@@ -19,7 +20,6 @@ public class Planta  {
 		super();
 		this.nombre=nombreP;
 	}
-	
 	public String getNombre() {
 		return this.nombre;
 	}
