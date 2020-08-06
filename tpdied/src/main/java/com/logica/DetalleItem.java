@@ -2,18 +2,27 @@ package com.logica;
 
 public class DetalleItem {
 	
-	private Magnitud cantidad;
+	private double cantidad;
+	private Insumo insumo;
 
 	public DetalleItem() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Magnitud getCantidad() {
+	public double getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(Magnitud cantidad) {
+	public void setCantidad(double cantidad) {
 		this.cantidad = cantidad;
+	}
+
+	public Insumo getInsumo() {
+		return insumo;
+	}
+
+	public void setInsumo(Insumo insumo) {
+		this.insumo = insumo;
 	}
 
 }

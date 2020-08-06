@@ -2,13 +2,13 @@ package com.logica;
 
 public class InsumoGeneral extends Insumo {
 	
-	protected Magnitud peso;
+	protected double peso;
 
-	public Magnitud getPeso() {
+	public double getPeso() {
 		return peso;
 	}
 
-	public void setPeso(Magnitud peso) {
+	public void setPeso(double peso) {
 		this.peso = peso;
 	}
 
