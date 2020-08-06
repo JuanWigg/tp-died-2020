@@ -99,10 +99,13 @@ public class Tramo {
 	
 	@Override
 	public String toString() {
-		return "( "+this.plantaOrigen.getNombre()+" --> "+this.plantaDestino.getNombre()+" )";
+		return "Tramo: "+idTramo+" ( "+this.plantaOrigen.getNombre()+" --> "+this.plantaDestino.getNombre()+" )";
 	}
 	
-	
+	@Override
+	public boolean equals(Object obj) {
+		return (obj instanceof Tramo) && ((Tramo)obj).getIdTramo().equals(this.idTramo); 
+	}
 	
 	
 	

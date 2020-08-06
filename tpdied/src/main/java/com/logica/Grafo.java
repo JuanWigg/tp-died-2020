@@ -2,6 +2,7 @@ package com.logica;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Grafo {
 	private List<Tramo> tramos;
@@ -32,6 +33,10 @@ public class Grafo {
 		this.tramos.add(t);
 	}
 	
+	public List<Tramo> getTramos() {
+		return tramos;
+	}
+
 	public void conectar(Planta p1,Planta p2,Integer dist,double tEstimado,Integer pesoM,Integer idT,String uPmax) {
 		Tramo t1 = new Tramo(idT,p1,p2,dist,tEstimado,pesoM,uPmax);
 		this.tramos.add(t1);
@@ -80,8 +85,75 @@ public class Grafo {
     	return false;
     }
 	
+	public List<List<Planta>> caminos(Planta p1,Planta p2){
+		List<List<Planta>> salida = new ArrayList<List<Planta>>();
+		List<Planta> marcadas = new ArrayList<Planta>();
+		marcadas.add(p1);
+		buscarCaminosAux(p1,p2,marcadas,salida);
+		return salida;
+    	
+    }
+	public Tramo getTramo(Planta p1,Planta p2) {
+		for (Tramo t : this.getTramos()) {
+			if(t.getPlantaOrigen() == p1 && t.getPlantaDestino() == p2)
+				return t;
+		}
+		return null;
+		
+	}
+
+	private void buscarCaminosAux(Planta p1,Planta p2,List<Planta> marcadas,
+			List<List<Planta>> salida) {
+			List<Planta> adyacentes = this.getAdyacentes(p1);
+			List<Planta> copiaMarcadas = null;
+			for(Planta p: adyacentes) {
+				copiaMarcadas=marcadas.stream().collect(Collectors.toList());
+				if(p.equals(p2)) {
+					copiaMarcadas.add(p2);
+					salida.add(new ArrayList<Planta>(copiaMarcadas));
+				}
+				else {
+					if(!copiaMarcadas.contains(p)) {
+						copiaMarcadas.add(p);
+						this.buscarCaminosAux(p, p2, copiaMarcadas, salida);
+					}
+				}
+			}
+	}
 	
-	
-	
+	public List<Ruta> rutaMasCorta(List<Ruta> rutas) {
+		Ruta rMasCorta;
+		List<Ruta> masCortas = new ArrayList<Ruta>();
+		rMasCorta = rutas.get(0);
+		for (Ruta ruta : rutas) {
+			if(ruta.getDistanciaTotal()<rMasCorta.getDistanciaTotal())
+				rMasCorta=ruta;
+		}
+		masCortas.add(rMasCorta);
+		for (Ruta ruta : rutas) {
+			if(ruta.getDistanciaTotal().equals( rMasCorta.getDistanciaTotal()) && ruta.getId()!=rMasCorta.getId()) {
+				masCortas.add(ruta);
+			}
+		}
+		
+		return masCortas;
+	}
+	public List<Ruta> rutaMasCortaTiempo(List<Ruta> rutas) {
+		Ruta rMasCortaT;
+		List<Ruta> masCortasT = new ArrayList<Ruta>();
+		rMasCortaT = rutas.get(0);
+		for (Ruta ruta : rutas) {
+			if(ruta.getDistanciaTotal()<rMasCortaT.getDistanciaTotal())
+				rMasCortaT=ruta;
+		}
+		masCortasT.add(rMasCortaT);
+		for (Ruta ruta : rutas) {
+			if(ruta.getDuracionTotal().equals( rMasCortaT.getDuracionTotal()) && ruta.getId()!=rMasCortaT.getId()) {
+				masCortasT.add(ruta);
+			}
+		}
+		
+		return masCortasT;
+	}
 	
 }
