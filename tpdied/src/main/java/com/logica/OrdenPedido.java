@@ -1,6 +1,7 @@
 package com.logica;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class OrdenPedido {
 	
@@ -8,6 +9,16 @@ public class OrdenPedido {
 	private LocalDate fechaSolicitud;
 	private LocalDate fechaEntrega;
 	private EstadoOrden estado;
+	private DetalleEnvio detalleEnvio;
+	private List<DetalleItem> detalleItems;
+
+	public DetalleEnvio getDetalleEnvio() {
+		return detalleEnvio;
+	}
+
+	public void setDetalleEnvio(DetalleEnvio detalleEnvio) {
+		this.detalleEnvio = detalleEnvio;
+	}
 
 	public String getNroOrden() {
 		return nroOrden;
@@ -43,6 +54,14 @@ public class OrdenPedido {
 
 	public OrdenPedido() {
 		// TODO Auto-generated constructor stub
+	}
+
+	public List<DetalleItem> getDetalleItems() {
+		return detalleItems;
+	}
+
+	public void setDetalleItems(List<DetalleItem> detalleItems) {
+		this.detalleItems = detalleItems;
 	}
 
 }

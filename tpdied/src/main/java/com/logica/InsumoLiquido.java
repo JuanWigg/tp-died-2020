@@ -2,13 +2,13 @@ package com.logica;
 
 public class InsumoLiquido extends Insumo {
 	
-	protected Magnitud densidad;
+	protected double densidad;
 
-	public Magnitud getDensidad() {
+	public double getDensidad() {
 		return densidad;
 	}
 
-	public void setDensidad(Magnitud densidad) {
+	public void setDensidad(double densidad) {
 		this.densidad = densidad;
 	}
 
