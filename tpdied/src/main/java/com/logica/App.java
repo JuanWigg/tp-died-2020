@@ -33,7 +33,7 @@ public class App {
 		ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		ventana.pack();
 		ventana.setSize(1280, 720);
-		ventana.setContentPane(new PanelGestionPlantas());
+		ventana.setContentPane(new PanelPrincipal());
 		ventana.setVisible(true);
 		
 	}
