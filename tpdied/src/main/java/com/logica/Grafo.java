@@ -13,6 +13,11 @@ public class Grafo {
 		this.plantas = new ArrayList<Planta>();
 	}
 	
+	public Grafo(ArrayList<Tramo> tramos, ArrayList<Planta> plantas){
+		this.tramos = tramos;
+		this.plantas = plantas;
+	}
+	
 	public Planta getPlanta(Planta p) {
 		return this.plantas.get(plantas.indexOf(p));
 	}
@@ -84,15 +89,6 @@ public class Grafo {
     	}
     	return false;
     }
-	
-	public List<List<Planta>> caminos(Planta p1,Planta p2){
-		List<List<Planta>> salida = new ArrayList<List<Planta>>();
-		List<Planta> marcadas = new ArrayList<Planta>();
-		marcadas.add(p1);
-		buscarCaminosAux(p1,p2,marcadas,salida);
-		return salida;
-    	
-    }
 	public Tramo getTramo(Planta p1,Planta p2) {
 		for (Tramo t : this.getTramos()) {
 			if(t.getPlantaOrigen() == p1 && t.getPlantaDestino() == p2)
@@ -101,6 +97,15 @@ public class Grafo {
 		return null;
 		
 	}
+	public List<List<Planta>> caminos(Planta p1,Planta p2){
+		List<List<Planta>> salida = new ArrayList<List<Planta>>();
+		List<Planta> marcadas = new ArrayList<Planta>();
+		marcadas.add(p1);
+		buscarCaminosAux(p1,p2,marcadas,salida);
+		return salida;
+    	
+    }
+	
 
 	private void buscarCaminosAux(Planta p1,Planta p2,List<Planta> marcadas,
 			List<List<Planta>> salida) {
