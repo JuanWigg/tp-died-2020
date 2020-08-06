@@ -15,13 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-
+import io.github.cdimascio.dotenv.Dotenv;
 /**
  * @author juanwigg
  *
  */
 public class CamionDAOImplSQL implements CamionDAO{
-
+	Dotenv dotenv = Dotenv.load();
 
 	public List<Camion> buscarCamiones() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -29,7 +29,7 @@ public class CamionDAOImplSQL implements CamionDAO{
 		ArrayList<Camion> camiones = new ArrayList<Camion>();
 		try{
 		Class.forName("org.postgresql.Driver");
-		conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
+		conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 		PreparedStatement pstm = conn.prepareStatement("SELECT * from tpdied.camion");
 		ResultSet res = pstm.executeQuery();
 		if(!res.next()) {
@@ -66,7 +66,7 @@ public class CamionDAOImplSQL implements CamionDAO{
 		LocalDate fecha = LocalDate.parse(camionNuevo.getFechaCompra().toString(), formatter);
 		try {
 			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 			Statement stmt = conn.createStatement();
 			stmt.execute("UPDATE tpdied.camion "
 					+ "SET patente='" + camionNuevo.getPatente() + "',"
@@ -95,7 +95,7 @@ public class CamionDAOImplSQL implements CamionDAO{
 		LocalDate fecha = LocalDate.parse(camion.getFechaCompra().toString(), formatter);
 		try {
 			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 			Statement stmt = conn.createStatement();
 			stmt.execute("INSERT INTO tpdied.camion VALUES ('" + camion.getPatente() +
 					"', " + camion.getKilometrosRecorridos() + ", " + camion.getCostoPorKilometro() + ", " + 
@@ -119,7 +119,7 @@ public class CamionDAOImplSQL implements CamionDAO{
 		
 		try {
 			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 			Statement stmt = conn.createStatement();
 			stmt.execute("DELETE FROM tpdied.camion WHERE patente='" + camion.getPatente() + "';");
 			stmt.close();

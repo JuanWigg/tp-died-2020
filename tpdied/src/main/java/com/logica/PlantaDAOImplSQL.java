@@ -9,14 +9,14 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
-
+import io.github.cdimascio.dotenv.Dotenv;
 public class PlantaDAOImplSQL implements PlantaDAO{
-
+	Dotenv dotenv = Dotenv.load();
 	public void AltaPlanta(Planta p) {
 		Connection conn = null;
 		try {
 			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 			Statement stmt = conn.createStatement();
 			stmt.execute("INSERT INTO tpdied.planta VALUES ('" + p.getNombre() + "');");
 			stmt.close();
@@ -32,7 +32,7 @@ public class PlantaDAOImplSQL implements PlantaDAO{
 		Connection conn = null;
 		try {
 			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 			Statement stmt = conn.createStatement();
 			stmt.execute("DELETE FROM tpdied.planta WHERE nombre='" + p.getNombre() + "';");
 		} catch (ClassNotFoundException e) {
@@ -48,7 +48,7 @@ public class PlantaDAOImplSQL implements PlantaDAO{
 		Optional<Planta> p = Optional.empty();
 		try{
 		Class.forName("org.postgresql.Driver");
-		 conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
+		conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 		 PreparedStatement pstm  = conn.prepareStatement("SELECT * FROM tpdied.planta WHERE nombre='"+nombrePlanta+"';");
 		 res=pstm.executeQuery();
 		 pstm.close();
@@ -76,7 +76,7 @@ public class PlantaDAOImplSQL implements PlantaDAO{
 		ResultSet res = null;
 		try{
 			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 			PreparedStatement pstm = conn.prepareStatement("SELECT nombre FROM tpdied.planta;");
 			res = pstm.executeQuery();
 			if(!res.next()) {

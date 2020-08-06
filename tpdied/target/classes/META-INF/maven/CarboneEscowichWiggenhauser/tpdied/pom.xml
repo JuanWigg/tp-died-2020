@@ -4,6 +4,20 @@
   <artifactId>tpdied</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>TrabajoPracticoDied2020</name>
+  <build>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.0</version>
+         </plugin>
+      </plugins>
+   </build>
+   <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <maven.compiler.target>11</maven.compiler.target>
+      <maven.compiler.source>11</maven.compiler.source>
+   </properties>
   <dependencies>
   	<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
 	<dependency>
@@ -11,7 +25,11 @@
     	<artifactId>postgresql</artifactId>
     	<version>42.2.14</version>
 	</dependency>
-  
+ 	<dependency>
+    	<groupId>io.github.cdimascio</groupId>
+    	<artifactId>java-dotenv</artifactId>
+    	<version>5.2.1</version>
+  	</dependency>
   
   </dependencies>
 </project>

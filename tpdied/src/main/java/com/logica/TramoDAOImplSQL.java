@@ -9,14 +9,17 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class TramoDAOImplSQL implements TramoDAO {
+	
 
+	Dotenv dotenv = Dotenv.load();
 	public void AltaTramo(Tramo T) {
 		Connection conn = null;
 		try {
 			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 			Statement stmt = conn.createStatement();
 			stmt.execute("INSERT INTO tpdied.tramo (distancia, duracion, peso_max_permitido, peso_max_permitido_unidad,"
 					+ "planta_origen, planta_destino) VALUES ("+T.getDistancia()+","
@@ -36,7 +39,7 @@ public class TramoDAOImplSQL implements TramoDAO {
 		Connection conn = null;
 		try {
 			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 			Statement stmt = conn.createStatement();
 			stmt.execute("DELETE FROM tpdied.tramo WHERE id_tramo=" + T.getIdTramo()+";");
 			stmt.close();
@@ -56,7 +59,7 @@ public class TramoDAOImplSQL implements TramoDAO {
 		Planta PlantaD;
 		try{
 		Class.forName("org.postgresql.Driver");
-		 conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
+		conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 		 PreparedStatement pstm  = conn.prepareStatement("SELECT * FROM tpdied.tramo WHERE id_tramo="+id+";");
 		 res=pstm.executeQuery();
 		 pstm.close();
@@ -90,7 +93,7 @@ public class TramoDAOImplSQL implements TramoDAO {
 		Planta PlantaD;
 		try{
 			Class.forName("org.postgresql.Driver");
-			 conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 			 PreparedStatement pstm  = conn.prepareStatement("SELECT * FROM tpdied.tramo;");
 			 res=pstm.executeQuery();
 			
