@@ -18,8 +18,9 @@ public class TramoDAOImplSQL implements TramoDAO {
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("jdbc:postgresql://tpdied.cquiwsbyjbxy.sa-east-1.rds.amazonaws.com:5432/PichiDIED", "root", "trabajopracticodied");
 			Statement stmt = conn.createStatement();
-			stmt.execute("INSERT INTO tpdied.tramo VALUES ("+T.getIdTramo()+","+T.getDistancia()+","
-					+T.getDuracionEstimada()+","+T.getPesoMaximoPermitido()+","+"'"+T.getUnidad()+"'"+",'"+T.getPlantaOrigen()
+			stmt.execute("INSERT INTO tpdied.tramo (distancia, duracion, peso_max_permitido, peso_max_permitido_unidad,"
+					+ "planta_origen, planta_destino) VALUES ("+T.getDistancia()+","
+					+T.getDuracionEstimada()+","+T.getPesoMaximoPermitido()+","+" '"+T.getUnidad()+"'"+",'"+T.getPlantaOrigen()
 					+"','"+T.getPlantaDestino()+"');");
 			stmt.close();
 			conn.close();

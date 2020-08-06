@@ -55,7 +55,7 @@ public class VentanaAgregarCamion extends JDialog{
 		
 	}
 	
-	public void inicializarComponentes() {
+	private void inicializarComponentes() {
 		//LABELS
 				
 				labelPatente = new JLabel("Patente:");
@@ -125,7 +125,7 @@ public class VentanaAgregarCamion extends JDialog{
 				
 	}
 	
-	public void armarPanel() {
+	private void armarPanel() {
 		panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
 

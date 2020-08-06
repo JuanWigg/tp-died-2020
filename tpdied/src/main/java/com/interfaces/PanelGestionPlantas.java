@@ -6,6 +6,7 @@ package com.interfaces;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -29,6 +31,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import com.controladores.CamionController;
+import com.controladores.PlantaController;
 import com.controladores.TramoController;
 import com.logica.Camion;
 import com.logica.CamionDAOImplSQL;
@@ -102,7 +105,44 @@ public class PanelGestionPlantas extends JPanel {
 		
 		//BUTTONS
 		botonAgregarPlanta = new JButton("Agregar nueva planta");
+		botonAgregarPlanta.setPreferredSize(new Dimension(200, 50));
+		
+		botonAgregarPlanta.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String nombre_planta = JOptionPane.showInputDialog("Ingrese nombre de la nueva planta");
+				if(nombre_planta!=null && nombre_planta.length()!=0) {
+					(new PlantaController()).altaPlanta(nombre_planta);
+					comboPlantaOrigen.addItem(nombre_planta);
+					comboPlantaDestino.addItem(nombre_planta);
+					
+				}
+					
+			}
+			
+		});
+		
+		
 		botonAgregarTramo = new JButton("Agregar nuevo tramo");
+		botonAgregarTramo.setPreferredSize(new Dimension(200, 50));
+		botonAgregarTramo.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				VentanaAgregarTramo dialogo = new VentanaAgregarTramo(new JFrame(), true);
+				tramos = (ArrayList<Tramo>) (new TramoDAOImplSQL()).obtenerTramos();
+				construirTabla(setearColumnas(), obtenerMatrizDatos());
+			}
+			
+			
+			
+		});
+		
+		
+		
 		botonBuscar = new JButton("Buscar");
 		botonBuscar.setPreferredSize(new Dimension(100, 20));
 		botonBuscar.addActionListener(new ActionListener() {
@@ -144,6 +184,7 @@ public class PanelGestionPlantas extends JPanel {
 		
 		
 		botonAtras = new JButton("Atrás");
+		botonAtras.setPreferredSize(new Dimension(200,50));
 		
 		
 		//TABLE
@@ -210,7 +251,7 @@ public class PanelGestionPlantas extends JPanel {
 		JPanel panelAbajo = new JPanel();
 		
 		panelBusqueda.setLayout(new GridBagLayout());
-		panelAbajo.setLayout(new GridBagLayout());
+		panelAbajo.setLayout(new FlowLayout());
 		
 		this.add(panelBusqueda, BorderLayout.NORTH);
 
@@ -261,17 +302,11 @@ public class PanelGestionPlantas extends JPanel {
 		gbc.fill = GridBagConstraints.BOTH;
 		this.add(new JScrollPane(tablaTramos), BorderLayout.CENTER);
 		
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.ipadx = 20;
-		gbc.ipady = 20;
-		panelAbajo.add(botonAtras, gbc);
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		panelAbajo.add(botonAgregarPlanta, gbc);
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		panelAbajo.add(botonAgregarTramo, gbc);
+		panelAbajo.add(botonAtras);
+
+		panelAbajo.add(botonAgregarPlanta);
+
+		panelAbajo.add(botonAgregarTramo);
 		
 	}
 	

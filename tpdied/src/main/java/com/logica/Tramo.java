@@ -30,6 +30,15 @@ public class Tramo {
 		this.unidadPesoMax=unidad;
 	}
 	
+	public Tramo(Planta plantaOrigen, Planta plantaDestino, Integer distancia, Double duracionEstimada,
+		Integer pesoMaximoPermitido,String unidad) {
+		this.plantaOrigen = plantaOrigen;
+		this.plantaDestino = plantaDestino;
+		this.distancia = distancia;
+		this.duracionEstimada = duracionEstimada;
+		this.pesoMaximoPermitido = pesoMaximoPermitido;
+		this.unidadPesoMax=unidad;
+	}
 	
 	public Integer getIdTramo() {
 		return idTramo;
