@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import com.controladores.CamionController;
 import com.controladores.PlantaController;
@@ -185,7 +186,18 @@ public class PanelGestionPlantas extends JPanel {
 		
 		botonAtras = new JButton("Atrás");
 		botonAtras.setPreferredSize(new Dimension(200,50));
-		
+		botonAtras.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
+				ventana.setContentPane(new PanelPrincipal());
+				ventana.revalidate();
+				ventana.repaint();
+			}
+			
+		});
 		
 		//TABLE
 		tablaTramos = new JTable();

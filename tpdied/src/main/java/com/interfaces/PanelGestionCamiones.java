@@ -172,6 +172,18 @@ public class PanelGestionCamiones extends JPanel{
 		
 		//BOTONES
 		botonAtras = new JButton("Atrás");
+		botonAtras.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
+				ventana.setContentPane(new PanelPrincipal());
+				ventana.revalidate();
+				ventana.repaint();
+			}
+			
+		});
 		botonAgregarCamion = new JButton("Agregar nuevo camión");
 		botonAgregarCamion.addActionListener(new ActionListener() {
 

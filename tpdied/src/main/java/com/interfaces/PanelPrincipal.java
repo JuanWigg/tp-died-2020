@@ -7,9 +7,13 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  * @author Pichi
@@ -38,7 +42,32 @@ public class PanelPrincipal extends JPanel{
 		opcionesPedidos = new JButton("Gestionar Pedidos");
 		
 		opcionesCamiones.setPreferredSize(new Dimension(200,75));
+		opcionesCamiones.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
+				ventana.setContentPane(new PanelGestionCamiones());
+				ventana.revalidate();
+				ventana.repaint();
+			}
+			
+		});
+		
 		opcionesPlantas.setPreferredSize(new Dimension(200,75));
+		opcionesPlantas.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
+				ventana.setContentPane(new PanelGestionPlantas());
+				ventana.revalidate();
+				ventana.repaint();
+			}
+			
+		});
 		opcionesInsumos.setPreferredSize(new Dimension(200,75));
 		opcionesStockInsumo.setPreferredSize(new Dimension(200,75));
 		opcionesPedidos.setPreferredSize(new Dimension(200,75));

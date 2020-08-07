@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,6 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 
 import com.controladores.CamionController;
 import com.logica.Camion;
@@ -121,6 +123,19 @@ public class PanelAgregarPedido extends JPanel{
 		botonAceptar.setPreferredSize(new Dimension(200, 40));
 		botonCancelar = new JButton("Cancelar");
 		botonCancelar.setPreferredSize(new Dimension(200, 40));
+		botonCancelar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
+				ventana.setContentPane(new PanelPrincipal());
+				ventana.revalidate();
+				ventana.repaint();
+			}
+			
+		});
 		botonAgregarItem = new JButton("Agregar item");
 		botonAgregarItem.setPreferredSize(new Dimension(100, 40));
 		botonAgregarItem.addActionListener(new ActionListener() {
