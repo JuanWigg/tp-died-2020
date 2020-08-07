@@ -5,6 +5,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 
+import com.interfaces.PanelAgregarPedido;
 import com.interfaces.PanelGestionCamiones;
 import com.interfaces.PanelGestionPlantas;
 import com.interfaces.PanelPrincipal;
@@ -33,7 +34,7 @@ public class App {
 		ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		ventana.pack();
 		ventana.setSize(1280, 720);
-		ventana.setContentPane(new PanelPrincipal());
+		//ventana.setContentPane(new PanelPrincipal());
 		ventana.setVisible(true);
 		
 	}

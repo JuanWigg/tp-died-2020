@@ -3,7 +3,17 @@
  */
 package com.interfaces;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -11,10 +21,16 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import com.controladores.CamionController;
+import com.logica.Camion;
+import com.logica.CamionDAOImplSQL;
 import com.logica.DetalleItem;
 import com.logica.Insumo;
 import com.logica.PlantaDAOImplSQL;
@@ -45,12 +61,41 @@ public class PanelAgregarPedido extends JPanel{
 	}
 
 	private void armarPanel() {
-		// TODO Auto-generated method stub
+		this.setLayout(new BorderLayout());
+		JPanel panelCamposPedido = new JPanel();
+		JPanel panelBotonesInferiores = new JPanel();
+		
+		panelCamposPedido.setLayout(new GridBagLayout());
+		panelBotonesInferiores.setLayout(new FlowLayout());
+		this.add(panelCamposPedido, BorderLayout.NORTH);
+		this.add(panelBotonesInferiores, BorderLayout.SOUTH);
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(10,10,10,10);
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		panelCamposPedido.add(labelDestino, gbc);
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		panelCamposPedido.add(comboPlantas, gbc);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panelCamposPedido.add(labelFecha, gbc);
+		gbc.gridx = 1;
+		gbc.gridy = 1;
+		panelCamposPedido.add(fieldFecha, gbc);
+		
+		this.add(new JScrollPane(tablaItems), BorderLayout.CENTER);
+		
+		panelBotonesInferiores.add(botonCancelar);
+		panelBotonesInferiores.add(botonAceptar);
+		
+		this.add(botonAgregarItem, BorderLayout.EAST);
 		
 	}
 
 	private void inicializarComponentes() {
-		// TODO Auto-generated method stub
 		//LABELS
 		labelDestino = new JLabel("Planta de destino:");
 		labelInsumos = new JLabel("Items del pedido:");
@@ -65,18 +110,76 @@ public class PanelAgregarPedido extends JPanel{
 			plantas[0] = "<Ninguna>";
 		}
 		comboPlantas = new JComboBox<String>(plantas);
-		
+		comboPlantas.setPreferredSize(new Dimension(100, 25));
 		
 		//FIELDS
 		fieldFecha = new JFormattedTextField();
+		fieldFecha.setPreferredSize(new Dimension(100, 25));
 		
 		//BOTONES
-		botonAceptar = new JButton("Aceptar");
+		botonAceptar = new JButton("Registrar pedido");
+		botonAceptar.setPreferredSize(new Dimension(200, 40));
 		botonCancelar = new JButton("Cancelar");
+		botonCancelar.setPreferredSize(new Dimension(200, 40));
 		botonAgregarItem = new JButton("Agregar item");
-		
+		botonAgregarItem.setPreferredSize(new Dimension(100, 40));
+		botonAgregarItem.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				VentanaAgregarItem dialogo = new VentanaAgregarItem((JPanel) ((JButton) e.getSource()).getParent(), new JFrame(), true);
+				// CAMBIAR insumosAgregados = (ArrayList<Camion>) (new CamionDAOImplSQL()).buscarCamiones();
+				construirTabla(setearColumnas(), obtenerMatrizDatos());
+			}
+			
+		});
 		//TABLE
 		tablaItems =  new JTable();
+		tablaItems.addMouseListener(new MouseListener() {
+
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				int fila = tablaItems.rowAtPoint(e.getPoint());
+				int columna = tablaItems.columnAtPoint(e.getPoint());
+				
+				if(columna==UtilTablaItemsPedido.ELIMINAR) {
+					String[] botonesDialogo = {"Aceptar", "Cancelar"};
+					int dialogo = JOptionPane.showOptionDialog(null,
+							"¿Seguro que desea eliminar el item seleccionado?", 
+							"Confirmacion",
+							JOptionPane.DEFAULT_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null,
+							botonesDialogo, botonesDialogo[0]
+							);
+					if(dialogo==0) {
+						model.removeRow(fila);
+						insumosAgregados.remove(fila);
+						model.fireTableDataChanged();
+					}
+				}
+			}
+
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		construirTabla(setearColumnas(), obtenerMatrizDatos());
 		
 	}
@@ -139,7 +242,10 @@ public class PanelAgregarPedido extends JPanel{
 		return informacion;
 	}
 	
-	
+	public void agregarItem(DetalleItem i) {
+		insumosAgregados.add(i);
+		construirTabla(setearColumnas(), obtenerMatrizDatos());
+	}
 	
 	
 }
