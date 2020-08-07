@@ -69,8 +69,29 @@ public class PanelPrincipal extends JPanel{
 			
 		});
 		opcionesInsumos.setPreferredSize(new Dimension(200,75));
+		opcionesInsumos.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
+				ventana.setContentPane(new PanelGestionInsumos());
+				ventana.revalidate();
+				ventana.repaint();
+			}
+		});
 		opcionesStockInsumo.setPreferredSize(new Dimension(200,75));
 		opcionesPedidos.setPreferredSize(new Dimension(200,75));
+		opcionesPedidos.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
+				ventana.setContentPane(new PanelGestionOrdenes());
+				ventana.revalidate();
+				ventana.repaint();
+			}
+			
+		});
 		
 	}
 	

@@ -11,11 +11,13 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 public class PanelGestionInsumos extends JPanel {
 	ArrayList<String> columnasTabla;
@@ -125,6 +127,15 @@ public class PanelGestionInsumos extends JPanel {
 		
 		//BOTONES
 		botonAtras = new JButton("Atrás");
+		botonAtras.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
+				ventana.setContentPane(new PanelPrincipal());
+				ventana.revalidate();
+				ventana.repaint();
+			}
+		});
 		botonAgregarInsumo = new JButton("Agregar nuevo insumo");
 		botonAgregarInsumo.addActionListener(new ActionListener() {
 

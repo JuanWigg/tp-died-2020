@@ -3,9 +3,12 @@ package com.interfaces;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -34,6 +37,17 @@ public class PanelOrdenesCreadas extends JPanel{
 		procesarOrden=new JButton("Procesar Orden");
 		
 		botonAtras.setPreferredSize(new Dimension(100,30));
+		botonAtras.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
+				ventana.setContentPane(new PanelGestionOrdenes());
+				ventana.revalidate();
+				ventana.repaint();
+			}
+			
+		});
 		verDetalles.setPreferredSize(new Dimension(200, 50));
 		procesarOrden.setPreferredSize(new Dimension(200, 50));
 		tablaOrdenes= new JTable();
@@ -67,12 +81,11 @@ public class PanelOrdenesCreadas extends JPanel{
 		
 		this.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 0));
 		panelBotones.setLayout(new GridBagLayout());
-		
+		panelInf.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.add(panelBotones, BorderLayout.EAST);
 		this.add(panelInf,BorderLayout.SOUTH);
 		GridBagConstraints gbc = new GridBagConstraints();
 		this.setPreferredSize(new Dimension(50,300));
-		
 		gbc.insets=new Insets(10,10,10,10);
 		gbc.gridx=0;
 		gbc.gridy=0;
@@ -91,7 +104,7 @@ public class PanelOrdenesCreadas extends JPanel{
 		gbc.gridy=0;
 		gbc.fill=GridBagConstraints.WEST;
 		gbc.anchor=GridBagConstraints.WEST;
-		panelInf.add(botonAtras,gbc);
+		panelInf.add(botonAtras);
 			
 	}
 

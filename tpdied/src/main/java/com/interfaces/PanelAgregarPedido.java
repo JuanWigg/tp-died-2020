@@ -130,7 +130,7 @@ public class PanelAgregarPedido extends JPanel{
 				// TODO Auto-generated method stub
 				
 				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
-				ventana.setContentPane(new PanelPrincipal());
+				ventana.setContentPane(new PanelGestionOrdenes());
 				ventana.revalidate();
 				ventana.repaint();
 			}
