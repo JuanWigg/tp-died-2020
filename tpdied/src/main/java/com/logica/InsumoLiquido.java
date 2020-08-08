@@ -21,4 +21,16 @@ public class InsumoLiquido extends Insumo {
 		super(id, desc, unidad, costoPorUnidad);
 		this.densidad = densidad;
 	}
+	
+	public double pesoPorUnidad() {
+		switch(this.unidad) {
+		case l:
+			return densidad/1000d;
+		case m3:
+			return densidad;
+		
+		}
+		
+		return 0d;
+	}
 }
