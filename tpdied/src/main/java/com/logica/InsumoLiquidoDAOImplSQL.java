@@ -128,10 +128,7 @@ public class InsumoLiquidoDAOImplSQL implements InsumoLiquidoDAO {
 			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 			PreparedStatement pstm  = conn.prepareStatement("SELECT * FROM tpdied.insumo I, tpdied.insumo_liquido IL WHERE I.id=IL.id ;");
 			res=pstm.executeQuery();
-<<<<<<< HEAD
-=======
-			
->>>>>>> e138ab1bf25a3dc17c84315bd684e9bb1aaf487b
+
 			 
 			while(res.next()) {
 				listaInsumos.add(
@@ -143,14 +140,10 @@ public class InsumoLiquidoDAOImplSQL implements InsumoLiquidoDAO {
 				 	res.getDouble("densidad")
 				 ));
 			 }
-<<<<<<< HEAD
 			
 			pstm.close();
 			conn.close();
 			
-=======
-
->>>>>>> e138ab1bf25a3dc17c84315bd684e9bb1aaf487b
 		}catch(ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch(SQLException e) {
