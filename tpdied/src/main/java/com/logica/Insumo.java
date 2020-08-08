@@ -1,10 +1,21 @@
 package com.logica;
 
-public class Insumo {
+public abstract class Insumo {
 	
+	protected int id;
+	
+
 	protected String descripcion;
 	protected Unidad unidad;
 	protected double costoPorUnidad;
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 	
 	public String getDescripcion() {
 		return descripcion;
@@ -30,8 +41,11 @@ public class Insumo {
 		this.costoPorUnidad = costoPorUnidad;
 	}
 
-	public Insumo() {
-		// TODO Auto-generated constructor stub
+	public Insumo(int id, String desc, Unidad unidad, double costoPorUnidad) {
+		this.id = id;
+		this.descripcion = desc;
+		this.unidad = unidad;
+		this.costoPorUnidad = costoPorUnidad;
 	}
 
 }
