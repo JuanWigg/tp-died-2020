@@ -1,5 +1,10 @@
 package com.logica;
 
+
+/**
+ * @author josesei
+ *
+ */
 public class InsumoGeneral extends Insumo {
 	
 	protected double peso;
@@ -12,8 +17,9 @@ public class InsumoGeneral extends Insumo {
 		this.peso = peso;
 	}
 
-	public InsumoGeneral() {
-		// TODO Auto-generated constructor stub
+	public InsumoGeneral(int id, String desc, Unidad unidad, double costoPorUnidad, double peso) {
+		super(id, desc, unidad, costoPorUnidad);
+		this.peso = peso;
 	}
 
 }

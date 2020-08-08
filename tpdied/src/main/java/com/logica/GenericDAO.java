@@ -2,6 +2,11 @@ package com.logica;
 
 import java.util.List;
 
+/**
+ * @author josesei
+ *
+ */
+
 public interface GenericDAO<T> {
 	public void create(T obj);
 	public T read(int id);

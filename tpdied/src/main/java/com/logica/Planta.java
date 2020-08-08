@@ -2,35 +2,22 @@ package com.logica;
 
 import java.util.List;
 import java.util.Optional;
-/*Falta
- * Corregir el tipo de la lista stocks
- * 
-*/ 
+
 
 public class Planta  {
 	public String nombre;
-
 	
+	public Planta(String nombre) {
+		this.nombre = nombre;
+	}
 	
-	public Planta() {
-		super();
-		this.nombre=null;
-	}
-	public Planta(String nombreP) {
-		super();
-		this.nombre=nombreP;
-	}
 	public String getNombre() {
 		return this.nombre;
 	}
-	
+
 	public void setNombre(String nombreP) {
 		this.nombre=nombreP;
 	}
-	
-	
-	
-	
 	@Override
 	public String toString() {
 		return this.nombre;

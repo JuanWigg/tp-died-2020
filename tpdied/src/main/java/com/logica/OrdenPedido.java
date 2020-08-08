@@ -1,6 +1,12 @@
 package com.logica;
 
 import java.time.LocalDate;
+
+/**
+ * @author josesei
+ *
+ */
+
 import java.util.List;
 
 public class OrdenPedido {

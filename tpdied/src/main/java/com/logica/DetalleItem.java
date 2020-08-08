@@ -1,5 +1,10 @@
 package com.logica;
 
+/**
+ * @author josesei
+ *
+ */
+
 public class DetalleItem {
 	
 	private double cantidad;
