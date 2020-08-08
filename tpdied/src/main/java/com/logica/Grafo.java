@@ -2,20 +2,24 @@ package com.logica;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class Grafo {
 	private List<Tramo> tramos;
 	private List<Planta> plantas;
-
+	public TreeMap<String,Double> pr;
+	
 	public Grafo(){
 		this.tramos = new ArrayList<Tramo>();
 		this.plantas = new ArrayList<Planta>();
+		this.pr=new TreeMap<String, Double>();
 	}
 	
 	public Grafo(ArrayList<Tramo> tramos, ArrayList<Planta> plantas){
 		this.tramos = tramos;
 		this.plantas = plantas;
+		this.pr=new TreeMap<String, Double>();
 	}
 	
 	public Planta getPlanta(Planta p) {
@@ -160,5 +164,58 @@ public class Grafo {
 		
 		return masCortasT;
 	}
+	
+	public List<Planta> esAlcanzadaPor(Planta p) {
+		List<Planta> plantas = new ArrayList<Planta>();
+		for (Tramo t : tramos) {
+			if(t.getPlantaDestino()==p && !plantas.contains(t.getPlantaOrigen()))
+				plantas.add(t.getPlantaOrigen());
+		}
+		return plantas;
+	}
+	
+	
+	public Integer gradoEntrada(Planta P){
+		Integer res =0;
+		for(Tramo t : this.tramos){
+			if(t.getPlantaDestino().equals(P)) ++res;
+		}
+		return res;
+	}
+
+	public Integer gradoSalida(Planta P){
+		Integer res =0;
+		for(Tramo t : this.tramos){
+			if(t.getPlantaOrigen().equals(P)) ++res;
+		}
+		return res;
+	}
+	
+	
+	public void pageRank() {
+		TreeMap<String,Double> pageAnterior = new TreeMap<String, Double>();
+		List<Planta> ady = new ArrayList<Planta>();
+		Double nuevoPr=0d;
+		for (Planta planta : plantas) {
+			pageAnterior.put(planta.getNombre(),1/(double)plantas.size());
+			pr.put(planta.getNombre(),1/(double)plantas.size());
+		}
+		
+	for(int i=0;i<plantas.size()-2;i++) {
+		for (Planta planta : plantas) {
+			ady=esAlcanzadaPor(planta);
+			for (Planta pAdy : ady) {
+				nuevoPr+=(pageAnterior.get(pAdy.getNombre())/gradoSalida(pAdy));
+			}
+			pr.replace(planta.getNombre(),nuevoPr.doubleValue());
+			nuevoPr=0d;
+		}
+		pageAnterior.clear();
+		pageAnterior.putAll(pr);
+	}
+		
+		return;
+	}
+	
 	
 }
