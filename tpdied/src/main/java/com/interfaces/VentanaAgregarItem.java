@@ -48,7 +48,8 @@ public class VentanaAgregarItem extends JDialog {
 	
 	public VentanaAgregarItem(JPanel panelPadre,  JFrame padre, boolean modal) {
 		super(padre, modal);
-		listaInsumos = (new InsumoController()).consultarInsumos();
+		listaInsumos = (ArrayList<Insumo>) (new InsumoController()).consultarInsumos();
+		System.out.println(listaInsumos.size());
 		this.panelPadre = panelPadre;
 		inicializarComponentes();
 		armarPanel();
@@ -117,7 +118,7 @@ public class VentanaAgregarItem extends JDialog {
 				Insumo in = listaInsumos.get(lista.getSelectedIndex());
 				areaTexto.setText("Insumo: " + in.getDescripcion() + "\n"
 						+ "Costo por unidad: " + in.getCostoPorUnidad() + "\n"
-						+ "Unidad: " + in.getCostoPorUnidad());
+						+ "Unidad: " + in.getUnidad());
 				
 			}
 			

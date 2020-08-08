@@ -11,6 +11,9 @@ public class Planta  {
 		this.nombre = nombre;
 	}
 	
+	public Planta() {
+		
+	}
 	public String getNombre() {
 		return this.nombre;
 	}

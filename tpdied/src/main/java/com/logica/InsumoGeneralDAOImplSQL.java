@@ -125,8 +125,7 @@ public class InsumoGeneralDAOImplSQL implements InsumoGeneralDAO {
 		conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 		PreparedStatement pstm  = conn.prepareStatement("SELECT * FROM tpdied.insumo I, tpdied.insumo_general IG WHERE I.id=IG.id ;");
 		res=pstm.executeQuery();
-		pstm.close();
-		conn.close();
+		
 		 
 		while(res.next()) {
 			listaInsumos.add(
@@ -138,6 +137,9 @@ public class InsumoGeneralDAOImplSQL implements InsumoGeneralDAO {
 			 	res.getDouble("peso")
 			 ));
 		 }
+		
+		pstm.close();
+		conn.close();
 		 
 		}catch(ClassNotFoundException e) {
 			e.printStackTrace();
