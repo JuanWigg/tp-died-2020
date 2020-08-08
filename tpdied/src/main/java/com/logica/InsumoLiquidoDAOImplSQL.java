@@ -28,46 +28,47 @@ public class InsumoLiquidoDAOImplSQL implements InsumoLiquidoDAO {
 	public void create(InsumoLiquido obj) {
 		
 		Connection conn = null;
-		PreparedStatement pstm = null;
+		PreparedStatement pstm1, pstm2 = null;
 		
 		try{
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 			
 			
-			pstm  = conn.prepareStatement(
+			pstm1  = conn.prepareStatement(
 				 "INSERT INTO tpdied.insumo "
 				 + "( descripcion, unidad, costo_por_unidad ) "
 				 + "VALUES ( ?, ?, ? );" ,
 				 Statement.RETURN_GENERATED_KEYS
 			);
 			 
-			 pstm.setString(1, obj.getDescripcion());
-			 pstm.setString(2, obj.getUnidad().toString());
-			 pstm.setDouble(3, obj.getCostoPorUnidad());
+			 pstm1.setString(1, obj.getDescripcion());
+			 pstm1.setString(2, obj.getUnidad().toString());
+			 pstm1.setDouble(3, obj.getCostoPorUnidad());
 			 
-			 pstm.execute();
+			 pstm1.execute();
 			 
-			 ResultSet generatedKeys = pstm.getGeneratedKeys();
+			 ResultSet generatedKeys = pstm1.getGeneratedKeys();
 			 
-			 pstm.close();
+			 
 			 
 			 if (generatedKeys.next()) {
 	            obj.setId(generatedKeys.getInt(1));
 	         }
 			 
-			 pstm  = conn.prepareStatement(
+			 pstm2  = conn.prepareStatement(
 				 "INSERT INTO tpdied.insumo_liquido "
 				 + "( id, densidad ) "
 				 + "VALUES ( ?, ? );"
 			 );
 			 
-			 pstm.setInt(1, obj.getId());
-			 pstm.setDouble(2, obj.getDensidad());
+			 pstm2.setInt(1, obj.getId());
+			 pstm2.setDouble(2, obj.getDensidad());
 			 
-			 pstm.execute();
+			 pstm2.execute();
 			 
-			 pstm.close();
+			 pstm1.close();
+			 pstm2.close();
 			 
 			 conn.close();
 			 
@@ -92,8 +93,6 @@ public class InsumoLiquidoDAOImplSQL implements InsumoLiquidoDAO {
 			 PreparedStatement pstm  = conn.prepareStatement("SELECT * FROM tpdied.insumo I, tpdied.insumo_liquido IL WHERE I.id= ? AND IL.id= I.id ;");
 			 pstm.setInt(1, id);
 			 res=pstm.executeQuery();
-			 pstm.close();
-			 conn.close();
 			 
 			 if(res.next()) {
 				 return new InsumoLiquido(
@@ -104,6 +103,9 @@ public class InsumoLiquidoDAOImplSQL implements InsumoLiquidoDAO {
 				 	res.getDouble("densidad")
 				 );
 			 }
+			 
+			 pstm.close();
+			 conn.close();
 			 
 			}catch(ClassNotFoundException e) {
 				e.printStackTrace();
@@ -126,8 +128,6 @@ public class InsumoLiquidoDAOImplSQL implements InsumoLiquidoDAO {
 			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 			PreparedStatement pstm  = conn.prepareStatement("SELECT * FROM tpdied.insumo I, tpdied.insumo_liquido IL WHERE I.id=IL.id ;");
 			res=pstm.executeQuery();
-			pstm.close();
-			conn.close();
 			 
 			while(res.next()) {
 				listaInsumos.add(
@@ -139,7 +139,10 @@ public class InsumoLiquidoDAOImplSQL implements InsumoLiquidoDAO {
 				 	res.getDouble("densidad")
 				 ));
 			 }
-		 
+			
+			pstm.close();
+			conn.close();
+			
 		}catch(ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch(SQLException e) {
@@ -152,11 +155,11 @@ public class InsumoLiquidoDAOImplSQL implements InsumoLiquidoDAO {
 	@Override
 	public void update(InsumoLiquido newObj, InsumoLiquido oldObj) {
 		Connection conn = null;
-		PreparedStatement stmt = null;
+		PreparedStatement stmt1, stmt2 = null;
 		try{
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
-			stmt = conn.prepareStatement(
+			stmt1 = conn.prepareStatement(
 				"UPDATE tpdied.insumo "
 				+ "SET descripcion= ? , "
 				+ "unidad= ? , "
@@ -164,27 +167,26 @@ public class InsumoLiquidoDAOImplSQL implements InsumoLiquidoDAO {
 				+ " WHERE id= ? ;"
 			);
 			
-			stmt.setString(1, newObj.getDescripcion());
-			stmt.setString(2, newObj.getUnidad().toString());
-			stmt.setDouble(3, newObj.getCostoPorUnidad());
-			stmt.setInt(4, newObj.getId());
+			stmt1.setString(1, newObj.getDescripcion());
+			stmt1.setString(2, newObj.getUnidad().toString());
+			stmt1.setDouble(3, newObj.getCostoPorUnidad());
+			stmt1.setInt(4, newObj.getId());
 			
-			stmt.execute();
-			
-			stmt.close();
+			stmt1.execute();
 
-			stmt = conn.prepareStatement(
+			stmt2 = conn.prepareStatement(
 				"UPDATE tpdied.insumo_liquido "
 				+ "SET densidad= ? ,"
 				+ " WHERE id= ?  ;"
 			);
 			
-			stmt.setDouble(1, newObj.getDensidad());
-			stmt.setInt(2, oldObj.getId());
+			stmt2.setDouble(1, newObj.getDensidad());
+			stmt2.setInt(2, oldObj.getId());
 			
-			stmt.execute();
+			stmt2.execute();
 			
-			stmt.close();
+			stmt1.close();
+			stmt2.close();
 			conn.close();
 			
 			}catch(ClassNotFoundException e) {
@@ -198,20 +200,22 @@ public class InsumoLiquidoDAOImplSQL implements InsumoLiquidoDAO {
 	@Override
 	public boolean delete(InsumoLiquido obj) {
 		Connection conn = null;
-		PreparedStatement stmt = null;
+		PreparedStatement stmt1, stmt2 = null;
 		int rowsDeletedParent = 0;
 		int rowsDeletedChild = 0;
 		try {
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
-			stmt = conn.prepareStatement("DELETE FROM tpdied.insumo WHERE id= ? ;");
-			stmt.setInt(1, obj.getId());
-			rowsDeletedParent = stmt.executeUpdate();
-			stmt.close();
-			stmt  = conn.prepareStatement("DELETE FROM tpdied.insumo_liquido WHERE id= ? ;");
-			stmt.setInt(1, obj.getId());
-			rowsDeletedChild = stmt.executeUpdate();
-			stmt.close();
+			stmt1 = conn.prepareStatement("DELETE FROM tpdied.insumo WHERE id= ? ;");
+			stmt1.setInt(1, obj.getId());
+			rowsDeletedParent = stmt1.executeUpdate();
+			
+			stmt2  = conn.prepareStatement("DELETE FROM tpdied.insumo_liquido WHERE id= ? ;");
+			stmt2.setInt(1, obj.getId());
+			rowsDeletedChild = stmt2.executeUpdate();
+			
+			stmt1.close();
+			stmt2.close();
 			conn.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();

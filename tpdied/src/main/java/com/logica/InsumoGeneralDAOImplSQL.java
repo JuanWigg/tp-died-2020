@@ -28,46 +28,47 @@ public class InsumoGeneralDAOImplSQL implements InsumoGeneralDAO {
 	public void create(InsumoGeneral obj) {
 		
 		Connection conn = null;
-		PreparedStatement pstm = null;
+		PreparedStatement pstm1, pstm2 = null;
 		
 		try{
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 			
 			
-			pstm  = conn.prepareStatement(
+			pstm1  = conn.prepareStatement(
 				 "INSERT INTO tpdied.insumo "
 				 + "( descripcion, unidad, costo_por_unidad ) "
 				 + "VALUES ( ?, ?, ? );" ,
 				 Statement.RETURN_GENERATED_KEYS
 			);
 			 
-			 pstm.setString(1, obj.getDescripcion());
-			 pstm.setString(2, obj.getUnidad().toString());
-			 pstm.setDouble(3, obj.getCostoPorUnidad());
+			 pstm1.setString(1, obj.getDescripcion());
+			 pstm1.setString(2, obj.getUnidad().toString());
+			 pstm1.setDouble(3, obj.getCostoPorUnidad());
 			 
-			 pstm.execute();
+			 pstm1.execute();
 			 
-			 ResultSet generatedKeys = pstm.getGeneratedKeys();
+			 ResultSet generatedKeys = pstm1.getGeneratedKeys();
 			 
-			 pstm.close();
+			 
 			 
 			 if (generatedKeys.next()) {
 	            obj.setId(generatedKeys.getInt(1));
 	         }
 			 
-			 pstm  = conn.prepareStatement(
+			 pstm2  = conn.prepareStatement(
 				 "INSERT INTO tpdied.insumo_general "
 				 + "( id, peso ) "
 				 + "VALUES ( ?, ? );"
 			 );
 			 
-			 pstm.setInt(1, obj.getId());
-			 pstm.setDouble(2, obj.getPeso());
+			 pstm2.setInt(1, obj.getId());
+			 pstm2.setDouble(2, obj.getPeso());
 			 
-			 pstm.execute();
+			 pstm2.execute();
 			 
-			 pstm.close();
+			 pstm1.close();
+			 pstm2.close();
 			 
 			 conn.close();
 			 
@@ -91,8 +92,7 @@ public class InsumoGeneralDAOImplSQL implements InsumoGeneralDAO {
 			 PreparedStatement pstm  = conn.prepareStatement("SELECT * FROM tpdied.insumo I, tpdied.insumo_general IG WHERE I.id=? AND IG.id=I.id ;");
 			 pstm.setInt(1, id);
 			 res=pstm.executeQuery();
-			 pstm.close();
-			 conn.close();
+			 
 			 
 			 if(res.next()) {
 				 return new InsumoGeneral(
@@ -103,6 +103,9 @@ public class InsumoGeneralDAOImplSQL implements InsumoGeneralDAO {
 				 	res.getDouble("peso")
 				 );
 			 }
+			 
+			 pstm.close();
+			 conn.close();
 			 
 			}catch(ClassNotFoundException e) {
 				e.printStackTrace();
@@ -125,8 +128,7 @@ public class InsumoGeneralDAOImplSQL implements InsumoGeneralDAO {
 		conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 		PreparedStatement pstm  = conn.prepareStatement("SELECT * FROM tpdied.insumo I, tpdied.insumo_general IG WHERE I.id=IG.id ;");
 		res=pstm.executeQuery();
-		pstm.close();
-		conn.close();
+		
 		 
 		while(res.next()) {
 			listaInsumos.add(
@@ -138,6 +140,9 @@ public class InsumoGeneralDAOImplSQL implements InsumoGeneralDAO {
 			 	res.getDouble("peso")
 			 ));
 		 }
+		
+		pstm.close();
+		conn.close();
 		 
 		}catch(ClassNotFoundException e) {
 			e.printStackTrace();
@@ -151,11 +156,12 @@ public class InsumoGeneralDAOImplSQL implements InsumoGeneralDAO {
 	@Override
 	public void update(InsumoGeneral newObj, InsumoGeneral oldObj) {
 		Connection conn = null;
-		PreparedStatement stmt = null;
+		PreparedStatement stmt1 = null;
+		PreparedStatement stmt2 = null;
 		try{
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
-			stmt = conn.prepareStatement(
+			stmt1 = conn.prepareStatement(
 				"UPDATE tpdied.insumo "
 				+ "SET descripcion= ? , "
 				+ "unidad= ? , "
@@ -163,27 +169,28 @@ public class InsumoGeneralDAOImplSQL implements InsumoGeneralDAO {
 				+ " WHERE id= ? ;"
 			);
 			
-			stmt.setString(1, newObj.getDescripcion());
-			stmt.setString(2, newObj.getUnidad().toString());
-			stmt.setDouble(3, newObj.getCostoPorUnidad());
-			stmt.setInt(4, newObj.getId());
+			stmt1.setString(1, newObj.getDescripcion());
+			stmt1.setString(2, newObj.getUnidad().toString());
+			stmt1.setDouble(3, newObj.getCostoPorUnidad());
+			stmt1.setInt(4, newObj.getId());
 			
-			stmt.execute();
+			stmt1.execute();			
 			
-			stmt.close();
 
-			stmt = conn.prepareStatement(
+			stmt2 = conn.prepareStatement(
 				"UPDATE tpdied.insumo_general "
 				+ "SET densidad= ? ,"
 				+ " WHERE id= ?  ;"
 			);
 			
-			stmt.setDouble(1, newObj.getPeso());
-			stmt.setInt(2, oldObj.getId());
+			stmt2.setDouble(1, newObj.getPeso());
+			stmt2.setInt(2, oldObj.getId());
 			
-			stmt.execute();
+			stmt2.execute();
 			
-			stmt.close();
+			stmt1.close();
+			stmt2.close();
+			
 			conn.close();
 			
 			}catch(ClassNotFoundException e) {
@@ -197,20 +204,27 @@ public class InsumoGeneralDAOImplSQL implements InsumoGeneralDAO {
 	@Override
 	public boolean delete(InsumoGeneral obj) {
 		Connection conn = null;
-		PreparedStatement stmt = null;
+		PreparedStatement stmt1 = null;
+		PreparedStatement stmt2 = null;
 		int rowsDeletedParent = 0;
 		int rowsDeletedChild = 0;
 		try {
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
-			stmt = conn.prepareStatement("DELETE FROM tpdied.insumo WHERE id= ? ;");
-			stmt.setInt(1, obj.getId());
-			rowsDeletedParent = stmt.executeUpdate();
-			stmt.close();
-			stmt  = conn.prepareStatement("DELETE FROM tpdied.insumo_general WHERE id= ? ;");
-			stmt.setInt(1, obj.getId());
-			rowsDeletedChild = stmt.executeUpdate();
-			stmt.close();
+			
+			stmt1 = conn.prepareStatement("DELETE FROM tpdied.insumo WHERE id= ? ;");
+			stmt1.setInt(1, obj.getId());
+			
+			rowsDeletedParent = stmt1.executeUpdate();	
+			
+			stmt2  = conn.prepareStatement("DELETE FROM tpdied.insumo_general WHERE id= ? ;");
+			stmt2.setInt(1, obj.getId());
+			
+			rowsDeletedChild = stmt2.executeUpdate();
+			
+			stmt1.close();
+			stmt2.close();
+			
 			conn.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
