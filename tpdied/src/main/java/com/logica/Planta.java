@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class Planta  {
 	public String nombre;
-	private List stocks;
+
 	
 	
 	public Planta() {
@@ -28,9 +28,7 @@ public class Planta  {
 		this.nombre=nombreP;
 	}
 	
-	public List getStocks() {
-		return this.stocks;
-	}
+	
 	
 	
 	@Override
