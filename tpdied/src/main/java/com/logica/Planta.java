@@ -2,14 +2,10 @@ package com.logica;
 
 import java.util.List;
 import java.util.Optional;
-/*Falta
- * Corregir el tipo de la lista stocks
- * 
-*/ 
+
 
 public class Planta  {
 	public String nombre;
-	private List stocks;
 	
 	
 	public Planta() {
@@ -26,10 +22,6 @@ public class Planta  {
 	
 	public void setNombre(String nombreP) {
 		this.nombre=nombreP;
-	}
-	
-	public List getStocks() {
-		return this.stocks;
 	}
 	
 	

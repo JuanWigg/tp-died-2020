@@ -1,5 +1,10 @@
 package com.logica;
 
+
+/**
+ * @author josesei
+ *
+ */
 public class InsumoGeneral extends Insumo {
 	
 	protected double peso;

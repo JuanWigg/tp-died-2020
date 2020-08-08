@@ -2,6 +2,11 @@ package com.logica;
 
 import java.util.List;
 
+
+/**
+ * @author josesei
+ *
+ */
 public interface InsumoGeneralDAO extends InsumoDAO<InsumoGeneral> {
 	public void create(InsumoGeneral obj);
 	public InsumoGeneral read(int id);

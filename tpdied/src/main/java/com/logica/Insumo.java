@@ -1,5 +1,10 @@
 package com.logica;
 
+/**
+ * @author josesei
+ *
+ */
+
 public abstract class Insumo {
 	
 	protected int id;

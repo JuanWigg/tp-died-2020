@@ -1,10 +1,23 @@
 package com.logica;
 
+/**
+ * @author josesei
+ *
+ */
+
 public class StockInsumo {
 	
 	private double cantidad;
 	private double puntoDePedido;
+	private Planta planta;
 	private Insumo insumo;
+	
+	public StockInsumo(Planta planta, Insumo insumo, double cantidad, double puntoDePedido) {
+		this.planta = planta;
+		this.insumo = insumo;
+		this.cantidad = cantidad;
+		this.puntoDePedido = puntoDePedido;
+	}
 
 	public double getCantidad() {
 		return cantidad;
@@ -14,9 +27,7 @@ public class StockInsumo {
 		this.cantidad = cantidad;
 	}
 
-	public StockInsumo() {
-		// TODO Auto-generated constructor stub
-	}
+
 
 	public double getPuntoDePedido() {
 		return puntoDePedido;
@@ -32,6 +43,14 @@ public class StockInsumo {
 
 	public void setInsumo(Insumo insumo) {
 		this.insumo = insumo;
+	}
+
+	public Planta getPlanta() {
+		return planta;
+	}
+
+	public void setPlanta(Planta planta) {
+		this.planta = planta;
 	}
 
 }

@@ -11,6 +11,11 @@ import java.util.List;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
+/**
+ * @author josesei
+ *
+ */
+
 public class InsumoGeneralDAOImplSQL implements InsumoGeneralDAO {
 	
 	Dotenv dotenv = Dotenv.load();

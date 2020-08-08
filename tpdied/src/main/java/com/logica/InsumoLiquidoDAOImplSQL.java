@@ -11,6 +11,11 @@ import java.util.List;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
+/**
+ * @author josesei
+ *
+ */
+
 public class InsumoLiquidoDAOImplSQL implements InsumoLiquidoDAO {
 	
 	Dotenv dotenv = Dotenv.load();
@@ -117,23 +122,23 @@ public class InsumoLiquidoDAOImplSQL implements InsumoLiquidoDAO {
 		List<InsumoLiquido> listaInsumos = new ArrayList<InsumoLiquido>();
 		
 		try{
-		Class.forName("org.postgresql.Driver");
-		conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
-		PreparedStatement pstm  = conn.prepareStatement("SELECT * FROM tpdied.insumo I, tpdied.insumo_liquido IL WHERE I.id=IL.id ;");
-		res=pstm.executeQuery();
-		pstm.close();
-		conn.close();
-		 
-		while(res.next()) {
-			listaInsumos.add(
-				new InsumoLiquido(
-			    res.getInt("id"),
-			 	res.getString("descripcion"),
-			 	Unidad.valueOf(res.getString("unidad")),
-			 	res.getDouble("costo_por_unidad"),
-			 	res.getDouble("densidad")
-			 ));
-		 }
+			Class.forName("org.postgresql.Driver");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
+			PreparedStatement pstm  = conn.prepareStatement("SELECT * FROM tpdied.insumo I, tpdied.insumo_liquido IL WHERE I.id=IL.id ;");
+			res=pstm.executeQuery();
+			pstm.close();
+			conn.close();
+			 
+			while(res.next()) {
+				listaInsumos.add(
+					new InsumoLiquido(
+				    res.getInt("id"),
+				 	res.getString("descripcion"),
+				 	Unidad.valueOf(res.getString("unidad")),
+				 	res.getDouble("costo_por_unidad"),
+				 	res.getDouble("densidad")
+				 ));
+			 }
 		 
 		}catch(ClassNotFoundException e) {
 			e.printStackTrace();

@@ -1,5 +1,10 @@
 package com.logica;
 
+/**
+ * @author josesei
+ *
+ */
+
 public class InsumoLiquido extends Insumo {
 	
 	protected double densidad;
