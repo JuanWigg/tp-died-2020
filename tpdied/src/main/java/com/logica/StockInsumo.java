@@ -6,7 +6,7 @@ package com.logica;
  */
 
 public class StockInsumo {
-	
+	private Planta planta;
 	private double cantidad;
 	private double puntoDePedido;
 	private Planta planta;
@@ -43,6 +43,10 @@ public class StockInsumo {
 
 	public void setInsumo(Insumo insumo) {
 		this.insumo = insumo;
+	}
+	
+	public Planta getPlanta() {
+		return planta;
 	}
 
 	public Planta getPlanta() {
