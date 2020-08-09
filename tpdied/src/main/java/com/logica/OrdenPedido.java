@@ -17,6 +17,7 @@ public class OrdenPedido {
 	private EstadoOrden estado;
 	private DetalleEnvio detalleEnvio;
 	private List<DetalleItem> detalleItems;
+	private Planta plantaDestino;
 
 	public DetalleEnvio getDetalleEnvio() {
 		return detalleEnvio;
@@ -62,13 +63,18 @@ public class OrdenPedido {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public OrdenPedido(int nroOrden, LocalDate fechaSolicitud, LocalDate fechaEntrega, EstadoOrden estado, DetalleEnvio detalleEnvio, List<DetalleItem> detalleItems){
+	public OrdenPedido(
+			int nroOrden, LocalDate fechaSolicitud, LocalDate fechaEntrega, 
+			EstadoOrden estado, DetalleEnvio detalleEnvio, List<DetalleItem> detalleItems,
+			Planta plantaDestino
+	){
 		this.nroOrden = nroOrden;
 		this.fechaSolicitud = fechaSolicitud;
 		this.fechaEntrega = fechaEntrega;
 		this.estado = estado;
 		this.detalleEnvio = detalleEnvio;
 		this.detalleItems = detalleItems;
+		this.plantaDestino = plantaDestino;
 	}
 
 	public List<DetalleItem> getDetalleItems() {
@@ -77,6 +83,14 @@ public class OrdenPedido {
 
 	public void setDetalleItems(List<DetalleItem> detalleItems) {
 		this.detalleItems = detalleItems;
+	}
+
+	public Planta getPlantaDestino() {
+		return plantaDestino;
+	}
+
+	public void setPlantaDestino(Planta plantaDestino) {
+		this.plantaDestino = plantaDestino;
 	}
 
 }
