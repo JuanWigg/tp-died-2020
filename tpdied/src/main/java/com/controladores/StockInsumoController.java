@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import com.logica.Insumo;
 import com.logica.InsumoGeneral;
+import com.logica.OrdenPedido;
 import com.logica.Planta;
 import com.logica.StockInsumo;
 import com.logica.StockInsumoDAOImplSQL;
@@ -34,5 +35,10 @@ public class StockInsumoController {
 				Double.parseDouble(datosStock.get(2)),
 				Double.parseDouble(datosStock.get(3)));
 		(new StockInsumoDAOImplSQL()).addStock(stock);
+	}
+	
+	
+	public ArrayList<Planta> plantasConStockSuficiente(OrdenPedido orden){
+		return (new StockInsumoDAOImplSQL()).plantasConStockSuficiente(orden);
 	}
 }

@@ -7,10 +7,9 @@ public class ModeloTablaOrdenes extends DefaultTableModel {
 	String[] columnas;
 	Object[][] data;
 	
-	public ModeloTablaOrdenes(String[] columnas) {
+	public ModeloTablaOrdenes(Object[][] data, String[] columnas) {
 		super();
-		Object[][] a={{1,2},{3,4}};
-		data = a;
+		this.data = data;
 		this.columnas = columnas;
 		setDataVector(data,columnas);
 	}

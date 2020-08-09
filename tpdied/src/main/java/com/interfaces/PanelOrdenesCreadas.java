@@ -11,9 +11,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.*;
+
+import com.controladores.StockInsumoController;
+import com.logica.Camion;
+import com.logica.CamionDAOImplSQL;
+import com.logica.OrdenPedido;
+import com.logica.Planta;
 
 public class PanelOrdenesCreadas extends JPanel{
 	ArrayList<String> columnasTabla;
@@ -24,7 +32,7 @@ public class PanelOrdenesCreadas extends JPanel{
 	
 	ModeloTablaOrdenes model;
 	//ArrayList<OrdenPedido> listaOrdenes;
-	ArrayList<Integer> listaOrdenes;
+	ArrayList<OrdenPedido> listaOrdenes;
 	public PanelOrdenesCreadas() {
 		super();
 		inicializarComponentes();
@@ -54,8 +62,12 @@ public class PanelOrdenesCreadas extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+					//Ventana ver detalles orden
+					// TODO INICIALIZAR LISTA ORDENES
+					construirTabla(setearColumnas(), obtenerMatrizDatos());
 				}
+
+			
 			
 		});
 		
@@ -64,7 +76,8 @@ public class PanelOrdenesCreadas extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				VentanaProcesarOrden dialogo = new VentanaProcesarOrden(new JFrame(), true);
+				int fila = tablaOrdenes.getSelectedRow();
+				VentanaProcesarOrden dialogo = new VentanaProcesarOrden(listaOrdenes.get(fila), new JFrame(), true);
 				}
 			
 		});
@@ -89,7 +102,7 @@ public class PanelOrdenesCreadas extends JPanel{
 				// TODO Auto-generated method stub
 			}
 		});
-		construirTabla(setearColumnas());
+		construirTabla(setearColumnas(), obtenerMatrizDatos());
 		
 		
 	}
@@ -126,9 +139,20 @@ public class PanelOrdenesCreadas extends JPanel{
 		panelInf.add(botonAtras);
 			
 	}
+	private Object[][] obtenerMatrizDatos() {
+		String informacion[][] = new String[listaOrdenes.size()][columnasTabla.size()];
+		
+		for(int i=0; i<informacion.length ; i++) {
+			informacion[i][0] = listaOrdenes.get(i).getNroOrden() + "";
+			informacion[i][1] = listaOrdenes.get(i).getPlantaDestino().getNombre() + "";
 
-	public void construirTabla(String[] columnas) {
-		 model = new ModeloTablaOrdenes(columnas);
+		}
+		
+		
+		return informacion;
+	}
+	public void construirTabla(String[] columnas, Object[][] data) {
+		 model = new ModeloTablaOrdenes(data, columnas);
 		 tablaOrdenes.setModel(model);
 		
 		//ASIGNO TIPO DE DATOS A CADA COLUMNA

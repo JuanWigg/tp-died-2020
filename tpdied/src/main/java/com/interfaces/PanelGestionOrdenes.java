@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -34,18 +35,31 @@ public class PanelGestionOrdenes extends JPanel{
 		botonVerCreadas.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				Window ventana = SwingUtilities.windowForComponent(((JButton) e.getSource()).getParent());
+				((JFrame) ventana).setContentPane(new PanelOrdenesCreadas());
+				ventana.revalidate();
+				ventana.repaint();
+				
 			}
 		});
 		botonVerProcesadas.setPreferredSize(new Dimension(300, 70));
 		botonVerProcesadas.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				Window ventana = SwingUtilities.windowForComponent(((JButton) e.getSource()).getParent());
+				((JFrame) ventana).setContentPane(new PanelOrdenesCreadas());
+				ventana.revalidate();
+				ventana.repaint();
 			}
 		});
 		botonNuevaOrden.setPreferredSize(new Dimension(300, 70));
 		botonNuevaOrden.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				Window ventana = SwingUtilities.windowForComponent(((JButton) e.getSource()).getParent());
+				((JFrame) ventana).setContentPane(new PanelAgregarPedido());
+				ventana.revalidate();
+				ventana.repaint();
 			}
 		});
 		

@@ -8,6 +8,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.Vector;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -18,9 +20,13 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
+import com.logica.OrdenPedido;
+import com.logica.Ruta;
+
 
 public class VentanaProcesarOrden extends JDialog{
 	ArrayList<String> columnasTabla;
+	ArrayList<Ruta> listaRutas;
 	JLabel mensajeError;
 	JLabel rutaCorta;
 	JLabel rutaRapida;
@@ -33,12 +39,15 @@ public class VentanaProcesarOrden extends JDialog{
 	JSplitPane split2;
 	JTable tablaCortas;
 	JTable tablaRapidas;
-	ModeloTablaOrdenes model;
+	ModeloTablaOrdenes modelCortas;
+	ModeloTablaOrdenes modelRapidas;
+	OrdenPedido ordenPedido;
 	
-	public VentanaProcesarOrden(JFrame padre, boolean modal) {
+	public VentanaProcesarOrden(OrdenPedido ordenPedido, JFrame padre, boolean modal) {
 		super();
 		inicializarComponentes();
 		armarPanel();
+		this.ordenPedido = ordenPedido;
 		this.setContentPane(panel);
 		this.setSize(1024,720);
 		this.setLocationRelativeTo(null);
@@ -61,11 +70,23 @@ public class VentanaProcesarOrden extends JDialog{
 		 split.setResizeWeight(0.5d);
 		 split2.setResizeWeight(0.5d);
 		 splitVert = new JSplitPane(JSplitPane.VERTICAL_SPLIT,split2,split);
-		 construirTabla(setearColumnas());
+		 construirTabla(setearColumnas(), obtenerMatrizDatos(0), obtenerMatrizDatos(1));
 		
 	}
 	
 	
+	private Object[][] obtenerMatrizDatos(int tipo) {
+		
+		if(tipo == 0) {
+			
+		}
+		if(tipo == 1) {
+			
+		}
+		
+		String informacion[][] = new String[listaRutas.size()][columnasTabla.size()];
+	}
+
 	private void armarPanel() {
 		panel = new JPanel();
 		panel2= new JPanel();
@@ -86,10 +107,11 @@ public class VentanaProcesarOrden extends JDialog{
 		
 	}
 	
-	public void construirTabla(String[] columnas) {
-		 model = new ModeloTablaOrdenes(columnas);
-		 tablaCortas.setModel(model);
-		 tablaRapidas.setModel(model);
+	public void construirTabla(String[] columnas, Object[][] dataCorta, Object[][] dataRapida) {
+		 modelCortas = new ModeloTablaOrdenes(dataCorta, columnas);
+		 modelRapidas = new ModeloTablaOrdenes(dataRapida, columnas);
+		 tablaCortas.setModel(modelCortas);
+		 tablaRapidas.setModel(modelRapidas);
 		
 		//ASIGNO TIPO DE DATOS A CADA COLUMNA
 		 tablaCortas.getColumnModel().getColumn(0).setCellRenderer(new GestionCeldasOrdenes("numero"));
@@ -115,7 +137,6 @@ public class VentanaProcesarOrden extends JDialog{
 	
 	private String[] setearColumnas() {
 		columnasTabla = new ArrayList<String>();
-		columnasTabla.add("Id de Ruta");
 		columnasTabla.add("Planta de Origen");
 		columnasTabla.add("Distancia");
 		columnasTabla.add("Duración estimada");
