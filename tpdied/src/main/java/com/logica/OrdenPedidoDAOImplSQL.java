@@ -40,7 +40,6 @@ public class OrdenPedidoDAOImplSQL implements OrdenPedidoDAO {
 		Connection conn = null;
 		PreparedStatement pstm = null;
 		ResultSet nroOrdenKey = null;
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		int nroOrden = -1;
 		try{
 			Class.forName("org.postgresql.Driver");
@@ -50,12 +49,12 @@ public class OrdenPedidoDAOImplSQL implements OrdenPedidoDAO {
 			pstm  = conn.prepareStatement(
 				 "INSERT INTO tpdied.orden_pedido "
 				 + "( fecha_solicitud, fecha_entrega, estado, planta_destino ) "
-				 + "VALUES ( ?, ?, ?, ? );",
+				 + "VALUES ( ?, ?, ?::tpdied.estado_pedido, ? );",
 				 Statement.RETURN_GENERATED_KEYS
 			);
 			 
-			 pstm.setString(1, formatter.format(obj.getFechaSolicitud()));
-			 pstm.setString(2, formatter.format(obj.getFechaEntrega()));
+			 pstm.setObject(1, obj.getFechaSolicitud());
+			 pstm.setObject(2, obj.getFechaEntrega());
 			 pstm.setString(3, obj.getEstado().toString());
 			 pstm.setString(4, obj.getPlantaDestino().getNombre());
 			 
@@ -176,7 +175,7 @@ public class OrdenPedidoDAOImplSQL implements OrdenPedidoDAO {
 			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 			PreparedStatement pstm  = conn.prepareStatement("SELECT * "
 					+ "FROM tpdied.orden_pedido " 
-					+ "WHERE estado = ? ;" );
+					+ "WHERE estado = ?::tpdied.estado_pedido ;" );
 			pstm.setString(1, estado.toString());
 			res=pstm.executeQuery();
 			 
@@ -216,7 +215,7 @@ public class OrdenPedidoDAOImplSQL implements OrdenPedidoDAO {
 				"UPDATE tpdied.orden_pedido "
 				+ "SET fecha_solicitud = ? , "
 				+ "SET fecha_entrega = ? , "
-				+ "SET estado = ? , "
+				+ "SET estado = ?::tpdied.estado_pedido , "
 				+ "SET planta_destino = ? , "
 				+ " WHERE nro_orden_pedido = ? ;"
 			);		
