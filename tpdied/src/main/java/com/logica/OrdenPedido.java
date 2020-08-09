@@ -30,7 +30,7 @@ public class OrdenPedido {
 	public int getNroOrden() {
 		return nroOrden;
 	}
-
+	
 	public void setNroOrden(int nroOrden) {
 		this.nroOrden = nroOrden;
 	}
@@ -63,6 +63,7 @@ public class OrdenPedido {
 		// TODO Auto-generated constructor stub
 	}
 	
+
 	public OrdenPedido(
 			int nroOrden, LocalDate fechaSolicitud, LocalDate fechaEntrega, 
 			EstadoOrden estado, DetalleEnvio detalleEnvio, List<DetalleItem> detalleItems,
@@ -75,6 +76,11 @@ public class OrdenPedido {
 		this.detalleEnvio = detalleEnvio;
 		this.detalleItems = detalleItems;
 		this.plantaDestino = plantaDestino;
+	}
+
+	public OrdenPedido(int id) {
+		// TODO Auto-generated constructor stub
+		this.nroOrden = id;
 	}
 
 	public List<DetalleItem> getDetalleItems() {

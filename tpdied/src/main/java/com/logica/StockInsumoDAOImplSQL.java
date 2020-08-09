@@ -318,6 +318,48 @@ public class StockInsumoDAOImplSQL implements StockInsumoDAO {
 		}
 	}
 
-
+	public ArrayList<Planta> plantasConStockSuficiente(OrdenPedido orden){
+		Connection conn = null;
+		ArrayList<Planta> plantas = new ArrayList<Planta>();
+		try {
+			Class.forName("org.postgresql.Driver");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
+			PreparedStatement stmt = conn.prepareStatement("select nombre_planta from (select bar.nombre_planta "
+					+ "from tpdied.detalle_item dt, " 
+					+ "(select * from tpdied.stock_insumo st right join "
+					+ "(SELECT * FROM tpdied.planta as p "
+					+ "WHERE NOT EXISTS ((SELECT id_insumo FROM tpdied.detalle_item as DI ) "
+					+ "EXCEPT (SELECT st.id_insumo FROM tpdied.stock_insumo as st WHERE st.nombre_planta = p.nombre) )"
+					+ ") as foo on st.nombre_planta=foo.nombre) as bar "
+					+ "where dt.id_insumo = bar.id_insumo and "
+					+ "dt.cantidad <= bar.cantidad) as XD GROUP BY XD.nombre_planta having "
+					+ "count(nombre_planta)=(select count(id_insumo) "
+					+ "from tpdied.detalle_item group by nro_orden_pedido having nro_orden_pedido = ?); ");
+			stmt.setInt(1, orden.getNroOrden());
+			ResultSet res = stmt.executeQuery();
+			if(!res.next()) {
+				return plantas;
+			}
+			else {
+				
+				do {
+					plantas.add(new Planta(res.getString(1)));
+					
+					
+				} while (res.next());
+			}
+			stmt.close();
+			conn.close();
+		}
+		catch(ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return plantas;
+	}
 
 }
