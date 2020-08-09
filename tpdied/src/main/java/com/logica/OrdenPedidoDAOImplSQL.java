@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -28,12 +29,19 @@ public class OrdenPedidoDAOImplSQL implements OrdenPedidoDAO {
 	public OrdenPedidoDAOImplSQL() {
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	@Override
 	public void create(OrdenPedido obj) {
+		//DEPRECATED
+	}
+
+	@Override
+	public int createAndGetKey(OrdenPedido obj) {
 		Connection conn = null;
 		PreparedStatement pstm = null;
+		ResultSet nroOrdenKey = null;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		int nroOrden = -1;
 		try{
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
@@ -42,7 +50,8 @@ public class OrdenPedidoDAOImplSQL implements OrdenPedidoDAO {
 			pstm  = conn.prepareStatement(
 				 "INSERT INTO tpdied.orden_pedido "
 				 + "( fecha_solicitud, fecha_entrega, estado, planta_destino ) "
-				 + "VALUES ( ?, ?, ?, ? );"
+				 + "VALUES ( ?, ?, ?, ? );",
+				 Statement.RETURN_GENERATED_KEYS
 			);
 			 
 			 pstm.setString(1, formatter.format(obj.getFechaSolicitud()));
@@ -51,6 +60,12 @@ public class OrdenPedidoDAOImplSQL implements OrdenPedidoDAO {
 			 pstm.setString(4, obj.getPlantaDestino().getNombre());
 			 
 			 pstm.execute();
+			 
+			 nroOrdenKey = pstm.getGeneratedKeys();		
+			 
+			 if (nroOrdenKey.next()) {
+		          nroOrden = nroOrdenKey.getInt(1);
+		     }
 			 
 			 pstm.close();
 			 
@@ -62,6 +77,7 @@ public class OrdenPedidoDAOImplSQL implements OrdenPedidoDAO {
 			} catch(SQLException e) {
 				e.printStackTrace();
 			}
+		return nroOrden;
 	}
 
 	@Override
