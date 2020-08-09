@@ -13,6 +13,11 @@ public class DetalleItem {
 	public DetalleItem() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	public DetalleItem(Insumo insumo, double cantidad) {
+		this.insumo = insumo;
+		this.cantidad = cantidad;
+	}
 
 	public double getCantidad() {
 		return cantidad;
