@@ -51,7 +51,14 @@ public class Ruta {
 		return menorPesoMax;
 	}
 	
-	
+	public void calcularMenorPesoMax() {
+		Integer menor=listaTramos.get(0).getPesoMaximoPermitido();
+		for (Tramo t : listaTramos) {
+			if(t.getPesoMaximoPermitido()<menor)
+				menor=t.getPesoMaximoPermitido();
+		}
+		this.menorPesoMax=menor;
+	}
 	
 	public Ruta(Integer id, List<Tramo> listaTramos, Double duracionTotal, Integer distanciaTotal,
 			Integer menorPesoMax) {
