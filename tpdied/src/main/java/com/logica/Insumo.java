@@ -52,5 +52,8 @@ public abstract class Insumo {
 		this.unidad = unidad;
 		this.costoPorUnidad = costoPorUnidad;
 	}
-
+	
+	public Insumo(int id) {
+		this.id = id;
+	}
 }
