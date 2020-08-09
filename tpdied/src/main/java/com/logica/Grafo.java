@@ -101,11 +101,15 @@ public class Grafo {
 		return null;
 		
 	}
-	public List<List<Planta>> caminos(Planta p1,Planta p2){
-		List<List<Planta>> salida = new ArrayList<List<Planta>>();
+	public List<Ruta> caminos(Planta p1,Planta p2){
+		List<List<Planta>> salidaAux = new ArrayList<List<Planta>>();
+		List<Ruta> salida = new ArrayList<Ruta>();
 		List<Planta> marcadas = new ArrayList<Planta>();
 		marcadas.add(p1);
-		buscarCaminosAux(p1,p2,marcadas,salida);
+		buscarCaminosAux(p1,p2,marcadas,salidaAux);
+		for (int i=0;i<salidaAux.size()-1;i++) {
+			salida.add(new Ruta(i+1,salidaAux.get(i)));
+		}
 		return salida;
     	
     }
