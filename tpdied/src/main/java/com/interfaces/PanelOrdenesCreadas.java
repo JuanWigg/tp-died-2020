@@ -48,8 +48,21 @@ public class PanelOrdenesCreadas extends JPanel{
 			}
 			
 		});
-		verDetalles.setPreferredSize(new Dimension(200, 50));
+		
 		procesarOrden.setPreferredSize(new Dimension(200, 50));
+		procesarOrden.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+                    
+				}
+			
+		});
+		
+		
+		
+		verDetalles.setPreferredSize(new Dimension(200, 50));
+		
 		tablaOrdenes= new JTable();
 		tablaOrdenes.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent e) {
