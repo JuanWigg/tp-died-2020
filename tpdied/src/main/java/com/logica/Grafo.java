@@ -109,19 +109,15 @@ public class Grafo {
         buscarCaminosAux(p1,p2,marcadas,salida);
         for (int i=0;i<salida.size();i++) {
             salidaMod.add(new Ruta(i+1,salida.get(i)));
-            for (int j=0;j<salida.get(i).size();j++) {
-                salidaMod.get(i).getListaTramos().add(this.getTramo(salida.get(i).get(j),salida.get(i).get(j)));
-            }
+            salidaMod.get(i).crearListaTramos(this);
         }
-
-        return salidaMod;
-    	
+        return salidaMod;	
     }
 	
 
 	private void buscarCaminosAux(Planta p1,Planta p2,List<Planta> marcadas,
 			List<List<Planta>> salida) {
-			List<Planta> adyacentes = this.getAdyacentes(p1);
+			List<Planta> adyacentes = this.getAdyacentes(p1.getNombre());
 			List<Planta> copiaMarcadas = null;
 			for(Planta p: adyacentes) {
 				copiaMarcadas=marcadas.stream().collect(Collectors.toList());

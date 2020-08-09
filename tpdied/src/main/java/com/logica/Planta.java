@@ -34,7 +34,7 @@ public class Planta  {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		if(this.nombre== ((Planta) obj).getNombre())
+		if(this.nombre.contentEquals(((Planta) obj).getNombre()))
 			return true;
 		else
 			return false;
