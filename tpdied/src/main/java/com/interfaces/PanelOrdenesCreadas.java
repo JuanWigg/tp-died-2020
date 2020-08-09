@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
+import com.controladores.OrdenPedidoController;
 import com.controladores.StockInsumoController;
 import com.logica.Camion;
 import com.logica.CamionDAOImplSQL;
@@ -35,6 +36,7 @@ public class PanelOrdenesCreadas extends JPanel{
 	ArrayList<OrdenPedido> listaOrdenes;
 	public PanelOrdenesCreadas() {
 		super();
+		listaOrdenes = (new OrdenPedidoController()).getPedidosCreados();
 		inicializarComponentes();
 		armarPanel();
 	}

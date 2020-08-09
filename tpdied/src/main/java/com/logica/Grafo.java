@@ -11,8 +11,8 @@ public class Grafo {
 	public TreeMap<String,Double> pr;
 	
 	public Grafo(){
-		this.tramos = new ArrayList<Tramo>();
-		this.plantas = new ArrayList<Planta>();
+		this.tramos = (new TramoDAOImplSQL()).obtenerTramos();
+		this.plantas = (new PlantaDAOImplSQL()).consultarPlantas();
 		this.pr=new TreeMap<String, Double>();
 	}
 	
@@ -102,15 +102,19 @@ public class Grafo {
 		
 	}
 	public List<Ruta> caminos(Planta p1,Planta p2){
-		List<List<Planta>> salidaAux = new ArrayList<List<Planta>>();
-		List<Ruta> salida = new ArrayList<Ruta>();
-		List<Planta> marcadas = new ArrayList<Planta>();
-		marcadas.add(p1);
-		buscarCaminosAux(p1,p2,marcadas,salidaAux);
-		for (int i=0;i<salidaAux.size()-1;i++) {
-			salida.add(new Ruta(i+1,salidaAux.get(i)));
-		}
-		return salida;
+		List<List<Planta>> salida = new ArrayList<List<Planta>>();
+        List<Ruta> salidaMod = new ArrayList<Ruta>();
+        List<Planta> marcadas = new ArrayList<Planta>();
+        marcadas.add(p1);
+        buscarCaminosAux(p1,p2,marcadas,salida);
+        for (int i=0;i<salida.size();i++) {
+            salidaMod.add(new Ruta(i+1,salida.get(i)));
+            for (int j=0;j<salida.get(i).size();j++) {
+                salidaMod.get(i).getListaTramos().add(this.getTramo(salida.get(i).get(j),salida.get(i).get(j)));
+            }
+        }
+
+        return salidaMod;
     	
     }
 	

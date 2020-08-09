@@ -30,7 +30,9 @@ public class Ruta {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	public List<Planta> getListaPlantasRuta(){
+		return listaPlantasRuta;
+	}
 	public List<Tramo> getListaTramos() {
 		return listaTramos;
 	}

@@ -87,5 +87,8 @@ public class OrdenPedido {
 	public void setDetalleItems(List<DetalleItem> detalleItems) {
 		this.detalleItems = detalleItems;
 	}
+	public void setPlantaDestino(Planta plantaDestino) {
+		this.plantaDestino = plantaDestino;
+	}
 
 }

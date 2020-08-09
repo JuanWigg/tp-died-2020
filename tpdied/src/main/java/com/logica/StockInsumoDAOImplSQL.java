@@ -334,8 +334,7 @@ public class StockInsumoDAOImplSQL implements StockInsumoDAO {
 					+ "where dt.id_insumo = bar.id_insumo and "
 					+ "dt.cantidad <= bar.cantidad) as XD GROUP BY XD.nombre_planta having "
 					+ "count(nombre_planta)=(select count(id_insumo) "
-					+ "from tpdied.detalle_item group by nro_orden_pedido having nro_orden_pedido = ?); ");
-			stmt.setInt(1, orden.getNroOrden());
+					+ "from tpdied.detalle_item group by nro_orden_pedido having nro_orden_pedido = " + orden.getNroOrden() + "); ");
 			ResultSet res = stmt.executeQuery();
 			if(!res.next()) {
 				return plantas;

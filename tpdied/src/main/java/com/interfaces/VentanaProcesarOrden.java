@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -20,13 +21,17 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
+import com.controladores.StockInsumoController;
+import com.logica.Grafo;
 import com.logica.OrdenPedido;
+import com.logica.Planta;
 import com.logica.Ruta;
 
 
 public class VentanaProcesarOrden extends JDialog{
 	ArrayList<String> columnasTabla;
-	ArrayList<Ruta> listaRutas;
+	ArrayList<Ruta> listaRutasCortas;
+	ArrayList<Ruta> listaRutasRapidas;
 	JLabel mensajeError;
 	JLabel rutaCorta;
 	JLabel rutaRapida;
@@ -45,9 +50,10 @@ public class VentanaProcesarOrden extends JDialog{
 	
 	public VentanaProcesarOrden(OrdenPedido ordenPedido, JFrame padre, boolean modal) {
 		super();
+		this.ordenPedido = ordenPedido;
 		inicializarComponentes();
 		armarPanel();
-		this.ordenPedido = ordenPedido;
+		
 		this.setContentPane(panel);
 		this.setSize(1024,720);
 		this.setLocationRelativeTo(null);
@@ -76,15 +82,31 @@ public class VentanaProcesarOrden extends JDialog{
 	
 	
 	private Object[][] obtenerMatrizDatos(int tipo) {
+		ArrayList<Planta> plantasConStock = (new StockInsumoController()).plantasConStockSuficiente(ordenPedido);
+		ArrayList<Ruta> caminosPosibles = new ArrayList<Ruta>();
+		ArrayList<Ruta> rutas = null;
+		Grafo g = new Grafo();
+		for(Planta p : plantasConStock) {
+			caminosPosibles.addAll(g.caminos(p, ordenPedido.getPlantaDestino()));
+		}
 		
 		if(tipo == 0) {
-			
+			listaRutasCortas = (ArrayList<Ruta>) (g.rutaMasCorta(caminosPosibles));
+			rutas = listaRutasCortas;
 		}
 		if(tipo == 1) {
-			
+			listaRutasCortas = (ArrayList<Ruta>) (g.rutaMasCortaTiempo(caminosPosibles));
+			rutas = listaRutasCortas;
 		}
 		
-		String informacion[][] = new String[listaRutas.size()][columnasTabla.size()];
+		String informacion[][] = new String[rutas.size()][columnasTabla.size()];
+		for(int i=0; i<informacion.length ; i++) {
+			informacion[i][0] = rutas.get(i).getListaPlantasRuta().get(0).getNombre();
+			informacion[i][1] = rutas.get(i).getDistanciaTotal() + "";
+			informacion[i][2] = rutas.get(i).getDuracionTotal() + "";
+ 			informacion[i][3] = rutas.get(i).getMenorPesoMax() + "";
+		}
+		return informacion;
 	}
 
 	private void armarPanel() {
@@ -114,11 +136,15 @@ public class VentanaProcesarOrden extends JDialog{
 		 tablaRapidas.setModel(modelRapidas);
 		
 		//ASIGNO TIPO DE DATOS A CADA COLUMNA
-		 tablaCortas.getColumnModel().getColumn(0).setCellRenderer(new GestionCeldasOrdenes("numero"));
+		 tablaCortas.getColumnModel().getColumn(0).setCellRenderer(new GestionCeldasOrdenes("texto"));
 		 tablaCortas.getColumnModel().getColumn(1).setCellRenderer(new GestionCeldasOrdenes("numero"));
+		 tablaCortas.getColumnModel().getColumn(2).setCellRenderer(new GestionCeldasOrdenes("numero"));
+		 tablaCortas.getColumnModel().getColumn(3).setCellRenderer(new GestionCeldasOrdenes("numero"));
 		 
-		 tablaRapidas.getColumnModel().getColumn(0).setCellRenderer(new GestionCeldasOrdenes("numero"));
+		 tablaRapidas.getColumnModel().getColumn(0).setCellRenderer(new GestionCeldasOrdenes("texto"));
 		 tablaRapidas.getColumnModel().getColumn(1).setCellRenderer(new GestionCeldasOrdenes("numero"));
+		 tablaRapidas.getColumnModel().getColumn(2).setCellRenderer(new GestionCeldasOrdenes("numero"));
+		 tablaRapidas.getColumnModel().getColumn(3).setCellRenderer(new GestionCeldasOrdenes("numero"));
 		 
 		 tablaCortas.getTableHeader().setReorderingAllowed(false);
 		 tablaCortas.setRowHeight(25);
@@ -129,10 +155,16 @@ public class VentanaProcesarOrden extends JDialog{
 		 tablaRapidas.setRowHeight(25);
 		 tablaRapidas.setGridColor(Color.BLACK);
 		// TAMAÑO DE CADA COLUMNA
-		 tablaCortas.getColumnModel().getColumn(0).setPreferredWidth(10);
+		 tablaCortas.getColumnModel().getColumn(0).setPreferredWidth(30);
 		 tablaCortas.getColumnModel().getColumn(1).setPreferredWidth(15);
-		 tablaRapidas.getColumnModel().getColumn(0).setPreferredWidth(10);
+		 tablaCortas.getColumnModel().getColumn(2).setPreferredWidth(20);
+		 tablaCortas.getColumnModel().getColumn(3).setPreferredWidth(20);
+		 
+		 
+		 tablaRapidas.getColumnModel().getColumn(0).setPreferredWidth(30);
 		 tablaRapidas.getColumnModel().getColumn(1).setPreferredWidth(15);
+		 tablaRapidas.getColumnModel().getColumn(2).setPreferredWidth(20);
+		 tablaRapidas.getColumnModel().getColumn(3).setPreferredWidth(20);
 	}
 	
 	private String[] setearColumnas() {

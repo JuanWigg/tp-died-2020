@@ -105,5 +105,38 @@ public class PlantaDAOImplSQL implements PlantaDAO{
 		return plantas;
 	}
 	
+	
+	
+	public ArrayList<Planta> consultarPlantas(){
+		ArrayList<Planta> plantasList = new ArrayList<Planta>();
+		Connection conn = null;
+		ResultSet res = null;
+		try{
+			Class.forName("org.postgresql.Driver");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
+			PreparedStatement pstm = conn.prepareStatement("SELECT nombre FROM tpdied.planta;");
+			res = pstm.executeQuery();
+			if(!res.next()) {
+				return null;
+			}
+			else {
+				
+				do {
+					
+					plantasList.add(new Planta(res.getString(1)));
+					
+				} while (res.next());
+			}
+			
+		} catch(ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return plantasList;
+		
+	}
+	
 
 }
