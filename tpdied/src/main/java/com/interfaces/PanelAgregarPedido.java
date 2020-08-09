@@ -34,7 +34,12 @@ import com.controladores.CamionController;
 import com.logica.Camion;
 import com.logica.CamionDAOImplSQL;
 import com.logica.DetalleItem;
+import com.logica.DetalleItemDAOImplSQL;
+import com.logica.EstadoOrden;
 import com.logica.Insumo;
+import com.logica.OrdenPedido;
+import com.logica.OrdenPedidoDAOImplSQL;
+import com.logica.Planta;
 import com.logica.PlantaDAOImplSQL;
 
 /**
@@ -121,6 +126,33 @@ public class PanelAgregarPedido extends JPanel{
 		//BOTONES
 		botonAceptar = new JButton("Registrar pedido");
 		botonAceptar.setPreferredSize(new Dimension(200, 40));
+		botonAceptar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				OrdenPedido o = new OrdenPedido();
+				o.setFechaSolicitud(LocalDate.now());
+				o.setFechaEntrega(LocalDate.parse(fieldFecha.getText().trim(), formatter));
+				o.setEstado(EstadoOrden.CREADA);
+				o.setPlantaDestino(new Planta((String) comboPlantas.getSelectedItem()));
+				int nro = (new OrdenPedidoDAOImplSQL()).create(o);
+				ArrayList<DetalleItem> items = new ArrayList<DetalleItem>();
+				int cantFilas = tablaItems.getRowCount();
+				for(int i=0; i<cantFilas; i++) {
+					items.get(i).setNroOrden(nro);
+					items.get(i).setCantidad(Double.parseDouble((String) tablaItems.getModel().getValueAt(i, 2)));
+					items.get(i).setInsumo(insumosAgregados.get(i).getInsumo());
+				}
+				DetalleItemDAOImplSQL SQLDetalleItem = new DetalleItemDAOImplSQL();
+				for(DetalleItem i : items) {
+					SQLDetalleItem.create(i);
+				}
+				
+			}
+			
+		});
 		botonCancelar = new JButton("Cancelar");
 		botonCancelar.setPreferredSize(new Dimension(200, 40));
 		botonCancelar.addActionListener(new ActionListener() {

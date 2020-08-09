@@ -98,8 +98,6 @@ public class OrdenPedido {
 		return plantaDestino;
 	}
 
-	public void setPlantaDestino(Planta plantaDestino) {
-		this.plantaDestino = plantaDestino;
-	}
+	
 
 }
