@@ -34,43 +34,23 @@ public class PanelGestionOrdenes extends JPanel{
 		botonVerCreadas.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
-				ventana.setContentPane(new PanelOrdenesCreadas());
-				ventana.revalidate();
-				ventana.repaint();
 			}
 		});
 		botonVerProcesadas.setPreferredSize(new Dimension(300, 70));
 		botonVerProcesadas.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
-				ventana.setContentPane(new PanelOrdenesProcesadas());
-				ventana.revalidate();
-				ventana.repaint();
 			}
 		});
 		botonNuevaOrden.setPreferredSize(new Dimension(300, 70));
 		botonNuevaOrden.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
-				ventana.setContentPane(new PanelAgregarPedido());
-				ventana.revalidate();
-				ventana.repaint();
 			}
 		});
 		
 		botonAtras.setPreferredSize(new Dimension(90, 30));
-		botonAtras.setLocation(400, 20);
-		botonAtras.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
-				ventana.setContentPane(new PanelPrincipal());
-				ventana.revalidate();
-				ventana.repaint();
-			}
-		});
+		
 	}
 	
 	

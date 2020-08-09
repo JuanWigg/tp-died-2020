@@ -1,14 +1,10 @@
 package com.interfaces;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -37,15 +33,6 @@ public class PanelOrdenesProcesadas extends JPanel{
 		entregarOrden=new JButton("Marcar orden como Entregada");
 		
 		botonAtras.setPreferredSize(new Dimension(100,30));
-		botonAtras.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
-				ventana.setContentPane(new PanelGestionOrdenes());
-				ventana.revalidate();
-				ventana.repaint();
-			}
-		});
 		verDetalles.setPreferredSize(new Dimension(200, 50));
 		entregarOrden.setPreferredSize(new Dimension(200, 50));
 		tablaOrdenes= new JTable();
@@ -84,7 +71,7 @@ public class PanelOrdenesProcesadas extends JPanel{
 		this.add(panelInf,BorderLayout.SOUTH);
 		GridBagConstraints gbc = new GridBagConstraints();
 		this.setPreferredSize(new Dimension(50,300));
-		panelInf.setLayout(new FlowLayout(FlowLayout.LEFT));
+		
 		gbc.insets=new Insets(10,10,10,10);
 		gbc.gridx=0;
 		gbc.gridy=0;
@@ -103,7 +90,7 @@ public class PanelOrdenesProcesadas extends JPanel{
 		gbc.gridy=0;
 		gbc.fill=GridBagConstraints.WEST;
 		gbc.anchor=GridBagConstraints.WEST;
-		panelInf.add(botonAtras);
+		panelInf.add(botonAtras,gbc);
 			
 	}
 

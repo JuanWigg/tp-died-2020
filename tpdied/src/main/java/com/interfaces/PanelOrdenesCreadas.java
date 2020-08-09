@@ -23,7 +23,8 @@ public class PanelOrdenesCreadas extends JPanel{
 	JTable tablaOrdenes;
 	
 	ModeloTablaOrdenes model;
-	//ArrayList<Orden> ordenes;
+	//ArrayList<OrdenPedido> listaOrdenes;
+	ArrayList<Integer> listaOrdenes;
 	public PanelOrdenesCreadas() {
 		super();
 		inicializarComponentes();
@@ -48,20 +49,25 @@ public class PanelOrdenesCreadas extends JPanel{
 			}
 			
 		});
+		verDetalles.setPreferredSize(new Dimension(200, 50));
+		verDetalles.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				}
+			
+		});
 		
 		procesarOrden.setPreferredSize(new Dimension(200, 50));
 		procesarOrden.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-                    
+				VentanaProcesarOrden dialogo = new VentanaProcesarOrden(new JFrame(), true);
 				}
 			
 		});
-		
-		
-		
-		verDetalles.setPreferredSize(new Dimension(200, 50));
 		
 		tablaOrdenes= new JTable();
 		tablaOrdenes.addMouseListener(new MouseListener() {
