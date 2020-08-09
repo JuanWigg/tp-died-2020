@@ -11,7 +11,7 @@ import java.util.List;
 
 public class OrdenPedido {
 	
-	private String nroOrden;
+	private int nroOrden;
 	private LocalDate fechaSolicitud;
 	private LocalDate fechaEntrega;
 	private EstadoOrden estado;
@@ -26,11 +26,11 @@ public class OrdenPedido {
 		this.detalleEnvio = detalleEnvio;
 	}
 
-	public String getNroOrden() {
+	public int getNroOrden() {
 		return nroOrden;
 	}
 
-	public void setNroOrden(String nroOrden) {
+	public void setNroOrden(int nroOrden) {
 		this.nroOrden = nroOrden;
 	}
 
@@ -60,6 +60,15 @@ public class OrdenPedido {
 
 	public OrdenPedido() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	public OrdenPedido(int nroOrden, LocalDate fechaSolicitud, LocalDate fechaEntrega, EstadoOrden estado, DetalleEnvio detalleEnvio, List<DetalleItem> detalleItems){
+		this.nroOrden = nroOrden;
+		this.fechaSolicitud = fechaSolicitud;
+		this.fechaEntrega = fechaEntrega;
+		this.estado = estado;
+		this.detalleEnvio = detalleEnvio;
+		this.detalleItems = detalleItems;
 	}
 
 	public List<DetalleItem> getDetalleItems() {
