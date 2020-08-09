@@ -10,21 +10,35 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
+import com.controladores.InsumoController;
 import com.controladores.PlantaController;
+import com.controladores.StockInsumoController;
+import com.logica.Camion;
+import com.logica.CamionDAOImplSQL;
 import com.logica.Insumo;
 import com.logica.Planta;
 import com.logica.StockInsumo;
@@ -42,15 +56,17 @@ public class PanelGestionStockInsumo extends JPanel{
 	JTable tablaStocks;
 	ModeloTablaStocks model;
 	JButton botonAtras;
-	JButton botonBuscar;
+	JButton botonAgregarStock;
 	String[] plantas;
-	String[] insumos;
+	String[][] insumos;
 	ArrayList<StockInsumo> listaStocks;
-	
+	HashMap<Integer,Integer> mapaInsumos;
 	
 	public PanelGestionStockInsumo() {
 			super();
-			inicializarComponentes();
+			listaStocks = (ArrayList<StockInsumo>) (new StockInsumoController()).consultarStocksInsuficientes();
+			mapaInsumos = (new StockInsumoController()).buscarStockTotalInsumos();
+			inicializarComponentes(); 
 			armarPanel();
 		
 		
@@ -58,14 +74,13 @@ public class PanelGestionStockInsumo extends JPanel{
 		}
 	
 	
-	private void inicializarComponentes() {
+	public void inicializarComponentes() {
 		//LABELS
 		labelPlanta = new JLabel("Plantas:");
 		labelInsumo = new JLabel("Insumos:");
 		
 		
-		//COMBO
-		/*
+
 		plantas = (new PlantaController()).buscarNombresPlanta();
 		if(plantas == null) {
 			plantas = new String[1];
@@ -73,42 +88,114 @@ public class PanelGestionStockInsumo extends JPanel{
 		}
 		comboPlanta = new JComboBox<String>(plantas);
 		comboPlanta.setPreferredSize(new Dimension(100,20));
+		comboPlanta.addItemListener(new ItemListener() {
+            // Listening if a new items of the combo box has been selected.
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				JComboBox comboBox = (JComboBox) e.getSource();
+
+                // The item affected by the event.
+                Object item = e.getItem();
+
+
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    filtrarTabla();
+                }
+			}
+
+			
+        });
 		
-		insumos = (new InsumoController()).buscarInsumos();
-		if(insumos == null) {
-			insumos = new String[1];
-			insumos[0] = "<Ninguno>";
+		insumos = (new InsumoController()).consultarDescripcionesInsumos();
+		if(insumos[0].length == 0) {
+			insumos = new String[1][2];
+			insumos[0][0] = "<Ninguno>";
 		}
-		comboInsumo = new JComboBox<String>(insumos);
+		String[] descripcionesInsumo = new String[insumos.length];
+		for(int i=0; i<insumos.length; i++) 
+			descripcionesInsumo[i] = insumos[i][0];
+		
+	
+		comboInsumo = new JComboBox<String>(descripcionesInsumo);
 		comboInsumo.setPreferredSize(new Dimension(100,20));
-		*/
+		comboInsumo.addItemListener(new ItemListener() {
+            // Listening if a new items of the combo box has been selected.
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				JComboBox comboBox = (JComboBox) e.getSource();
+
+                // The item affected by the event.
+                Object item = e.getItem();
+
+
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    filtrarTabla();
+                }
+			}
+        });
 		
 		//TABLE 
 		tablaStocks = new JTable();
-		//construirTabla(setearColumnas(), obtenerMatrizDatos());
+		construirTabla(setearColumnas(), obtenerMatrizDatos(listaStocks));
 		
 		//BUTTONS
-		botonBuscar = new JButton("Buscar");
 		botonAtras = new JButton("Atras");
-		botonAtras.setPreferredSize(new Dimension(100, 30));
 		botonAtras.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Window ventana = SwingUtilities.windowForComponent(((JButton) e.getSource()).getParent());
+				((JFrame) ventana).setContentPane(new PanelPrincipal());
+				ventana.revalidate();
+				ventana.repaint();
+			}
+		});
+		botonAgregarStock = new JButton("Agregar Stock");
+		
+		
+		
+		botonAgregarStock.setPreferredSize(new Dimension(100, 30));
+		botonAgregarStock.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
-				ventana.setContentPane(new PanelPrincipal());
-				ventana.revalidate();
-				ventana.repaint();
+				VentanaAgregarStock dialogo = new VentanaAgregarStock( plantas, insumos, (new JFrame()), true);
+				listaStocks = (ArrayList<StockInsumo>) (new StockInsumoController()).consultarStocksInsuficientes();
+				mapaInsumos = (new StockInsumoController()).buscarStockTotalInsumos();
+				construirTabla(setearColumnas(), obtenerMatrizDatos(listaStocks));
 			}
 			
 		});
+		botonAtras.setPreferredSize(new Dimension(100, 30));
+		
 		
 		
 	}
 	
+	private void filtrarTabla() {
+		// TODO Auto-generated method stub
+		ArrayList<Predicate<StockInsumo>> predicados = new ArrayList<Predicate<StockInsumo>>();
+		if(!((String) comboPlanta.getSelectedItem()).equals("<Ninguna>"))
+			predicados.add(st -> st.getPlanta().getNombre().equals((String) comboPlanta.getSelectedItem()));
+		if(!((String) comboInsumo.getSelectedItem()).equals("<Ninguno>"))
+			predicados.add(st -> st.getInsumo().getDescripcion().equals((String) comboInsumo.getSelectedItem()));
+		
+		if(predicados.size()!=0) {
+			ArrayList<StockInsumo> result = (ArrayList<StockInsumo>) listaStocks.stream()
+		          .filter(predicados.stream().reduce(x->true, Predicate::and))
+		          .collect(Collectors.toList());
+			construirTabla(setearColumnas(), obtenerMatrizDatos(result));
+		}
+		else {
+			construirTabla(setearColumnas(), obtenerMatrizDatos(listaStocks));
+		}
+	}
 	
-	private void armarPanel() {
+	
+	public void armarPanel() {
 		this.setLayout(new BorderLayout());
 		JPanel panelBusqueda = new JPanel();
 		panelBusqueda.setLayout(new GridBagLayout());
@@ -126,20 +213,21 @@ public class PanelGestionStockInsumo extends JPanel{
 		panelBusqueda.add(labelPlanta, gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 0;
-		//panelBusqueda.add(comboPlanta, gbc);
+		panelBusqueda.add(comboPlanta, gbc);
 		gbc.gridx = 2;
 		gbc.gridy = 0;
 		panelBusqueda.add(labelInsumo, gbc);
 		gbc.gridx = 3;
 		gbc.gridy = 0;
-		//panelBusqueda.add(comboInsumo, gbc);
+		panelBusqueda.add(comboInsumo, gbc);
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.weightx = 1.0;
-		panelBusqueda.add(botonBuscar);
+
 		
 		panelInf.add(botonAtras);
-		this.add(tablaStocks, BorderLayout.CENTER);
+		panelInf.add(botonAgregarStock);
+		this.add(new JScrollPane(tablaStocks), BorderLayout.CENTER);
 		
 		
 	}
@@ -154,7 +242,6 @@ public class PanelGestionStockInsumo extends JPanel{
 		tablaStocks.getColumnModel().getColumn(UtilTablaStocks.STOCK_PLANTA).setCellRenderer(new GestionCeldasStocks("numero"));
 		tablaStocks.getColumnModel().getColumn(UtilTablaStocks.PUNTO_PEDIDO).setCellRenderer(new GestionCeldasStocks("numero"));
 		tablaStocks.getColumnModel().getColumn(UtilTablaStocks.STOCK_TOTAL).setCellRenderer(new GestionCeldasStocks("numero"));
-		tablaStocks.getColumnModel().getColumn(UtilTablaStocks.MODIFICAR).setCellRenderer(new GestionCeldasStocks("boton"));
 		
 		tablaStocks.getTableHeader().setReorderingAllowed(false);
 		tablaStocks.setRowHeight(25);
@@ -166,10 +253,9 @@ public class PanelGestionStockInsumo extends JPanel{
 		tablaStocks.getColumnModel().getColumn(UtilTablaStocks.STOCK_PLANTA).setPreferredWidth(10);
 		tablaStocks.getColumnModel().getColumn(UtilTablaStocks.PUNTO_PEDIDO).setPreferredWidth(10);
 		tablaStocks.getColumnModel().getColumn(UtilTablaStocks.STOCK_TOTAL).setPreferredWidth(10);
-		tablaStocks.getColumnModel().getColumn(UtilTablaStocks.MODIFICAR).setPreferredWidth(20);
 	}
 	
-	private Object[][] obtenerMatrizDatos(){
+	private Object[][] obtenerMatrizDatos(ArrayList<StockInsumo> listaStocks){
 		String informacion[][] = new String[listaStocks.size()][columnasTabla.size()];
 		
 		for(int i=0; i<informacion.length ; i++) {
@@ -178,7 +264,9 @@ public class PanelGestionStockInsumo extends JPanel{
 			informacion[i][UtilTablaStocks.STOCK_PLANTA] = listaStocks.get(i).getCantidad() + ""; 
 			informacion[i][UtilTablaStocks.PUNTO_PEDIDO] = listaStocks.get(i).getPuntoDePedido() + "";
 			informacion[i][UtilTablaStocks.STOCK_TOTAL] = 
-			informacion[i][UtilTablaStocks.MODIFICAR] = "MODIFICAR";
+					(mapaInsumos.get(listaStocks.get(i).getInsumo().getId()) == null? 
+							0:
+								mapaInsumos.get(listaStocks.get(i).getInsumo().getId())) + "";
 			
 		}
 		
@@ -194,7 +282,6 @@ public class PanelGestionStockInsumo extends JPanel{
 		columnasTabla.add("Stock en la planta");
 		columnasTabla.add("Punto de pedido");
 		columnasTabla.add("Stock total");
-		columnasTabla.add("  ");
 		String[] columnas = new String[columnasTabla.size()];
 		
 		

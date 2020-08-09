@@ -9,7 +9,6 @@ public class StockInsumo {
 	private Planta planta;
 	private double cantidad;
 	private double puntoDePedido;
-	private Planta planta;
 	private Insumo insumo;
 	
 	public StockInsumo(Planta planta, Insumo insumo, double cantidad, double puntoDePedido) {
@@ -45,10 +44,6 @@ public class StockInsumo {
 		this.insumo = insumo;
 	}
 	
-	public Planta getPlanta() {
-		return planta;
-	}
-
 	public Planta getPlanta() {
 		return planta;
 	}

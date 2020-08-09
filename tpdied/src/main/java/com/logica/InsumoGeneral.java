@@ -21,5 +21,13 @@ public class InsumoGeneral extends Insumo {
 		super(id, desc, unidad, costoPorUnidad);
 		this.peso = peso;
 	}
+	
+	public InsumoGeneral(int id) {
+		super(id);
+	}
+	public InsumoGeneral(int id, String desc, String unidad, double costoPorUnidad) {
+		// TODO Auto-generated constructor stub
+		super(id, desc, Unidad.valueOf(unidad), costoPorUnidad);
+	}
 
 }

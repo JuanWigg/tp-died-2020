@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -121,23 +122,26 @@ public class StockInsumoDAOImplSQL implements StockInsumoDAO {
 		try{
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
-			PreparedStatement pstm  = conn.prepareStatement("SELECT * FROM tpdied.stock_insumo ;");
+			PreparedStatement pstm  = conn.prepareStatement("SELECT * " + 
+					"FROM tpdied.insumo i " + 
+					"RIGHT JOIN(SELECT * from tpdied.stock_insumo)as foo " + 
+					"ON i.id=foo.id_insumo;");
 			res=pstm.executeQuery();
-			pstm.close();
-			conn.close();
-			
+
 			Planta plantaActual;	
-			Insumo insumoActual;
+			InsumoGeneral insumoActual;
 			 
 			while(res.next()) {		
 				
-				insumoActual = ID.read(res.getInt("id_insumo"));
-				plantaActual = PD.consultarPlanta(res.getString("nombre_planta")).get();
+				insumoActual = new InsumoGeneral(res.getInt(1), res.getString(2), res.getString(3), res.getDouble(4) );
+				plantaActual = new Planta(res.getString("nombre_planta"));
 				
 				listaStockInsumos.add(new StockInsumo(plantaActual, insumoActual, res.getDouble("cantidad"), res.getDouble("punto_pedido")));
 										
 			 }
-		 
+			
+			pstm.close();
+			conn.close();
 		}catch(ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch(SQLException e) {
@@ -145,6 +149,79 @@ public class StockInsumoDAOImplSQL implements StockInsumoDAO {
 		}
 		
 		return listaStockInsumos;
+	}
+	public List<StockInsumo> consultarStocksInsuficientes(){
+		Connection conn = null;
+		ResultSet res = null;
+		List<StockInsumo> listaStockInsumos = new ArrayList<StockInsumo>();
+		InsumoDAO<Insumo> ID = new InsumoDAOImplSQL();
+		
+		
+		try{
+			Class.forName("org.postgresql.Driver");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
+			PreparedStatement pstm  = conn.prepareStatement("SELECT * " + 
+					"FROM tpdied.insumo i " + 
+					"RIGHT JOIN(SELECT * from tpdied.stock_insumo WHERE cantidad<punto_pedido)as foo " + 
+					"ON i.id=foo.id_insumo;");
+			res=pstm.executeQuery();
+			
+			
+			Planta plantaActual;	
+
+			 
+			while(res.next()) {		
+				
+				Insumo insumoActual = new InsumoGeneral(res.getInt(1), res.getString(2), res.getString(3), res.getDouble(4));
+				plantaActual = new Planta(res.getString("nombre_planta"));
+				
+				listaStockInsumos.add(new StockInsumo(plantaActual, insumoActual, res.getDouble("cantidad"), res.getDouble("punto_pedido")));
+										
+			 }
+		 
+			pstm.close();
+			conn.close();
+		}catch(ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return listaStockInsumos;
+	}
+	public HashMap<Integer, Integer> buscarStockTotalInsumos(){
+		Connection conn = null;
+		HashMap<Integer, Integer> mapa = new HashMap<Integer,Integer>();
+		try {
+			Class.forName("org.postgresql.Driver");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
+			Statement stmt = conn.createStatement();
+			ResultSet res = stmt.executeQuery("SELECT i.id, foo.sum FROM tpdied.insumo i " + 
+					"LEFT JOIN( " + 
+					"SELECT id_insumo, SUM(cantidad) FROM tpdied.stock_insumo " + 
+					"GROUP BY id_insumo)as foo " + 
+					"ON i.id=foo.id_insumo;");
+			
+			if(!res.next()) {
+				return mapa;
+			}
+			else {
+				
+				do {
+					mapa.put(res.getInt(1), res.getInt(2));
+					
+					
+				} while (res.next());
+			}
+			stmt.close();
+			conn.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return mapa;
 	}
 
 	@Override
@@ -198,6 +275,47 @@ public class StockInsumoDAOImplSQL implements StockInsumoDAO {
 		}
 		
 		return rowsDeleted > 0;
+	}
+
+	public void addStock(StockInsumo stock) {
+		// TODO Auto-generated method stub
+		Connection conn = null;
+		try {
+			Class.forName("org.postgresql.Driver");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
+			Statement stmt = conn.createStatement();
+			
+			if(stock.getPuntoDePedido() == 0) {
+				stmt.execute("DO $do$ BEGIN IF EXISTS (SELECT id_insumo, nombre_planta FROM tpdied.stock_insumo " + 
+						"	   WHERE id_insumo=" + stock.getInsumo().getId() + " AND nombre_planta='" + stock.getPlanta().getNombre() + "') "+ 
+						"	   THEN " + 
+						"	   UPDATE tpdied.stock_insumo SET cantidad = cantidad + " + stock.getCantidad() + "WHERE id_insumo="
+								+ stock.getInsumo().getId() + " AND nombre_planta='" + stock.getPlanta().getNombre() + "';" +
+						"      ELSE " + 
+						"	INSERT INTO tpdied.stock_insumo VALUES ('" + stock.getPlanta().getNombre() + 
+						"', " + stock.getInsumo().getId() + ", " + stock.getCantidad() + ", " + stock.getPuntoDePedido() + "); END IF;" +
+						" END $do$");
+			}
+			else {
+				stmt.execute("DO $do$ BEGIN IF EXISTS (SELECT id_insumo, nombre_planta FROM tpdied.stock_insumo " + 
+						"	   WHERE id_insumo=" + stock.getInsumo().getId() + " AND nombre_planta='" + stock.getPlanta().getNombre() + "') " + 
+						"	   THEN " + 
+						"	   UPDATE tpdied.stock_insumo SET cantidad = cantidad + " + stock.getCantidad() + ", punto_pedido = " +
+						stock.getPuntoDePedido() + "WHERE id_insumo="
+						+ stock.getInsumo().getId() + " AND nombre_planta='" + stock.getPlanta().getNombre() + "';" +
+						"      ELSE " + 
+						"	INSERT INTO tpdied.stock_insumo VALUES ('" + stock.getPlanta().getNombre() + 
+						"', " + stock.getInsumo().getId() + ", " + stock.getCantidad() + ", " + stock.getPuntoDePedido() + "); END IF;" +
+						" END $do$");
+			}
+			
+			stmt.close();
+			conn.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 
