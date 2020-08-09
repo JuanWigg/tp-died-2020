@@ -56,4 +56,14 @@ public abstract class Insumo {
 	public Insumo(int id) {
 		this.id = id;
 	}
+	
+	public double getCantidadPorUnidad() {
+		if(this.getClass() == InsumoLiquido.class) {
+			return ((InsumoLiquido) this).getDensidad();
+		}
+		if(this.getClass() == InsumoGeneral.class) {
+			return ((InsumoGeneral) this).getPeso();
+		}
+		return Double.MAX_VALUE;
+	}
 }

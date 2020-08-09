@@ -16,5 +16,13 @@ import javax.swing.JTextField;
 import com.controladores.InsumoController;
 
 public class VentanaAgregarInsumo extends JDialog {
+
+	/**
+	 * @param jFrame
+	 * @param b
+	 */
+	public VentanaAgregarInsumo(JFrame jFrame, boolean modal) {
+		super(jFrame, modal);
+	}
 	
 }
