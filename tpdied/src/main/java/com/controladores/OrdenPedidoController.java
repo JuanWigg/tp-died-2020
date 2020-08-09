@@ -48,7 +48,7 @@ public class OrdenPedidoController {
 					OrdenPedido op = new OrdenPedido();
 					op.setNroOrden(res.getInt(1));
 					op.setEstado(EstadoOrden.valueOf(res.getString(4)));
-					op.setPlantaDestino(new Planta(res.getString(7)));
+					op.setPlantaDestino(new Planta(res.getString(5)));
 					pedidos.add(op);
 				} while (res.next());
 			}

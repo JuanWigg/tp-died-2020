@@ -6,7 +6,7 @@ package com.logica;
  */
 
 public class DetalleItem {
-	
+	private int nroOrden;
 	private double cantidad;
 	private Insumo insumo;
 
@@ -18,7 +18,13 @@ public class DetalleItem {
 		this.insumo = insumo;
 		this.cantidad = cantidad;
 	}
-
+	public int getNroOrden() {
+		return nroOrden;
+	}
+	
+	public void setNroOrden(int nroOrden) {
+		this.nroOrden = nroOrden;
+	}
 	public double getCantidad() {
 		return cantidad;
 	}
