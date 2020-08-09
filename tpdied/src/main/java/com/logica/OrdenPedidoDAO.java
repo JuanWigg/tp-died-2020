@@ -14,5 +14,10 @@ public interface OrdenPedidoDAO extends GenericDAO<OrdenPedido> {
 	 */
 	
 	List<OrdenPedido> readAllWithStatus(EstadoOrden estado);
+	
+	@Deprecated
+	public void create(OrdenPedido obj);
+	
+	public int createAndGetKey(OrdenPedido obj);
 
 }
