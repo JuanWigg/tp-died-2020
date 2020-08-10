@@ -181,13 +181,19 @@ public class OrdenPedidoDAOImplSQL implements OrdenPedidoDAO {
 			 
 			while(res.next()) {
 				
-				DetalleEnvio detalleEnvio = DED.consultarDetalleEnvio(res.getInt("nro_orden_pedido"));
 				
 				
-				listaOrdenesPedido.add(new OrdenPedido(res.getInt("nro_orden_pedido"), (LocalDate) formatter.parse(res.getString("fecha_solicitud")), 
+				if(estado == EstadoOrden.CREADA) {
+					listaOrdenesPedido.add(new OrdenPedido(res.getInt("nro_orden"), LocalDate.parse(res.getString("fecha_solicitud"), formatter), 
+							LocalDate.parse(res.getString("fecha_entrega"), formatter), estado , DID.readAllFromOrden(res.getInt("nro_orden")),
+							PD.consultarPlanta(res.getString("planta_destino")).get()));
+				}
+				else {
+				DetalleEnvio detalleEnvio = DED.consultarDetalleEnvio(res.getInt("nro_orden"));
+				listaOrdenesPedido.add(new OrdenPedido(res.getInt("nro_orden"), (LocalDate) formatter.parse(res.getString("fecha_solicitud")), 
 						(LocalDate) formatter.parse(res.getString("fecha_entrega")), estado , 
-						detalleEnvio , DID.readAllFromOrden(res.getInt("nro_orden_pedido")), PD.consultarPlanta(res.getString("planta_destino")).get()));
-										
+						detalleEnvio , DID.readAllFromOrden(res.getInt("nro_orden")), PD.consultarPlanta(res.getString("planta_destino")).get()));
+				}
 			 }
 			
 			pstm.close();

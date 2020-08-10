@@ -42,7 +42,7 @@ public class DetalleItemDAOImplSQL implements DetalleItemDAO {
 			
 			
 			pstm  = conn.prepareStatement(
-				 "INSERT INTO detalle_item "
+				 "INSERT INTO tpdied.detalle_item "
 				 + "( id_insumo, nro_orden_pedido, cantidad  ) "
 				 + "VALUES ( ?, ?, ? );"
 			);
@@ -50,7 +50,7 @@ public class DetalleItemDAOImplSQL implements DetalleItemDAO {
 			 pstm.setInt(1, obj.getInsumo().getId());
 			 pstm.setInt(2, nroOrden);
 			 pstm.setDouble(3, obj.getCantidad());
-			 
+			 System.out.println("EJECUTO EL SQL");
 			 pstm.execute();
 			 
 			 pstm.close();

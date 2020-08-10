@@ -51,21 +51,23 @@ public class PlantaDAOImplSQL implements PlantaDAO{
 		conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
 		 PreparedStatement pstm  = conn.prepareStatement("SELECT * FROM tpdied.planta WHERE nombre='"+nombrePlanta+"';");
 		 res=pstm.executeQuery();
-		 pstm.close();
-		 conn.close();
+		 
 		 if (res.next() == false) {
-			 return null;
+			 Optional.ofNullable(null);
 			}
 		 else {
 			 p=Optional.of(new Planta(res.getString(1)));
 			 return p;
 			 }
-		 
+		pstm.close();
+		conn.close();
 		} catch(ClassNotFoundException e) {
 			
 		} catch(SQLException e) {
 			
 		}
+		
+		
 		return p;	
 		}
 	

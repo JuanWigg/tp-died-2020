@@ -20,6 +20,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import com.controladores.StockInsumoController;
 import com.logica.Grafo;
@@ -38,7 +40,7 @@ public class VentanaProcesarOrden extends JDialog{
 	JButton atras;
 	JButton aceptar;
 	JPanel panel;
-	JPanel panel2;
+	JPanel panelInf;
 	JSplitPane splitVert;
 	JSplitPane split;
 	JSplitPane split2;
@@ -68,9 +70,33 @@ public class VentanaProcesarOrden extends JDialog{
 		 rutaRapida = new JLabel("Ruta mas rapida");
 		 rutaRapida.setHorizontalAlignment(SwingConstants.CENTER);
 		 atras = new JButton("Atrás");
+		 atras.setPreferredSize(new Dimension(120, 40));
 		 aceptar = new JButton("Aceptar");
+		 aceptar.setPreferredSize(new Dimension(120, 40));
 		 tablaCortas = new JTable();
 		 tablaRapidas = new JTable();
+		 tablaCortas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				// TODO Auto-generated method stub
+				if(tablaRapidas.getSelectedRow()!=-1) {
+					tablaRapidas.clearSelection();
+				}
+			}
+			 
+		 });
+		 tablaRapidas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					// TODO Auto-generated method stub
+					if(tablaCortas.getSelectedRow()!=-1) {
+						tablaCortas.clearSelection();
+					}
+				}
+				 
+			 });
 		 split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,tablaCortas,tablaRapidas);
 		 split2 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,rutaCorta,rutaRapida);
 		 split.setResizeWeight(0.5d);
@@ -101,6 +127,10 @@ public class VentanaProcesarOrden extends JDialog{
 		
 		String informacion[][] = new String[rutas.size()][columnasTabla.size()];
 		for(int i=0; i<informacion.length ; i++) {
+			rutas.get(i).crearListaTramos(g);
+			//rutas.get(i).distanciaRuta();
+			//rutas.get(i).duracionRuta();
+			//rutas.get(i).calcularMenorPesoMax();
 			informacion[i][0] = rutas.get(i).getListaPlantasRuta().get(0).getNombre();
 			informacion[i][1] = rutas.get(i).getDistanciaTotal() + "";
 			informacion[i][2] = rutas.get(i).getDuracionTotal() + "";
@@ -111,21 +141,13 @@ public class VentanaProcesarOrden extends JDialog{
 
 	private void armarPanel() {
 		panel = new JPanel();
-		panel2= new JPanel();
-		panel.setLayout(new GridBagLayout());
-		panel2.setLayout(new FlowLayout());
-		this.add(panel,BorderLayout.CENTER);
-		this.add(panel2,BorderLayout.SOUTH);
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill=GridBagConstraints.NONE;
-		gbc.insets = new Insets(2,0,2,0);
-		panel.add(splitVert,gbc);
-		gbc.gridx=0;
-		gbc.gridy=0;
-		panel2.add(atras);
-		gbc.gridx=1;
-		gbc.gridy=0;
-		panel2.add(aceptar);
+		panel.setLayout(new BorderLayout());
+		panelInf = new JPanel();
+		panelInf.setLayout(new FlowLayout());
+		panel.add(splitVert, BorderLayout.CENTER);
+		panel.add(panelInf, BorderLayout.SOUTH);
+		panelInf.add(atras);
+		panelInf.add(aceptar);
 		
 	}
 	

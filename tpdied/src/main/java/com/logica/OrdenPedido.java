@@ -83,6 +83,17 @@ public class OrdenPedido {
 		this.nroOrden = id;
 	}
 
+	public OrdenPedido(int nroOrden, LocalDate fechaSolicitud, LocalDate fechaEntrega, EstadoOrden estado, List<DetalleItem> detalleItems, Planta plantaDestino) {
+		// TODO Auto-generated constructor stub
+		this.nroOrden = nroOrden;
+		this.fechaSolicitud = fechaSolicitud;
+		this.fechaEntrega = fechaEntrega;
+		this.estado = estado;
+		this.plantaDestino = plantaDestino;
+		this.detalleItems = detalleItems;
+	}
+
+
 	public List<DetalleItem> getDetalleItems() {
 		return detalleItems;
 	}

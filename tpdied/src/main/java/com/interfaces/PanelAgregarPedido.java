@@ -137,18 +137,27 @@ public class PanelAgregarPedido extends JPanel{
 				o.setFechaEntrega(LocalDate.parse(fieldFecha.getText().trim(), formatter));
 				o.setEstado(EstadoOrden.CREADA);
 				o.setPlantaDestino(new Planta((String) comboPlantas.getSelectedItem()));
-				int nro = (new OrdenPedidoDAOImplSQL()).create(o);
+				int nro = (new OrdenPedidoDAOImplSQL()).createAndGetKey(o);
 				ArrayList<DetalleItem> items = new ArrayList<DetalleItem>();
 				int cantFilas = tablaItems.getRowCount();
 				for(int i=0; i<cantFilas; i++) {
-					items.get(i).setNroOrden(nro);
-					items.get(i).setCantidad(Double.parseDouble((String) tablaItems.getModel().getValueAt(i, 2)));
-					items.get(i).setInsumo(insumosAgregados.get(i).getInsumo());
+					DetalleItem di = new DetalleItem();
+					di.setNroOrden(nro);
+					di.setCantidad(Double.parseDouble((String) tablaItems.getModel().getValueAt(i, 2)));
+					di.setInsumo(insumosAgregados.get(i).getInsumo());
+					items.add(di);
+					System.out.println("AGREGA ITEM");
+					System.out.println(di.getInsumo().getDescripcion() + " " + di.getCantidad());
 				}
 				DetalleItemDAOImplSQL SQLDetalleItem = new DetalleItemDAOImplSQL();
-				for(DetalleItem i : items) {
-					SQLDetalleItem.create(i);
+				for(int i=0; i<items.size(); i++) {
+					SQLDetalleItem.create(items.get(i), nro);
 				}
+				
+				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
+				ventana.setContentPane(new PanelGestionOrdenes());
+				ventana.revalidate();
+				ventana.repaint();
 				
 			}
 			
