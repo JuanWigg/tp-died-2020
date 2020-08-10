@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -18,6 +19,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+
+import com.logica.Insumo;
+import com.logica.InsumoDAO;
+import com.logica.InsumoDAOImplSQL;
 
 public class PanelGestionInsumos extends JPanel {
 	ArrayList<String> columnasTabla;
@@ -206,17 +211,19 @@ public class PanelGestionInsumos extends JPanel {
 			}
 	 
 	 private Object[][] obtenerMatrizDatos(){
-		/*	String informacion[][] = new String[listaInsumos.size()][columnasTabla.size()];
+		 	InsumoDAO<Insumo> ID = new InsumoDAOImplSQL();
+		 	List<Insumo> listaInsumos =  ID.readAll();
+			String informacion[][] = new String[listaInsumos.size()][columnasTabla.size()];
 			for(int i=0; i<informacion.length ; i++) {
 				informacion[i][UtilTablaInsumos.DESCRIPCION] = listaInsumos.get(i).getDescripcion() + "";
-				informacion[i][UtilTablaInsumos.UNIDAD_DE_MEDIDA] = listaInsumos.get(i).getUMedida() + "";
-				informacion[i][UtilTablaCamiones.COSTO] = listaInsumos.get(i).getCosto() + "";
-				informacion[i][UtilTablaCamiones.PESODENSIDAD] = listaInsumos.get(i).getPesoDensidad() + "";
-				informacion[i][UtilTablaCamiones.MODIFICAR] = "MODIFICAR";
-				informacion[i][UtilTablaCamiones.ELIMINAR] = "ELIMINAR";
+				informacion[i][UtilTablaInsumos.UNIDAD_DE_MEDIDA] = listaInsumos.get(i).getUnidad() + "";
+				informacion[i][UtilTablaInsumos.COSTO] = listaInsumos.get(i).getCostoPorUnidad() + "";
+				informacion[i][UtilTablaInsumos.PESODENSIDAD] = listaInsumos.get(i).getCantidadPorUnidad() + "";
+				informacion[i][UtilTablaInsumos.MODIFICAR] = "MODIFICAR";
+				informacion[i][UtilTablaInsumos.ELIMINAR] = "ELIMINAR";
 			}
-			return informacion;*/
-		 return null;
+			return informacion;
+
 		}
 	 
 	public void armarPanel() {
