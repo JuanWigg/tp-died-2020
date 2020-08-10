@@ -47,7 +47,7 @@ public class PanelGestionOrdenes extends JPanel{
 
 			public void actionPerformed(ActionEvent e) {
 				Window ventana = SwingUtilities.windowForComponent(((JButton) e.getSource()).getParent());
-				((JFrame) ventana).setContentPane(new PanelOrdenesCreadas());
+				((JFrame) ventana).setContentPane(new PanelOrdenesProcesadas());
 				ventana.revalidate();
 				ventana.repaint();
 			}
@@ -64,6 +64,18 @@ public class PanelGestionOrdenes extends JPanel{
 		});
 		
 		botonAtras.setPreferredSize(new Dimension(90, 30));
+		botonAtras.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Window ventana = SwingUtilities.windowForComponent(((JButton) e.getSource()).getParent());
+				((JFrame) ventana).setContentPane(new PanelPrincipal());
+				ventana.revalidate();
+				ventana.repaint();
+			}
+			
+		});
 		
 	}
 	

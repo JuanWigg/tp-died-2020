@@ -37,6 +37,22 @@ public class Ruta {
 		return listaTramos;
 	}
 
+	public void setListaPlantasRuta(List<Planta> listaPlantasRuta) {
+		this.listaPlantasRuta = listaPlantasRuta;
+	}
+
+	public void setDuracionTotal(Double duracionTotal) {
+		this.duracionTotal = duracionTotal;
+	}
+
+	public void setDistanciaTotal(Integer distanciaTotal) {
+		this.distanciaTotal = distanciaTotal;
+	}
+
+	public void setMenorPesoMax(Integer menorPesoMax) {
+		this.menorPesoMax = menorPesoMax;
+	}
+
 	public void setListaTramos(List<Tramo> listaTramos) {
 		this.listaTramos = listaTramos;
 	}
@@ -71,6 +87,10 @@ public class Ruta {
 		this.distanciaTotal = distanciaTotal;
 		this.menorPesoMax = menorPesoMax;
 	}
+	public Ruta() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public void crearListaTramos(Grafo G) {
 		for(int i=0;i<this.listaPlantasRuta.size()-1;i++) {
 			listaTramos.add(G.getTramo(listaPlantasRuta.get(i),listaPlantasRuta.get(i+1)));

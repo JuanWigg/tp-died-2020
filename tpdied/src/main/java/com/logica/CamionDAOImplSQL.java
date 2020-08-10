@@ -177,4 +177,39 @@ public class CamionDAOImplSQL implements CamionDAO{
 		return camiones;
 	}
 
+
+	public Camion buscarCamion(String patente) {
+		Connection conn = null;
+		Camion c = null;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		try {
+			Class.forName("org.postgresql.Driver");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
+			PreparedStatement stmt = conn.prepareStatement("SELECT * from tpdied.camion WHERE patente=?");
+			stmt.setString(1, patente);
+			ResultSet res = stmt.executeQuery();
+			
+			if(res.next()) {
+				c = new Camion(res.getString("patente"), 
+						res.getInt("km_recorridos"),
+						res.getDouble("costo_por_km"),
+						res.getDouble("costo_por_hora"),
+						LocalDate.parse(res.getString("fecha_compra"), formatter),
+						new Modelo(res.getString("modelo"), res.getString("marca"))
+						);
+			}
+
+			stmt.close();
+			conn.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return c;
+		
+	}
+
 }

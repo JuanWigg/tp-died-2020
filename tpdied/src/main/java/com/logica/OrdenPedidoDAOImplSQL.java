@@ -190,8 +190,8 @@ public class OrdenPedidoDAOImplSQL implements OrdenPedidoDAO {
 				}
 				else {
 				DetalleEnvio detalleEnvio = DED.consultarDetalleEnvio(res.getInt("nro_orden"));
-				listaOrdenesPedido.add(new OrdenPedido(res.getInt("nro_orden"), (LocalDate) formatter.parse(res.getString("fecha_solicitud")), 
-						(LocalDate) formatter.parse(res.getString("fecha_entrega")), estado , 
+				listaOrdenesPedido.add(new OrdenPedido(res.getInt("nro_orden"), LocalDate.parse(res.getString("fecha_solicitud"), formatter), 
+						LocalDate.parse(res.getString("fecha_entrega"), formatter), estado , 
 						detalleEnvio , DID.readAllFromOrden(res.getInt("nro_orden")), PD.consultarPlanta(res.getString("planta_destino")).get()));
 				}
 			 }

@@ -146,8 +146,7 @@ public class PanelAgregarPedido extends JPanel{
 					di.setCantidad(Double.parseDouble((String) tablaItems.getModel().getValueAt(i, 2)));
 					di.setInsumo(insumosAgregados.get(i).getInsumo());
 					items.add(di);
-					System.out.println("AGREGA ITEM");
-					System.out.println(di.getInsumo().getDescripcion() + " " + di.getCantidad());
+					
 				}
 				DetalleItemDAOImplSQL SQLDetalleItem = new DetalleItemDAOImplSQL();
 				for(int i=0; i<items.size(); i++) {

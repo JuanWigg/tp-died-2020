@@ -16,6 +16,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import com.controladores.OrdenPedidoController;
 import com.controladores.StockInsumoController;
@@ -30,7 +32,7 @@ public class PanelOrdenesCreadas extends JPanel{
 	JButton verDetalles;
 	JButton procesarOrden;
 	JTable tablaOrdenes;
-	
+	OrdenPedido ordenSeleccionada;
 	ModeloTablaOrdenes model;
 	//ArrayList<OrdenPedido> listaOrdenes;
 	ArrayList<OrdenPedido> listaOrdenes;
@@ -64,10 +66,8 @@ public class PanelOrdenesCreadas extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					//Ventana ver detalles orden
-					// TODO INICIALIZAR LISTA ORDENES
-					construirTabla(setearColumnas(), obtenerMatrizDatos());
-				}
+				VentanaVerDetallesOrden dialogo = new VentanaVerDetallesOrden(listaOrdenes.get(tablaOrdenes.getSelectedRow()), new JFrame(), true);
+			}
 
 			
 			
@@ -87,25 +87,25 @@ public class PanelOrdenesCreadas extends JPanel{
 		});
 		
 		tablaOrdenes= new JTable();
-		tablaOrdenes.addMouseListener(new MouseListener() {
-			public void mouseClicked(MouseEvent e) {
+		tablaOrdenes.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
 				// TODO Auto-generated method stub
-				int fila = tablaOrdenes.rowAtPoint(e.getPoint());
-				int columna = tablaOrdenes.columnAtPoint(e.getPoint());
+				if(tablaOrdenes.getSelectedRow()!=-1) {
+					procesarOrden.setEnabled(true);
+					verDetalles.setEnabled(true);
+					ordenSeleccionada = listaOrdenes.get(tablaOrdenes.getSelectedRow());
 				}
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
+				else {
+					ordenSeleccionada = null;
+					verDetalles.setEnabled(false);
+					procesarOrden.setEnabled(false);
+				}
+					
 			}
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-			}
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-			}
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-			}
-		});
+			 
+		 });
 		construirTabla(setearColumnas(), obtenerMatrizDatos());
 		
 		

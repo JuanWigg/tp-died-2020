@@ -49,7 +49,6 @@ public class VentanaAgregarItem extends JDialog {
 	public VentanaAgregarItem(JPanel panelPadre,  JFrame padre, boolean modal) {
 		super(padre, modal);
 		listaInsumos = (ArrayList<Insumo>) (new InsumoController()).consultarInsumos();
-		System.out.println(listaInsumos.size());
 		this.panelPadre = panelPadre;
 		inicializarComponentes();
 		armarPanel();

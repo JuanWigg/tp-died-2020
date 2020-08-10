@@ -5,11 +5,19 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import com.logica.EstadoOrden;
+import com.logica.OrdenPedido;
+import com.logica.OrdenPedidoDAOImplSQL;
 
 public class PanelOrdenesProcesadas extends JPanel{
 	ArrayList<String> columnasTabla;
@@ -17,11 +25,12 @@ public class PanelOrdenesProcesadas extends JPanel{
 	JButton verDetalles;
 	JButton entregarOrden;
 	JTable tablaOrdenes;
-	
+	OrdenPedido ordenPedido;
 	ModeloTablaOrdenes model;
-	//ArrayList<Orden> ordenes;
+	ArrayList<OrdenPedido> ordenes;
 	public PanelOrdenesProcesadas() {
 		super();
+		ordenes = (ArrayList<OrdenPedido>) (new OrdenPedidoDAOImplSQL()).readAllWithStatus(EstadoOrden.PROCESADA);
 		inicializarComponentes();
 		armarPanel();
 	}
@@ -33,29 +42,68 @@ public class PanelOrdenesProcesadas extends JPanel{
 		entregarOrden=new JButton("Marcar orden como Entregada");
 		
 		botonAtras.setPreferredSize(new Dimension(100,30));
-		verDetalles.setPreferredSize(new Dimension(200, 50));
-		entregarOrden.setPreferredSize(new Dimension(200, 50));
-		tablaOrdenes= new JTable();
-		tablaOrdenes.addMouseListener(new MouseListener() {
-			public void mouseClicked(MouseEvent e) {
+		botonAtras.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				int fila = tablaOrdenes.rowAtPoint(e.getPoint());
-				int columna = tablaOrdenes.columnAtPoint(e.getPoint());
-				}
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
+				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
+				ventana.setContentPane(new PanelGestionOrdenes());
+				ventana.revalidate();
+				ventana.repaint();
 			}
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-			}
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-			}
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-			}
+			
 		});
-		construirTabla(setearColumnas());
+		verDetalles.setPreferredSize(new Dimension(200, 50));
+		verDetalles.setEnabled(false);
+		verDetalles.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				VentanaVerDetallesOrden dialogo = new VentanaVerDetallesOrden(ordenPedido, new JFrame(), true);
+			}
+			
+		});
+		entregarOrden.setPreferredSize(new Dimension(200, 50));
+		entregarOrden.setEnabled(false);
+		
+		tablaOrdenes= new JTable();
+		tablaOrdenes.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				// TODO Auto-generated method stub
+				if(tablaOrdenes.getSelectedRow()!=-1) {
+					verDetalles.setEnabled(true);
+					entregarOrden.setEnabled(true);
+					ordenPedido = ordenes.get(tablaOrdenes.getSelectedRow());
+				}
+				else {
+					ordenPedido = null;
+					verDetalles.setEnabled(false);
+					entregarOrden.setEnabled(false);
+				}
+					
+			}
+			 
+		 });
+		entregarOrden.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				OrdenPedido nuevaOrden = new OrdenPedido(ordenPedido.getNroOrden(), ordenPedido.getFechaSolicitud(),
+						ordenPedido.getFechaEntrega(), EstadoOrden.ENTREGADA, ordenPedido.getDetalleEnvio(), ordenPedido.getDetalleItems()
+						, ordenPedido.getPlantaDestino());
+				(new OrdenPedidoDAOImplSQL()).update(nuevaOrden, ordenPedido);;
+				JOptionPane.showMessageDialog(new JFrame(), "Orden marcada como entregada");
+				ordenes.remove(tablaOrdenes.getSelectedRow());
+				construirTabla(setearColumnas(), obtenerMatrizDatos());
+			}
+			
+		});
+		construirTabla(setearColumnas(), obtenerMatrizDatos());
 		
 		
 	}
@@ -94,8 +142,8 @@ public class PanelOrdenesProcesadas extends JPanel{
 			
 	}
 
-	public void construirTabla(String[] columnas) {
-		 model = new ModeloTablaOrdenes(columnas);
+	public void construirTabla(String[] columnas, Object[][] data) {
+		 model = new ModeloTablaOrdenes(data, columnas);
 		 tablaOrdenes.setModel(model);
 		
 		//ASIGNO TIPO DE DATOS A CADA COLUMNA
@@ -112,6 +160,21 @@ public class PanelOrdenesProcesadas extends JPanel{
 		 tablaOrdenes.getColumnModel().getColumn(1).setPreferredWidth(15);
 		
 	}
+	
+	private Object[][] obtenerMatrizDatos(){
+		String informacion[][] = new String[ordenes.size()][columnasTabla.size()];
+		
+		for(int i=0; i<informacion.length ; i++) {
+			informacion[i][0] = ordenes.get(i).getNroOrden() + "";
+			informacion[i][1] = ordenes.get(i).getPlantaDestino().getNombre() + "";
+
+		}
+		
+		
+		return informacion;
+		
+	}
+	
 	
 	
 	private String[] setearColumnas() {

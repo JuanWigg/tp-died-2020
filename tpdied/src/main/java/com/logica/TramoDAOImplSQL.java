@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -57,15 +58,16 @@ public class TramoDAOImplSQL implements TramoDAO {
 		Optional<Tramo> t = Optional.empty();
 		Planta PlantaO;
 		Planta PlantaD;
+	
 		try{
 		Class.forName("org.postgresql.Driver");
 		conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
-		 PreparedStatement pstm  = conn.prepareStatement("SELECT * FROM tpdied.tramo WHERE id_tramo="+id+";");
+		 PreparedStatement pstm  = conn.prepareStatement("SELECT * FROM tpdied.tramo WHERE id_tramo=?;");
+		 pstm.setInt(1, id);
 		 res=pstm.executeQuery();
-		 pstm.close();
-		 conn.close();
-		 if (res.next() == false) {
-			 return null;
+		 
+		 if (!res.next()) {
+			 return Optional.ofNullable(null);
 			}
 		 else {
 			 PlantaO = new Planta(res.getString(6));
@@ -73,9 +75,9 @@ public class TramoDAOImplSQL implements TramoDAO {
 			 t=Optional.of(new Tramo(Integer.valueOf(res.getInt(1)),
 					 PlantaO,PlantaD,Integer.valueOf(res.getInt(2)),Double.valueOf(res.getDouble(3)),
 			 Integer.valueOf(res.getInt(4)),res.getString(5)));
-			 return t;
-			 }
-		 
+		}
+		 pstm.close();
+		 conn.close();
 		} catch(ClassNotFoundException e) {
 			
 		} catch(SQLException e) {
@@ -136,5 +138,37 @@ public class TramoDAOImplSQL implements TramoDAO {
 			} catch(SQLException e) {
 				e.printStackTrace();
 			}
+	}
+	
+	public ArrayList<Integer> consultarIdTramosConRuta(int id_ruta) {
+		Connection conn = null;
+		ArrayList<Integer> ids_tramos = new ArrayList<Integer>();
+		try{
+			Class.forName("org.postgresql.Driver");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
+			 PreparedStatement pstm  = conn.prepareStatement("SELECT id_tramo FROM tpdied.tramos_de_ruta WHERE id_ruta=? ORDER BY orden");
+			 pstm.setInt(1, id_ruta);
+			 ResultSet res = pstm.executeQuery();
+			 
+			 if(!res.next()) {
+					return ids_tramos;
+				}
+				else {
+					
+					do {
+						ids_tramos.add(res.getInt(1));
+						
+					} while (res.next());
+				}
+			 
+			 pstm.close();
+			 conn.close();
+			} catch(ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		
+		return ids_tramos;
 	}
 }

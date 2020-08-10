@@ -19,6 +19,10 @@ public class DetalleEnvio {
 	}
 	
 	
+	public DetalleEnvio() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public Ruta getRuta() {
 		return this.ruta;
 	}
@@ -37,6 +41,26 @@ public class DetalleEnvio {
 
 	public int getNroOrden() {
 		return nro_orden;
+	}
+
+	public void setId_envio(int id_envio) {
+		this.id_envio = id_envio;
+	}
+
+	public void setCosto(double costo) {
+		this.costo = costo;
+	}
+
+	public void setCamion(Camion camion) {
+		this.camion = camion;
+	}
+
+	public void setRuta(Ruta ruta) {
+		this.ruta = ruta;
+	}
+
+	public void setNro_orden(int nro_orden) {
+		this.nro_orden = nro_orden;
 	}
 }
 
