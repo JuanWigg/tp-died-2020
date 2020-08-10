@@ -194,7 +194,7 @@ public class Grafo {
 	public List<Planta> esAlcanzadaPor(Planta p) {
 		List<Planta> plantas = new ArrayList<Planta>();
 		for (Tramo t : tramos) {
-			if(t.getPlantaDestino()==p && !plantas.contains(t.getPlantaOrigen()))
+			if(t.getPlantaDestino().getNombre().equals(p.getNombre()) && !plantas.contains(t.getPlantaOrigen()))
 				plantas.add(t.getPlantaOrigen());
 		}
 		return plantas;
