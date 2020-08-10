@@ -39,7 +39,7 @@ public class InsumoGeneralDAOImplSQL implements InsumoGeneralDAO {
 			pstm1  = conn.prepareStatement(
 				 "INSERT INTO tpdied.insumo "
 				 + "( descripcion, unidad, costo_por_unidad ) "
-				 + "VALUES ( ?, ?, ? );" ,
+				 + "VALUES ( ?, ?::tpdied.unidad, ? );" ,
 				 Statement.RETURN_GENERATED_KEYS
 			);
 			 
@@ -165,8 +165,8 @@ public class InsumoGeneralDAOImplSQL implements InsumoGeneralDAO {
 			stmt1 = conn.prepareStatement(
 				"UPDATE tpdied.insumo "
 				+ "SET descripcion= ? , "
-				+ "unidad= ? , "
-				+ "costo_por_unidad= ? , "
+				+ "unidad= ?::tpdied.unidad , "
+				+ "costo_por_unidad= ? "
 				+ " WHERE id= ? ;"
 			);
 			
@@ -180,7 +180,7 @@ public class InsumoGeneralDAOImplSQL implements InsumoGeneralDAO {
 
 			stmt2 = conn.prepareStatement(
 				"UPDATE tpdied.insumo_general "
-				+ "SET densidad= ? ,"
+				+ "SET peso= ? "
 				+ " WHERE id= ?  ;"
 			);
 			
@@ -250,6 +250,58 @@ public class InsumoGeneralDAOImplSQL implements InsumoGeneralDAO {
 					"JOIN tpdied.insumo_general IG ON I.id = IG.id " + 
 					"LEFT JOIN tpdied.stock_insumo SI ON I.id = SI.id_insumo " + 
 					"GROUP BY I.id, I.descripcion, I.unidad, I.costo_por_unidad, IG.peso ");
+			
+			res=pstm.executeQuery();		
+			
+			while(res.next()) {
+				listaInsumosStock.add(
+					new Pair<Insumo, Integer>(
+					new InsumoGeneral(
+				    res.getInt("id"),
+				 	res.getString("descripcion"),
+				 	Unidad.valueOf(res.getString("unidad")),
+				 	res.getDouble("costo_por_unidad"),
+				 	res.getDouble("peso")
+				 ),
+					Integer.valueOf(res.getInt("sum"))));
+			 }
+			
+			pstm.close();
+			conn.close();
+			
+			
+		}catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return listaInsumosStock;
+	}
+	
+	
+	public List<Pair<Insumo, Integer>> readAllWithStockFiltered(String descripcion) {
+		Connection conn = null;
+		ResultSet res = null;
+		PreparedStatement pstm = null;
+		List<Pair<Insumo, Integer>> listaInsumosStock = new ArrayList<Pair<Insumo, Integer>>();
+		try {
+			String filtro1="LOWER(I.descripcion) LIKE LOWER(?) ";
+			Class.forName("org.postgresql.Driver");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
+			pstm = conn.prepareStatement("SELECT I.id, I.descripcion, I.unidad, I.costo_por_unidad, IG.peso, SUM(SI.cantidad) " + 
+					"FROM tpdied.insumo I " + 
+					"JOIN tpdied.insumo_general IG ON I.id = IG.id " + 
+					"LEFT JOIN tpdied.stock_insumo SI ON I.id = SI.id_insumo " + 
+					"GROUP BY I.id, I.descripcion, I.unidad, I.costo_por_unidad, IG.peso "
+					+ "HAVING " + filtro1);
+			if(descripcion != null && descripcion !="") {
+				pstm.setString(1, "%" + descripcion + "%");
+			}
+			else {
+				return this.readAllWithStock();
+			}
+			
 			
 			res=pstm.executeQuery();		
 			

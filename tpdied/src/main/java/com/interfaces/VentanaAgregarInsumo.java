@@ -25,6 +25,7 @@ import javax.swing.SwingUtilities;
 import com.controladores.CamionController;
 import com.controladores.InsumoController;
 import com.logica.PlantaDAOImplSQL;
+import com.logica.Unidad;
 
 public class VentanaAgregarInsumo extends JDialog {
 
@@ -98,13 +99,14 @@ public class VentanaAgregarInsumo extends JDialog {
 				botonAceptar = new JButton("Aceptar");
 				botonAceptar.addActionListener(new ActionListener() {
 
-					public void actionPerformed(ActionEvent e) {
-						ArrayList<String> datosLista = new ArrayList<String>();
-						datosLista.add(fieldDescripcion.getText().trim());
-						datosLista.add(fieldCostoPorUnidad.getText().trim());
-						datosLista.add(fieldCostoPorUnidad.getText().trim());
-						datosLista.add(fieldMagnitudUnidad.getText().trim());
-						// CAMBIAR!! (new CamionController()).altaCamion(datosLista);
+					public void actionPerformed(ActionEvent e) {						
+						new InsumoController().altaInsumo(
+							fieldDescripcion.getText().trim(),
+							(String) comboTipoInsumo.getSelectedItem(),
+							Unidad.valueOf((String) comboUnidad.getSelectedItem()),
+							Double.parseDouble(fieldCostoPorUnidad.getText().trim()),
+							Double.parseDouble(fieldMagnitudUnidad.getText().trim())				
+						);
 						JDialog frame = (JDialog) SwingUtilities.getWindowAncestor(panel);
 						frame.dispose();
 						

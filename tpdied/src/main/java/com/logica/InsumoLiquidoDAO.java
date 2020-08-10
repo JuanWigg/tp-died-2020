@@ -16,4 +16,10 @@ public interface InsumoLiquidoDAO extends InsumoDAO<InsumoLiquido> {
 	public List<Pair<Insumo, Integer>> readAllWithStock();
 	public void update(InsumoLiquido newObj, InsumoLiquido oldObj);
 	public boolean delete(InsumoLiquido obj);
+	public List<Pair<Insumo, Integer>> readAllWithStockFiltered(String descripcion);
+	/**
+	 * @param descripcion
+	 * @return
+	 */
+	
 }

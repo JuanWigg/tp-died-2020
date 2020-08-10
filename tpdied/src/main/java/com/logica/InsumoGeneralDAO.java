@@ -14,6 +14,7 @@ public interface InsumoGeneralDAO extends InsumoDAO<InsumoGeneral> {
 	public InsumoGeneral read(int id);
 	public List<InsumoGeneral> readAll();
 	public List<Pair<Insumo, Integer>> readAllWithStock();
+	public List<Pair<Insumo, Integer>> readAllWithStockFiltered(String descripcion);
 	public void update(InsumoGeneral newObj, InsumoGeneral oldObj);
 	public boolean delete(InsumoGeneral obj);
 }

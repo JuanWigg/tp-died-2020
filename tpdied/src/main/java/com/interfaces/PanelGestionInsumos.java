@@ -14,12 +14,14 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import com.controladores.InsumoController;
 import com.logica.Camion;
 import com.logica.CamionDAOImplSQL;
 import com.logica.Insumo;
@@ -31,14 +33,8 @@ import kotlin.Pair;
 public class PanelGestionInsumos extends JPanel {
 	ArrayList<String> columnasTabla;
 	JLabel labelDescripcion;
-	JLabel labelUnidadDeMedida;
-	JLabel labelCosto;
-	JLabel labelMedidaUnitaria;
 
 	JTextField fieldDescripcion;
-	JTextField fieldUnidadDeMedida;
-	JTextField fieldCosto;
-	JTextField fieldMedidaUnitaria;
 	
 	JTable tablaResultados;
 	JButton botonAtras;
@@ -58,23 +54,11 @@ public class PanelGestionInsumos extends JPanel {
 	 public void inicializarComponentes() {
 		//LABELS
 		labelDescripcion = new JLabel("Descripcion:");
-		labelCosto = new JLabel("Costo:");
-		labelUnidadDeMedida = new JLabel("Unidad de medida:");
-		labelCosto = new JLabel("Costo:");
-		labelMedidaUnitaria = new JLabel("MedidaUnitaria");
 		
 		//CAMPOS
 		fieldDescripcion = new JTextField();
 		fieldDescripcion.setPreferredSize(new Dimension(100, 20));
 		
-		fieldUnidadDeMedida = new JTextField();
-		fieldUnidadDeMedida.setPreferredSize(new Dimension(100, 20));
-		
-		fieldCosto = new JTextField();
-		fieldCosto.setPreferredSize(new Dimension(100, 20));
-		
-		fieldMedidaUnitaria = new JTextField();
-		fieldMedidaUnitaria.setPreferredSize(new Dimension(100, 20));
 		
 		//TABLA
 
@@ -86,14 +70,13 @@ public class PanelGestionInsumos extends JPanel {
 				int fila = tablaResultados.rowAtPoint(e.getPoint());
 				int columna = tablaResultados.columnAtPoint(e.getPoint());
 				
-			/*	if(columna==UtilTablaInsumos.MODIFICAR) {
+				if(columna==UtilTablaInsumos.MODIFICAR) {
 					//Logica para modificar
-					VentanaModificarCamion dialogo = new VentanaModificarInsumo(modeloI.getDataVector().elementAt(fila), 
-							((JTable) e.getSource()), (new JFrame()), true);
-					listaInsumos = (ArrayList<Insumos>) (new InsumosDAOImplSQL()).buscarInsumos();
+					VentanaModificarInsumo dialogo = new VentanaModificarInsumo(listaInsumosStock.get(fila).getFirst(), new JFrame(), true);
+					listaInsumosStock = (ArrayList<Pair<Insumo, Integer>>) (new InsumoDAOImplSQL()).readAllWithStock();
 					construirTabla(setearColumnas(), obtenerMatrizDatos());
 					
-				} else if(columna==UtilTablaCamiones.ELIMINAR) {
+				} else if(columna==UtilTablaInsumos.ELIMINAR) {
 					String[] botonesDialogo = {"Aceptar", "Cancelar"};
 					int dialogo = JOptionPane.showOptionDialog(null,
 							"¿Seguro que desea eliminar el insumo seleccionado?", 
@@ -101,16 +84,15 @@ public class PanelGestionInsumos extends JPanel {
 							JOptionPane.DEFAULT_OPTION,
 							JOptionPane.QUESTION_MESSAGE, null,
 							botonesDialogo, botonesDialogo[0]
-							);
+					);
 					if(dialogo==0) {
-						(new InsumoController()).eliminar(tablaResultados.getModel().getValueAt(fila, 0).toString());
-						model.removeRow(fila);
-						listaInsumos.remove(fila);
-						model.fireTableDataChanged();
+						new InsumoController().delete(listaInsumosStock.get(fila).getFirst());
+						modeloI.removeRow(fila);
+						listaInsumosStock.remove(fila);
+						modeloI.fireTableDataChanged();
 					}
 				}
 			}
-			*/}
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
 				
@@ -147,9 +129,8 @@ public class PanelGestionInsumos extends JPanel {
 		});
 		botonAgregarInsumo = new JButton("Agregar nuevo insumo");
 		botonAgregarInsumo.addActionListener(new ActionListener() {
-
+			
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				VentanaAgregarInsumo dialogo = new VentanaAgregarInsumo(new JFrame(), true);
 				listaInsumosStock = (ArrayList<Pair<Insumo, Integer>>) (new InsumoDAOImplSQL()).readAllWithStock();
 				construirTabla(setearColumnas(), obtenerMatrizDatos());
@@ -159,48 +140,29 @@ public class PanelGestionInsumos extends JPanel {
 		});
 		botonBuscar = new JButton("Buscar");
 		botonBuscar.setPreferredSize(new Dimension(100, 20));
-		/*botonBuscar.addActionListener(new ActionListener() {
+		botonBuscar.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<Predicate<Insumo>> predicados = new ArrayList<Predicate<Insumo>>();
-				if(fieldDescripcion.getText().trim().length()!=0)
-					predicados.add(i-> i.getDescripcion().equals(fieldDescripcion.getText().trim()));
-				if(fieldUnidadDeMedida.getText().trim().length()!=0)
-					predicados.add(i -> i.getUnidadDeMedida().equals(fieldUnidadDeMedida.getText().trim()));
-				if(fieldCosto.getText().trim().length()!=0)
-					predicados.add(i -> i.getCosto().equals(Integer.parseInt(fieldCosto.getText().trim())));
-				if(fieldMedidaUnitaria.getText().trim().length()!=0)
-					predicados.add(i -> i.getMedidaU().equals(fieldMedidaUnitaria.getText().trim()));
 				
-				if(predicados.size()==0) {
-					listaInsumos = (ArrayList<Insumo>) (new InsumosDAOImplSQL()).buscarInsumos();
-					construirTabla(setearColumnas(), obtenerMatrizDatos());
-				}
-				else {
-					listaInsumos = (ArrayList<Insumo>) (new InsumosDAOImplSQL()).buscarInsumos();
-					ArrayList<Insumo> result = (ArrayList<Insumo>) listaInsumos.stream()
-				          .filter(predicados.stream().reduce(x->true, Predicate::and))
-				          .collect(Collectors.toList());
-					listaInsumos = result;
-					construirTabla(setearColumnas(), obtenerMatrizDatos());
-				}
+				construirTabla(setearColumnas(), obtenerMatrizDatosFiltrada());
 			}
-			
-		});*/
-	} 
+				
+		});
+	}
+	 
 	
 	 public void construirTabla(String[] columnas, Object[][] data) {
 				 modeloI = new ModeloTablaInsumos(data, columnas);
 				tablaResultados.setModel(modeloI);
 				
 				//ASIGNO TIPO DE DATOS A CADA COLUMNA
-				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.DESCRIPCION).setCellRenderer(new GestionCeldasCamiones("texto"));
-				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.UNIDAD_DE_MEDIDA).setCellRenderer(new GestionCeldasCamiones("numero"));
+				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.DESCRIPCION).setCellRenderer(new GestionCeldas("texto"));
+				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.UNIDAD_DE_MEDIDA).setCellRenderer(new GestionCeldas("numero"));
 				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.COSTO).setCellRenderer(new GestionCeldasCamiones("numero"));
-				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.PESODENSIDAD).setCellRenderer(new GestionCeldasCamiones("numero"));
-				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.STOCK_TOTAL).setCellRenderer(new GestionCeldasCamiones("numero"));
-				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.MODIFICAR).setCellRenderer(new GestionCeldasCamiones("boton"));
-				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.ELIMINAR).setCellRenderer(new GestionCeldasCamiones("boton"));
+				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.PESODENSIDAD).setCellRenderer(new GestionCeldas("numero"));
+				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.STOCK_TOTAL).setCellRenderer(new GestionCeldas("numero"));
+				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.MODIFICAR).setCellRenderer(new GestionCeldas("boton"));
+				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.ELIMINAR).setCellRenderer(new GestionCeldas("boton"));
 				
 				tablaResultados.getTableHeader().setReorderingAllowed(false);
 				tablaResultados.setRowHeight(25);
@@ -218,15 +180,32 @@ public class PanelGestionInsumos extends JPanel {
 			}
 	 
 	 private Object[][] obtenerMatrizDatos(){
-		 	InsumoDAO<Insumo> ID = new InsumoDAOImplSQL();
-		 	List<Pair<Insumo, Integer>> listaInsumosStock =  ID.readAllWithStock();
+		 	InsumoController IC = new InsumoController();
+		 	List<Pair<Insumo, Integer>> listaInsumosStock =  IC.consultarInsumosStock();
 			String informacion[][] = new String[listaInsumosStock.size()][columnasTabla.size()];
 			for(int i=0; i<informacion.length ; i++) {
-				informacion[i][UtilTablaInsumos.DESCRIPCION] = listaInsumosStock.get(i).component1().getDescripcion() + "";
-				informacion[i][UtilTablaInsumos.UNIDAD_DE_MEDIDA] = listaInsumosStock.get(i).component1().getUnidad() + "";
-				informacion[i][UtilTablaInsumos.COSTO] = listaInsumosStock.get(i).component1().getCostoPorUnidad() + "";
-				informacion[i][UtilTablaInsumos.PESODENSIDAD] = listaInsumosStock.get(i).component1().getCantidadPorUnidad() + "";
-				informacion[i][UtilTablaInsumos.STOCK_TOTAL] = listaInsumosStock.get(i).component2().intValue() + "";
+				informacion[i][UtilTablaInsumos.DESCRIPCION] = listaInsumosStock.get(i).getFirst().getDescripcion() + "";
+				informacion[i][UtilTablaInsumos.UNIDAD_DE_MEDIDA] = listaInsumosStock.get(i).getFirst().getUnidad() + "";
+				informacion[i][UtilTablaInsumos.COSTO] = listaInsumosStock.get(i).getFirst().getCostoPorUnidad() + "";
+				informacion[i][UtilTablaInsumos.PESODENSIDAD] = listaInsumosStock.get(i).getFirst().getCantidadPorUnidad() + "";
+				informacion[i][UtilTablaInsumos.STOCK_TOTAL] = listaInsumosStock.get(i).getSecond().intValue() + "";
+				informacion[i][UtilTablaInsumos.MODIFICAR] = "MODIFICAR";
+				informacion[i][UtilTablaInsumos.ELIMINAR] = "ELIMINAR";
+			}
+			return informacion;
+
+		}
+	 
+	 private Object[][] obtenerMatrizDatosFiltrada(){
+		 	InsumoController IC = new InsumoController();
+		 	List<Pair<Insumo, Integer>> listaInsumosStock =  IC.consultarInsumosStockFiltrado(fieldDescripcion.getText());
+			String informacion[][] = new String[listaInsumosStock.size()][columnasTabla.size()];
+			for(int i=0; i<informacion.length ; i++) {
+				informacion[i][UtilTablaInsumos.DESCRIPCION] = listaInsumosStock.get(i).getFirst().getDescripcion() + "";
+				informacion[i][UtilTablaInsumos.UNIDAD_DE_MEDIDA] = listaInsumosStock.get(i).getFirst().getUnidad() + "";
+				informacion[i][UtilTablaInsumos.COSTO] = listaInsumosStock.get(i).getFirst().getCostoPorUnidad() + "";
+				informacion[i][UtilTablaInsumos.PESODENSIDAD] = listaInsumosStock.get(i).getFirst().getCantidadPorUnidad() + "";
+				informacion[i][UtilTablaInsumos.STOCK_TOTAL] = listaInsumosStock.get(i).getSecond().intValue() + "";
 				informacion[i][UtilTablaInsumos.MODIFICAR] = "MODIFICAR";
 				informacion[i][UtilTablaInsumos.ELIMINAR] = "ELIMINAR";
 			}
@@ -257,26 +236,7 @@ public class PanelGestionInsumos extends JPanel {
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		panelBusqueda.add(fieldDescripcion, gbc);
-		gbc.gridx = 2;
-		gbc.gridy = 0;
-		panelBusqueda.add(labelCosto, gbc);
-		gbc.gridx = 3;
-		gbc.gridy = 0;
-		panelBusqueda.add(fieldCosto, gbc);
-		gbc.gridx = 4;
-		gbc.gridy = 0;
-		panelBusqueda.add(labelUnidadDeMedida, gbc);
-		gbc.gridx = 5;
-		gbc.gridy = 0;
-		panelBusqueda.add(fieldUnidadDeMedida, gbc);
-		gbc.gridx = 6;
-		gbc.gridy = 0;
-		panelBusqueda.add(labelMedidaUnitaria, gbc);
-		gbc.gridx = 7;
-		gbc.gridy = 0;
-		panelBusqueda.add(fieldMedidaUnitaria, gbc);
-		
-		gbc.gridx = 6;
+		gbc.gridx = 0;
 		gbc.gridy = 1;
 		panelBusqueda.add(botonBuscar, gbc);
 		
@@ -302,7 +262,7 @@ private String[] setearColumnas() {
 		columnasTabla = new ArrayList<String>();
 		columnasTabla.add("Descripcion");
 		columnasTabla.add("Costo");
-		columnasTabla.add("Medida Unitaria");
+		columnasTabla.add("Peso por Unidad (KG)");
 		columnasTabla.add("Unidad De Medida");
 		columnasTabla.add("Stock Total");
 		columnasTabla.add("  ");

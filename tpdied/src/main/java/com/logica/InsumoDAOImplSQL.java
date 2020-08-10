@@ -101,4 +101,17 @@ public class InsumoDAOImplSQL implements InsumoDAO<Insumo> {
 		return false;
 	}
 
+	@Override
+	public List<Pair<Insumo, Integer>> readAllWithStockFiltered(String descripcion) {
+		InsumoGeneralDAO IGD = new InsumoGeneralDAOImplSQL(); 
+		InsumoLiquidoDAO ILD = new InsumoLiquidoDAOImplSQL(); 
+		
+		List<Pair<Insumo, Integer>> listaInsumos = new ArrayList<Pair<Insumo, Integer>>();
+		
+		listaInsumos.addAll(IGD.readAllWithStockFiltered(descripcion));
+		listaInsumos.addAll(ILD.readAllWithStockFiltered(descripcion));
+		
+		return listaInsumos;
+	}
+
 }
