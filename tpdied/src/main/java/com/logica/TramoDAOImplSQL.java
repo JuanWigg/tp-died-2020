@@ -127,7 +127,7 @@ public class TramoDAOImplSQL implements TramoDAO {
 			 pstm.setInt(2, id_tramo);
 			 pstm.setInt(3, orden);
 			 
-			
+			 pstm.execute();
 			 
 			 pstm.close();
 			 conn.close();

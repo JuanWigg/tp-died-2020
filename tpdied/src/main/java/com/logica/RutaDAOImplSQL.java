@@ -56,6 +56,7 @@ public class RutaDAOImplSQL implements RutaDAO{
 		ArrayList<Tramo> tramos = (ArrayList<Tramo>) ruta.getListaTramos();
 		for(int i=0; i<tramos.size(); i++) {
 			TramoSQL.altaTramoDeRuta(id_ruta, tramos.get(i).getIdTramo(), i+1);
+			
 		}
 		
 		return id_ruta;

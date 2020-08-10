@@ -146,8 +146,7 @@ public class CamionDAOImplSQL implements CamionDAO{
 					"(SELECT patente_camion FROM tpdied.detalle_envio DI " + 
 					"LEFT JOIN (SELECT nro_orden FROM tpdied.orden_pedido WHERE estado='PROCESADA') as foo ON DI.nro_orden=foo.nro_orden) as bar ON bar.patente_camion = CM.patente;");
 			ResultSet res = stmt.executeQuery();
-			stmt.close();
-			conn.close();
+			
 			if(!res.next()) {
 				return camiones;
 			}
@@ -166,6 +165,8 @@ public class CamionDAOImplSQL implements CamionDAO{
 					
 				} while (res.next());
 			}
+			stmt.close();
+			conn.close();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

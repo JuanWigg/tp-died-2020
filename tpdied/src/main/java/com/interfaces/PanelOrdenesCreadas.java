@@ -80,6 +80,8 @@ public class PanelOrdenesCreadas extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				int fila = tablaOrdenes.getSelectedRow();
 				VentanaProcesarOrden dialogo = new VentanaProcesarOrden(listaOrdenes.get(fila), new JFrame(), true);
+				//listaOrdenes = (new OrdenPedidoController()).getPedidosCreados();
+				//construirTabla(setearColumnas(),obtenerMatrizDatos());
 				}
 			
 		});

@@ -220,19 +220,18 @@ public class OrdenPedidoDAOImplSQL implements OrdenPedidoDAO {
 			pstm = conn.prepareStatement(
 				"UPDATE tpdied.orden_pedido "
 				+ "SET fecha_solicitud = ? , "
-				+ "SET fecha_entrega = ? , "
-				+ "SET estado = ?::tpdied.estado_pedido , "
-				+ "SET planta_destino = ? , "
-				+ " WHERE nro_orden_pedido = ? ;"
+				+ " fecha_entrega = ? , "
+				+ " estado = ?::tpdied.estado_pedido , "
+				+ " planta_destino = ?  "
+				+ " WHERE nro_orden = ? ;"
 			);		
 			
-			pstm.setString(1, formatter.format(fechaSolicitud));
-			pstm.setString(2, formatter.format(fechaEntrega));
+			pstm.setObject(1, newObj.getFechaSolicitud());
+			pstm.setObject(2, newObj.getFechaEntrega());
 			pstm.setString(3, newObj.getEstado().toString());
 			pstm.setString(4, newObj.getPlantaDestino().getNombre());
-			pstm.setNull(5, newObj.getDetalleEnvio().getId());
 			
-			pstm.setInt(6, oldObj.getNroOrden());
+			pstm.setInt(5, oldObj.getNroOrden());
 			
 			pstm.execute();
 			
