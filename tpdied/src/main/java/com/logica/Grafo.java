@@ -114,7 +114,22 @@ public class Grafo {
         return salidaMod;	
     }
 	
-
+	public List<Ruta> caminos(Planta p1,Planta p2,Double peso){
+		List<List<Planta>> salida = new ArrayList<List<Planta>>();
+        List<Ruta> salidaMod = new ArrayList<Ruta>();
+        List<Planta> marcadas = new ArrayList<Planta>();
+        marcadas.add(p1);
+        buscarCaminosAux(p1,p2,marcadas,salida);
+        for (int i=0;i<salida.size();i++) {
+            salidaMod.add(new Ruta(i+1,salida.get(i)));
+            salidaMod.get(i).crearListaTramos(this);
+            salidaMod.get(i).calcularMenorPesoMax();
+        }
+        
+        return salidaMod.stream().filter(c -> c.getMenorPesoMax()>peso).collect(Collectors.toList());
+    	
+    }
+	
 	private void buscarCaminosAux(Planta p1,Planta p2,List<Planta> marcadas,
 			List<List<Planta>> salida) {
 			List<Planta> adyacentes = this.getAdyacentes(p1.getNombre());
