@@ -117,6 +117,8 @@ public class Grafo {
         for (int i=0;i<salida.size();i++) {
             salidaMod.add(new Ruta(i+1,salida.get(i)));
             salidaMod.get(i).crearListaTramos(this);
+            salidaMod.get(i).distanciaRuta();
+            salidaMod.get(i).duracionRuta();
         }
         return salidaMod;	
     }
@@ -131,6 +133,8 @@ public class Grafo {
             salidaMod.add(new Ruta(i+1,salida.get(i)));
             salidaMod.get(i).crearListaTramos(this);
             salidaMod.get(i).calcularMenorPesoMax();
+            salidaMod.get(i).distanciaRuta();
+            salidaMod.get(i).duracionRuta();
         }
         
         return salidaMod.stream().filter(c -> c.getMenorPesoMax()>peso).collect(Collectors.toList());
