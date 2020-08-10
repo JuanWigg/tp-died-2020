@@ -20,7 +20,7 @@ public class DetalleEnvioDAOImplSQL implements DetalleEnvioDAO{
 		try {
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
-			PreparedStatement stmt = conn.prepareStatement("INSERT INTO tpdied.detalle_envio (id_ruta, costo, patente_camion, nro_orden"
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO tpdied.detalle_envio (id_ruta, costo, patente_camion, nro_orden)"
 					+ " VALUES (?,?,?,?)");
 			stmt.setInt(1, de.getRuta().getId());
 			stmt.setDouble(2 , de.getCosto());

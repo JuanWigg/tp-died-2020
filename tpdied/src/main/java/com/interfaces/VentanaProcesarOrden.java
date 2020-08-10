@@ -33,8 +33,10 @@ import com.controladores.StockInsumoController;
 import com.logica.Camion;
 import com.logica.DetalleEnvio;
 import com.logica.DetalleEnvioDAOImplSQL;
+import com.logica.EstadoOrden;
 import com.logica.Grafo;
 import com.logica.OrdenPedido;
+import com.logica.OrdenPedidoDAOImplSQL;
 import com.logica.Planta;
 import com.logica.Ruta;
 
@@ -115,7 +117,12 @@ public class VentanaProcesarOrden extends JDialog{
 						rutaElegida.setId(id_ruta);
 						DetalleEnvio de = new DetalleEnvio(camionAsignado, rutaElegida, ordenPedido.getNroOrden());
 						
-						(new DetalleEnvioDAOImplSQL()).altaDetalleEnvio(de);;
+						(new DetalleEnvioDAOImplSQL()).altaDetalleEnvio(de);
+						ordenPedido.setDetalleEnvio(de);
+						OrdenPedido nuevaOrden = new OrdenPedido(ordenPedido.getNroOrden(), ordenPedido.getFechaSolicitud(),
+								ordenPedido.getFechaEntrega(), EstadoOrden.PROCESADA, ordenPedido.getDetalleEnvio(), ordenPedido.getDetalleItems()
+								, ordenPedido.getPlantaDestino());
+						(new OrdenPedidoDAOImplSQL()).update(nuevaOrden, ordenPedido);
 						
 						JOptionPane.showMessageDialog(new JFrame(), "Pedido procesado con exito");
 						JDialog frame = (JDialog) SwingUtilities.getWindowAncestor(panel);
@@ -185,7 +192,6 @@ public class VentanaProcesarOrden extends JDialog{
 		
 		String informacion[][] = new String[rutas.size()][columnasTabla.size()];
 		for(int i=0; i<informacion.length ; i++) {
-			rutas.get(i).crearListaTramos(g);
 			rutas.get(i).distanciaRuta();
 			rutas.get(i).duracionRuta();
 			rutas.get(i).calcularMenorPesoMax();
