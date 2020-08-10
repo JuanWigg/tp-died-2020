@@ -26,6 +26,7 @@ public class PanelPrincipal extends JPanel{
 	JButton opcionesStockInsumo;
 	JButton opcionesPedidos;
 	JButton opcionesAlgoritmos;
+	JButton botonSalir;
 	
 	public PanelPrincipal() {
 		super();
@@ -121,6 +122,18 @@ public class PanelPrincipal extends JPanel{
 			
 		});
 		
+		botonSalir = new JButton("Salir");
+		botonSalir.setPreferredSize(new Dimension(200,75));
+		botonSalir.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.exit(0);
+			}
+			
+		});
+		
 		
 	}
 	
@@ -153,5 +166,8 @@ public class PanelPrincipal extends JPanel{
 		gbc.gridx = 0;
 		gbc.gridy = 5;
 		this.add(opcionesAlgoritmos, gbc);
+		gbc.gridx = 0;
+		gbc.gridy = 6;
+		this.add(botonSalir, gbc);
 	}
 }
