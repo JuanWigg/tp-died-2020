@@ -13,7 +13,7 @@ import com.interfaces.PanelPrincipal;
 public class App {
 
 	public static void main(String[] args) {
-	/*	try {
+		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -36,7 +36,7 @@ public class App {
 		ventana.setSize(1024, 768);
 		ventana.setContentPane(new PanelPrincipal());
 		ventana.setVisible(true);
-		*/
+		
 		
 	}
 

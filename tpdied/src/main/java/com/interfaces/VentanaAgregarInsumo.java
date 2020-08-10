@@ -11,6 +11,7 @@ import java.awt.event.ItemListener;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -40,6 +41,9 @@ public class VentanaAgregarInsumo extends JDialog {
 	JTextField fieldMagnitudUnidad;
 	JComboBox<String> comboUnidad;
 	JComboBox<String> comboTipoInsumo;
+	GridBagConstraints gbc = new GridBagConstraints();
+	
+	String [] unidades;
 	
 	JButton botonAceptar;
 	JButton botonCancelar;
@@ -70,8 +74,8 @@ public class VentanaAgregarInsumo extends JDialog {
 				fieldDescripcion = new JTextField();
 				fieldDescripcion.setPreferredSize(new Dimension(100, 20));
 				
-				String[] unidades = new String[1];
-				unidades[0] = "<Ninguno>";
+				unidades = new String[1];
+				unidades[0] = "<Ninguna>";
 				comboUnidad = new JComboBox<String>(unidades);
 				comboUnidad.setPreferredSize(new Dimension(100, 20));
 				
@@ -120,12 +124,34 @@ public class VentanaAgregarInsumo extends JDialog {
 				});
 				
 				comboTipoInsumo.addItemListener(new ItemListener() {
-		            // Listening if a new items of the combo box has been selected.
+		
 
 					@Override
 					public void itemStateChanged(ItemEvent e) {
-						// TODO Auto-generated method stub
-						
+							if (e.getStateChange() == ItemEvent.SELECTED) {
+								comboUnidad.removeAllItems();
+			                    
+								switch(String.valueOf(comboTipoInsumo.getSelectedItem())) {
+								case "LIQUIDO":
+									comboUnidad.addItem("<Ninguna>");
+									comboUnidad.addItem("m3");
+									comboUnidad.addItem("l");
+									labelDensidad.setVisible(true);
+									break;
+								case "GENERAL":
+									comboUnidad.addItem("<Ninguna>");
+									comboUnidad.addItem("kg");
+									comboUnidad.addItem("g");
+									labelPeso.setVisible(true);
+									break;
+								default:
+									comboUnidad.addItem("<Ninguna>");
+									labelDensidad.setVisible(true);
+									labelPeso.setVisible(true);
+							}
+													
+		                }
+							
 					}
 
 
@@ -138,7 +164,7 @@ public class VentanaAgregarInsumo extends JDialog {
 		panel.setLayout(new GridBagLayout());
 
 		
-		GridBagConstraints gbc = new GridBagConstraints();
+		
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.insets = new Insets(10,10,10,10);
 		gbc.gridx = 0;
@@ -182,7 +208,6 @@ public class VentanaAgregarInsumo extends JDialog {
 		panel.add(botonAceptar, gbc);
 		labelPeso.setVisible(false);
 		labelDensidad.setVisible(false);
-		comboUnidad.setVisible(false);
 	}
 	
 	
