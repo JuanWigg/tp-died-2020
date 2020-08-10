@@ -288,16 +288,22 @@ public class Grafo {
 				if(i==j) {
 					mat[i][j]=0;
 				}
-				else if(esAdyacente(pA, pB)) {
+				else if(this.hayCamino(pA, pB))
+					{
+					if(esAdyacente(pA, pB)) {
+					
 					mat[i][j]=getTramo(pA, pB).getDistancia();
 					}
-				else {
-					listaRutas=this.caminos(pA, pB);
-					for (Ruta ruta : listaRutas) {
-						ruta.distanciaRuta();
+					else {
+						listaRutas=this.caminos(pA, pB);
+						for (Ruta ruta : listaRutas) {
+							ruta.distanciaRuta();
+						}
+						mat[i][j]=this.rutaMasCorta(listaRutas).get(0).getDistanciaTotal();
+						}
 					}
-					mat[i][j]=this.rutaMasCorta(listaRutas).get(0).getDistanciaTotal();
-				}
+				else 
+					mat[i][j]=-1;
 			}
 		}
 		
@@ -314,17 +320,24 @@ public class Grafo {
 				if(i==j) {
 					mat[i][j]=0;
 				}
-				else if(this.esAdyacente(pA, pB)) {
-					mat[i][j]=this.getTramo(pA, pB).getDuracionEstimada();
+				else if(this.hayCamino(pA, pB))
+					{
+					if(esAdyacente(pA, pB)) {
+					
+					mat[i][j]=getTramo(pA, pB).getDuracionEstimada();
 					}
-				else {
-					listaRutas=this.caminos(pA, pB);
-					for (Ruta ruta : listaRutas) {
-						ruta.duracionRuta();
+					else {
+						listaRutas=this.caminos(pA, pB);
+						for (Ruta ruta : listaRutas) {
+							ruta.distanciaRuta();
+						}
+						mat[i][j]=this.rutaMasCorta(listaRutas).get(0).getDuracionTotal();
+						}
 					}
-					mat[i][j]=this.rutaMasCortaTiempo(listaRutas).get(0).getDuracionTotal();
+				else 
+					mat[i][j]=-1;
 				}
-			}
+			
 		}
 		return mat;}
 	
