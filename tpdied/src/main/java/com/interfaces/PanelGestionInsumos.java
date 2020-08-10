@@ -26,6 +26,8 @@ import com.logica.Insumo;
 import com.logica.InsumoDAO;
 import com.logica.InsumoDAOImplSQL;
 
+import kotlin.Pair;
+
 public class PanelGestionInsumos extends JPanel {
 	ArrayList<String> columnasTabla;
 	JLabel labelDescripcion;
@@ -44,11 +46,11 @@ public class PanelGestionInsumos extends JPanel {
 	JButton botonAgregarInsumo; 
 	
 	ModeloTablaInsumos modeloI;
-	ArrayList<Insumo> listaInsumos;
+	ArrayList<Pair<Insumo, Integer>> listaInsumosStock;
 	
 	public PanelGestionInsumos() {
 		super();
-		listaInsumos = (ArrayList<Insumo>) (new InsumoDAOImplSQL()).readAll();
+		listaInsumosStock = (ArrayList<Pair<Insumo, Integer>>) (new InsumoDAOImplSQL()).readAllWithStock();
 		inicializarComponentes();
 		armarPanel();
 	}
@@ -149,7 +151,7 @@ public class PanelGestionInsumos extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				VentanaAgregarInsumo dialogo = new VentanaAgregarInsumo(new JFrame(), true);
-				listaInsumos = (ArrayList<Insumo>) (new InsumoDAOImplSQL()).readAll();
+				listaInsumosStock = (ArrayList<Pair<Insumo, Integer>>) (new InsumoDAOImplSQL()).readAllWithStock();
 				construirTabla(setearColumnas(), obtenerMatrizDatos());
 				
 			}
@@ -196,6 +198,7 @@ public class PanelGestionInsumos extends JPanel {
 				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.UNIDAD_DE_MEDIDA).setCellRenderer(new GestionCeldasCamiones("numero"));
 				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.COSTO).setCellRenderer(new GestionCeldasCamiones("numero"));
 				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.PESODENSIDAD).setCellRenderer(new GestionCeldasCamiones("numero"));
+				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.STOCK_TOTAL).setCellRenderer(new GestionCeldasCamiones("numero"));
 				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.MODIFICAR).setCellRenderer(new GestionCeldasCamiones("boton"));
 				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.ELIMINAR).setCellRenderer(new GestionCeldasCamiones("boton"));
 				
@@ -205,9 +208,10 @@ public class PanelGestionInsumos extends JPanel {
 				
 				// TAMAÑO DE CADA COLUMNA
 				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.DESCRIPCION).setPreferredWidth(10);
-				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.UNIDAD_DE_MEDIDA).setPreferredWidth(15);
+				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.UNIDAD_DE_MEDIDA).setPreferredWidth(10);
 				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.COSTO).setPreferredWidth(20);
 				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.PESODENSIDAD).setPreferredWidth(20);
+				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.STOCK_TOTAL).setPreferredWidth(20);
 				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.MODIFICAR).setPreferredWidth(5);
 				tablaResultados.getColumnModel().getColumn(UtilTablaInsumos.ELIMINAR).setPreferredWidth(5);
 				
@@ -215,13 +219,14 @@ public class PanelGestionInsumos extends JPanel {
 	 
 	 private Object[][] obtenerMatrizDatos(){
 		 	InsumoDAO<Insumo> ID = new InsumoDAOImplSQL();
-		 	List<Insumo> listaInsumos =  ID.readAll();
-			String informacion[][] = new String[listaInsumos.size()][columnasTabla.size()];
+		 	List<Pair<Insumo, Integer>> listaInsumosStock =  ID.readAllWithStock();
+			String informacion[][] = new String[listaInsumosStock.size()][columnasTabla.size()];
 			for(int i=0; i<informacion.length ; i++) {
-				informacion[i][UtilTablaInsumos.DESCRIPCION] = listaInsumos.get(i).getDescripcion() + "";
-				informacion[i][UtilTablaInsumos.UNIDAD_DE_MEDIDA] = listaInsumos.get(i).getUnidad() + "";
-				informacion[i][UtilTablaInsumos.COSTO] = listaInsumos.get(i).getCostoPorUnidad() + "";
-				informacion[i][UtilTablaInsumos.PESODENSIDAD] = listaInsumos.get(i).getCantidadPorUnidad() + "";
+				informacion[i][UtilTablaInsumos.DESCRIPCION] = listaInsumosStock.get(i).component1().getDescripcion() + "";
+				informacion[i][UtilTablaInsumos.UNIDAD_DE_MEDIDA] = listaInsumosStock.get(i).component1().getUnidad() + "";
+				informacion[i][UtilTablaInsumos.COSTO] = listaInsumosStock.get(i).component1().getCostoPorUnidad() + "";
+				informacion[i][UtilTablaInsumos.PESODENSIDAD] = listaInsumosStock.get(i).component1().getCantidadPorUnidad() + "";
+				informacion[i][UtilTablaInsumos.STOCK_TOTAL] = listaInsumosStock.get(i).component2().intValue() + "";
 				informacion[i][UtilTablaInsumos.MODIFICAR] = "MODIFICAR";
 				informacion[i][UtilTablaInsumos.ELIMINAR] = "ELIMINAR";
 			}
@@ -299,6 +304,7 @@ private String[] setearColumnas() {
 		columnasTabla.add("Costo");
 		columnasTabla.add("Medida Unitaria");
 		columnasTabla.add("Unidad De Medida");
+		columnasTabla.add("Stock Total");
 		columnasTabla.add("  ");
 		columnasTabla.add("  ");
 		String[] columnas = new String[columnasTabla.size()];

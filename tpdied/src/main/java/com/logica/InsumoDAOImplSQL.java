@@ -6,6 +6,8 @@ package com.logica;
 import java.util.ArrayList;
 import java.util.List;
 
+import kotlin.Pair;
+
 /**
  * @author josesei
  *
@@ -56,6 +58,18 @@ public class InsumoDAOImplSQL implements InsumoDAO<Insumo> {
 		
 		listaInsumos.addAll(IGD.readAll());
 		listaInsumos.addAll(ILD.readAll());
+		
+		return listaInsumos;
+	}
+	
+	public List<Pair<Insumo, Integer>> readAllWithStock(){
+		InsumoGeneralDAO IGD = new InsumoGeneralDAOImplSQL(); 
+		InsumoLiquidoDAO ILD = new InsumoLiquidoDAOImplSQL(); 
+		
+		List<Pair<Insumo, Integer>> listaInsumos = new ArrayList<Pair<Insumo, Integer>>();
+		
+		listaInsumos.addAll(IGD.readAllWithStock());
+		listaInsumos.addAll(ILD.readAllWithStock());
 		
 		return listaInsumos;
 	}

@@ -136,18 +136,20 @@ public class VentanaAgregarInsumo extends JDialog {
 									comboUnidad.addItem("<Ninguna>");
 									comboUnidad.addItem("m3");
 									comboUnidad.addItem("l");
+									labelPeso.setVisible(false);
 									labelDensidad.setVisible(true);
 									break;
 								case "GENERAL":
 									comboUnidad.addItem("<Ninguna>");
 									comboUnidad.addItem("kg");
 									comboUnidad.addItem("g");
+									labelDensidad.setVisible(false);
 									labelPeso.setVisible(true);
 									break;
 								default:
 									comboUnidad.addItem("<Ninguna>");
-									labelDensidad.setVisible(true);
-									labelPeso.setVisible(true);
+									labelDensidad.setVisible(false);
+									labelPeso.setVisible(false);
 							}
 													
 		                }

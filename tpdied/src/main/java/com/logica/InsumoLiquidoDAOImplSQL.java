@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import kotlin.Pair;
 
 /**
  * @author josesei
@@ -225,6 +226,49 @@ public class InsumoLiquidoDAOImplSQL implements InsumoLiquidoDAO {
 		}
 		
 		return rowsDeletedParent > 0 && rowsDeletedChild > 0;
+	}
+
+	@Override
+	public List<Pair<Insumo, Integer>> readAllWithStock() {
+		Connection conn = null;
+		ResultSet res = null;
+		PreparedStatement pstm = null;
+		List<Pair<Insumo, Integer>> listaInsumosStock = new ArrayList<Pair<Insumo, Integer>>();
+		try {
+			Class.forName("org.postgresql.Driver");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
+			pstm = conn.prepareStatement("SELECT I.id, I.descripcion, I.unidad, I.costo_por_unidad, IL.densidad, SUM(SI.cantidad) " + 
+					"FROM tpdied.insumo I " + 
+					"JOIN tpdied.insumo_liquido IL ON I.id = IL.id " + 
+					"LEFT JOIN tpdied.stock_insumo SI ON I.id = SI.id_insumo " + 
+					"GROUP BY I.id, I.descripcion, I.unidad, I.costo_por_unidad, IL.densidad ");
+			
+			res=pstm.executeQuery();		
+			
+			while(res.next()) {
+				listaInsumosStock.add(
+					new Pair<Insumo, Integer>(
+					new InsumoLiquido(
+				    res.getInt("id"),
+				 	res.getString("descripcion"),
+				 	Unidad.valueOf(res.getString("unidad")),
+				 	res.getDouble("costo_por_unidad"),
+				 	res.getDouble("densidad")
+				 ),
+					Integer.valueOf(res.getInt("sum"))));
+			 }
+			
+			pstm.close();
+			conn.close();
+			
+			
+		}catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return listaInsumosStock;
 	}
 	
 }
