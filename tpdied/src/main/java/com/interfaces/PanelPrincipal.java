@@ -25,6 +25,7 @@ public class PanelPrincipal extends JPanel{
 	JButton opcionesInsumos;
 	JButton opcionesStockInsumo;
 	JButton opcionesPedidos;
+	JButton opcionesAlgoritmos;
 	
 	public PanelPrincipal() {
 		super();
@@ -40,6 +41,7 @@ public class PanelPrincipal extends JPanel{
 		opcionesInsumos = new JButton("Gestionar Insumos");
 		opcionesStockInsumo = new JButton("Gestionar Stocks de Plantas");
 		opcionesPedidos = new JButton("Gestionar Pedidos");
+		opcionesAlgoritmos = new JButton("Algoritmos Sobre El Grafo");
 		
 		opcionesCamiones.setPreferredSize(new Dimension(200,75));
 		opcionesCamiones.addActionListener(new ActionListener() {
@@ -105,6 +107,21 @@ public class PanelPrincipal extends JPanel{
 			
 		});
 		
+		opcionesAlgoritmos.setPreferredSize(new Dimension(200,75));
+		opcionesAlgoritmos.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JFrame ventana = ((JFrame) SwingUtilities.getWindowAncestor(((JButton) e.getSource()).getParent()));
+				ventana.setContentPane(new PanelAlgoritmos());
+				ventana.revalidate();
+				ventana.repaint();
+			}
+			
+		});
+		
+		
 	}
 	
 	public void armarPanel() {
@@ -133,5 +150,8 @@ public class PanelPrincipal extends JPanel{
 		gbc.gridx = 0;
 		gbc.gridy = 4;
 		this.add(opcionesPedidos, gbc);
+		gbc.gridx = 0;
+		gbc.gridy = 5;
+		this.add(opcionesAlgoritmos, gbc);
 	}
 }
