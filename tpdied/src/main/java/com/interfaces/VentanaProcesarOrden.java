@@ -209,12 +209,12 @@ public class VentanaProcesarOrden extends JDialog{
 		
 		String informacion[][] = new String[rutas.size()][columnasTabla.size()];
 		for(int i=0; i<informacion.length ; i++) {
-			rutas.get(i).distanciaRuta();
-			rutas.get(i).duracionRuta();
+			rutas.get(i).calcularMenorPesoMax();
 			informacion[i][0] = rutas.get(i).getListaPlantasRuta().get(0).getNombre();
 			informacion[i][1] = rutas.get(i).getDistanciaTotal() + "";
 			informacion[i][2] = rutas.get(i).getDuracionTotal() + "";
  			informacion[i][3] = rutas.get(i).getMenorPesoMax() + "";
+ 			System.out.println(rutas.get(i).getMenorPesoMax());
 		}
 		return informacion;
 	}
