@@ -95,7 +95,7 @@ public class Grafo {
     }
 	public Tramo getTramo(Planta p1,Planta p2) {
 		for (Tramo t : this.getTramos()) {
-			if(t.getPlantaOrigen() == p1 && t.getPlantaDestino() == p2)
+			if(t.getPlantaOrigen().equals(p1) && t.getPlantaDestino().equals(p2))
 				return t;
 		}
 		return null;
