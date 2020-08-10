@@ -162,7 +162,7 @@ public class VentanaProcesarOrden extends JDialog{
 				}
 				 
 			 });
-		 split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,tablaCortas,tablaRapidas);
+		 split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,new JScrollPane(tablaCortas),new JScrollPane(tablaRapidas));
 		 split2 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,rutaCorta,rutaRapida);
 		 split.setResizeWeight(0.5d);
 		 split2.setResizeWeight(0.5d);
