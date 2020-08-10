@@ -38,7 +38,7 @@ public class RutaDAOImplSQL implements RutaDAO{
 			
 			stmt.setDouble(1,ruta.getDuracionTotal());
 			stmt.setDouble(2, ruta.getDistanciaTotal());
-			stmt.setInt(3, ruta.getMenorPesoMax());
+			stmt.setDouble(3, ruta.getMenorPesoMax());
 			stmt.setString(4, "kg");
 			stmt.execute();
 			
@@ -80,7 +80,7 @@ public class RutaDAOImplSQL implements RutaDAO{
 				ruta.setId(id_ruta);
 				ruta.setDistanciaTotal(res.getInt("distancia_total"));
 				ruta.setDuracionTotal(res.getDouble("duracion_total"));
-				ruta.setMenorPesoMax(res.getInt("menor_peso_max"));
+				ruta.setMenorPesoMax(res.getDouble("menor_peso_max"));
 				
 			}
 			

@@ -66,4 +66,6 @@ public abstract class Insumo {
 		}
 		return Double.MAX_VALUE;
 	}
+	
+	public abstract double pesoPorUnidad();
 }

@@ -7,19 +7,21 @@ public class Tramo {
 	private Planta plantaDestino;
 	private Integer distancia;
 	private Double duracionEstimada;
-	private Integer pesoMaximoPermitido; 
+	private Double pesoMaximoPermitido; 
 	private String unidadPesoMax;
+	private Double capacidadUsada;
 	public Tramo() {
 		idTramo=null;
 		plantaOrigen= new Planta();
 		plantaDestino= new Planta();
 		distancia=0;
 		duracionEstimada=Double.MIN_VALUE;
-		pesoMaximoPermitido=0;
+		pesoMaximoPermitido=0d;
+		this.capacidadUsada=0d;
 	}
 
 	public Tramo(Integer idT,Planta plantaOrigen, Planta plantaDestino, Integer distancia, Double duracionEstimada,
-			Integer pesoMaximoPermitido,String unidad) {
+			Double pesoMaximoPermitido,String unidad) {
 		super();
 		this.idTramo=idT;
 		this.plantaOrigen = plantaOrigen;
@@ -28,16 +30,18 @@ public class Tramo {
 		this.duracionEstimada = duracionEstimada;
 		this.pesoMaximoPermitido = pesoMaximoPermitido;
 		this.unidadPesoMax=unidad;
+		this.capacidadUsada=0d;
 	}
 	
 	public Tramo(Planta plantaOrigen, Planta plantaDestino, Integer distancia, Double duracionEstimada,
-		Integer pesoMaximoPermitido,String unidad) {
+			Double pesoMaximoPermitido,String unidad) {
 		this.plantaOrigen = plantaOrigen;
 		this.plantaDestino = plantaDestino;
 		this.distancia = distancia;
 		this.duracionEstimada = duracionEstimada;
 		this.pesoMaximoPermitido = pesoMaximoPermitido;
 		this.unidadPesoMax=unidad;
+		this.capacidadUsada=0d;
 	}
 	
 	public Integer getIdTramo() {
@@ -80,11 +84,11 @@ public class Tramo {
 		this.duracionEstimada = duracionEstimada;
 	}
 
-	public Integer getPesoMaximoPermitido() {
+	public Double getPesoMaximoPermitido() {
 		return pesoMaximoPermitido;
 	}
 
-	public void setPesoMaximoPermitido(Integer pesoMaximoPermitido) {
+	public void setPesoMaximoPermitido(Double pesoMaximoPermitido) {
 		this.pesoMaximoPermitido = pesoMaximoPermitido;
 	}
 	
@@ -96,6 +100,13 @@ public class Tramo {
 		this.unidadPesoMax = unidad;
 	}
 	
+	public Double getCapacidadUsada() {
+		return capacidadUsada;
+	}
+
+	public void setCapacidadUsada(Double capacidadUsada) {
+		this.capacidadUsada = capacidadUsada;
+	}
 	
 	@Override
 	public String toString() {

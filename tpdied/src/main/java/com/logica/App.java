@@ -37,6 +37,7 @@ public class App {
 		ventana.setContentPane(new PanelPrincipal());
 		ventana.setVisible(true);
 		
+		
 	}
 
 }

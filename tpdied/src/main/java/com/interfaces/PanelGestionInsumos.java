@@ -20,6 +20,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import com.logica.Camion;
+import com.logica.CamionDAOImplSQL;
 import com.logica.Insumo;
 import com.logica.InsumoDAO;
 import com.logica.InsumoDAOImplSQL;
@@ -42,11 +44,11 @@ public class PanelGestionInsumos extends JPanel {
 	JButton botonAgregarInsumo; 
 	
 	ModeloTablaInsumos modeloI;
-	//ArrayList<Insumo> listaInsumos;
+	ArrayList<Insumo> listaInsumos;
 	
 	public PanelGestionInsumos() {
 		super();
-		//listaInsumos = (ArrayList<Insumo>) (new InsumosDAOImplSQL()).buscarInsumos();
+		listaInsumos = (ArrayList<Insumo>) (new InsumoDAOImplSQL()).readAll();
 		inicializarComponentes();
 		armarPanel();
 	}
@@ -146,9 +148,10 @@ public class PanelGestionInsumos extends JPanel {
 
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				/*VentanaAgregarInsumo dialogo = new VentanaAgregarInsumo(new JFrame(), true);
-				listaInsumos = (ArrayList<Insumo>) (new InsumosDAOImplSQL()).buscarInsumos();
-				construirTabla(setearColumnas(), obtenerMatrizDatos());*/
+				VentanaAgregarInsumo dialogo = new VentanaAgregarInsumo(new JFrame(), true);
+				listaInsumos = (ArrayList<Insumo>) (new InsumoDAOImplSQL()).readAll();
+				construirTabla(setearColumnas(), obtenerMatrizDatos());
+				
 			}
 			
 		});

@@ -180,6 +180,13 @@ public class VentanaProcesarOrden extends JDialog{
 		for(Planta p : plantasConStock) {
 			caminosPosibles.addAll(g.caminos(p, ordenPedido.getPlantaDestino()));
 		}
+		if(plantasConStock.size()==0) {
+			JOptionPane.showMessageDialog(this, "No hay ninguna planta con stock suficiente para el pedido");
+			OrdenPedido nuevaOrden = new OrdenPedido(ordenPedido.getNroOrden(), ordenPedido.getFechaSolicitud(),
+					ordenPedido.getFechaEntrega(), EstadoOrden.CANCELADA, ordenPedido.getDetalleEnvio(), ordenPedido.getDetalleItems()
+					, ordenPedido.getPlantaDestino());
+			(new OrdenPedidoDAOImplSQL()).update(nuevaOrden, ordenPedido);
+		}
 		
 		if(tipo == 0) {
 			listaRutasCortas = (ArrayList<Ruta>) (g.rutaMasCorta(caminosPosibles));
@@ -194,7 +201,6 @@ public class VentanaProcesarOrden extends JDialog{
 		for(int i=0; i<informacion.length ; i++) {
 			rutas.get(i).distanciaRuta();
 			rutas.get(i).duracionRuta();
-			rutas.get(i).calcularMenorPesoMax();
 			informacion[i][0] = rutas.get(i).getListaPlantasRuta().get(0).getNombre();
 			informacion[i][1] = rutas.get(i).getDistanciaTotal() + "";
 			informacion[i][2] = rutas.get(i).getDuracionTotal() + "";

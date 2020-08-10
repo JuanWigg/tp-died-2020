@@ -11,7 +11,7 @@ public class Ruta {
 	private List<Planta> listaPlantasRuta;
 	private Double duracionTotal;
 	private Integer distanciaTotal;
-	private Integer menorPesoMax;
+	private Double menorPesoMax;
 	
 	public Ruta(Integer id,List<Planta> plantas) {
 		super();
@@ -20,7 +20,7 @@ public class Ruta {
 		this.listaPlantasRuta = plantas;
 		this.distanciaTotal=0;
 		this.duracionTotal=0d;
-		this.menorPesoMax=Integer.MAX_VALUE;
+		this.menorPesoMax=Double.MAX_VALUE;
 	}
 
 	public Integer getId() {
@@ -49,7 +49,7 @@ public class Ruta {
 		this.distanciaTotal = distanciaTotal;
 	}
 
-	public void setMenorPesoMax(Integer menorPesoMax) {
+	public void setMenorPesoMax(Double menorPesoMax) {
 		this.menorPesoMax = menorPesoMax;
 	}
 
@@ -65,12 +65,12 @@ public class Ruta {
 		return distanciaTotal;
 	}
 
-	public Integer getMenorPesoMax() {
+	public Double getMenorPesoMax() {
 		return menorPesoMax;
 	}
 	
 	public void calcularMenorPesoMax() {
-		Integer menor=listaTramos.get(0).getPesoMaximoPermitido();
+		Double menor=(double) listaTramos.get(0).getPesoMaximoPermitido();
 		for (Tramo t : listaTramos) {
 			if(t.getPesoMaximoPermitido()<menor)
 				menor=t.getPesoMaximoPermitido();
@@ -79,7 +79,7 @@ public class Ruta {
 	}
 	
 	public Ruta(Integer id, List<Tramo> listaTramos, Double duracionTotal, Integer distanciaTotal,
-			Integer menorPesoMax) {
+			Double menorPesoMax) {
 		super();
 		this.id = id;
 		this.listaTramos = listaTramos;
@@ -109,6 +109,24 @@ public class Ruta {
 		}
 	}
 	
+	public void aumentarCapacidad(Double capacidad) {
+		for (Tramo t : listaTramos) {
+			t.setCapacidadUsada(t.getCapacidadUsada()+capacidad);
+		}
+	}
+	
+	public boolean hayTramoLleno() {
+		return (this.listaTramos.stream().filter(t -> t.getCapacidadUsada() >= t.getPesoMaximoPermitido()).count()>0);
+		
+	}
+	public Double capacidadMinRestante() {
+		Double menorCap = listaTramos.get(0).getPesoMaximoPermitido()-listaTramos.get(0).getCapacidadUsada();
+		for (Tramo t : listaTramos) {
+			if((t.getPesoMaximoPermitido()-t.getCapacidadUsada())<menorCap)
+				menorCap=t.getPesoMaximoPermitido()-t.getCapacidadUsada();
+		}
+		return menorCap;
+	}
 	
 	@Override
 	public String toString() {
