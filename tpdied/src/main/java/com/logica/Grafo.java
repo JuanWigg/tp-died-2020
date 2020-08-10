@@ -1,7 +1,9 @@
 package com.logica;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.OptionalDouble;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -34,6 +36,9 @@ public class Grafo {
 				return plantas.get(i);
 		}
 			return null;
+	}
+	public List<Planta> getPlantas() {
+		return this.plantas;
 	}
 	
 	public void agregarPlanta(Planta p) {
@@ -213,7 +218,7 @@ public class Grafo {
 	}
 	
 	
-	public void pageRank() {
+	public Map<Object,Object> pageRank() {
 		TreeMap<String,Double> pageAnterior = new TreeMap<String, Double>();
 		List<Planta> ady = new ArrayList<Planta>();
 		Double nuevoPr=0d;
@@ -234,8 +239,9 @@ public class Grafo {
 		pageAnterior.clear();
 		pageAnterior.putAll(pr);
 	}
-		
-		return;
+		Map<Object, Object> plantasOrd = pr.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(
+				Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));		
+		return plantasOrd;
 	}
 	
 	public Double flujoMax(Planta fuente,Planta sumidero) {
@@ -267,6 +273,56 @@ public class Grafo {
 		}
 		return flujoMax;
 	}
+	public double[][] caminosMinimosDistancia(){
+		int TAM = this.getPlantas().size();
+		double [][] mat = new double[TAM][TAM];
+		List<Ruta> listaRutas = new ArrayList<Ruta>();
+		for(int i=0;i<TAM;i++) {
+			for(int j=0;j<TAM;j++) {
+				Planta pA = this.getPlantas().get(i);
+				Planta pB = this.getPlantas().get(j);
+				if(i==j) {
+					mat[i][j]=0;
+				}
+				else if(esAdyacente(pA, pB)) {
+					mat[i][j]=getTramo(pA, pB).getDistancia();
+					}
+				else {
+					listaRutas=this.caminos(pA, pB);
+					for (Ruta ruta : listaRutas) {
+						ruta.distanciaRuta();
+					}
+					mat[i][j]=this.rutaMasCorta(listaRutas).get(0).getDistanciaTotal();
+				}
+			}
+		}
+		
+		return mat;
+		}
+	public double[][] caminosMinimosTiempo(){
+		int TAM = this.getPlantas().size();
+		double [][] mat = new double[TAM][TAM];
+		List<Ruta> listaRutas = new ArrayList<Ruta>();
+		for(int i=0;i<TAM;i++) {
+			for(int j=0;j<TAM;j++) {
+				Planta pA = this.getPlantas().get(i);
+				Planta pB = this.getPlantas().get(j);
+				if(i==j) {
+					mat[i][j]=0;
+				}
+				else if(this.esAdyacente(pA, pB)) {
+					mat[i][j]=this.getTramo(pA, pB).getDuracionEstimada();
+					}
+				else {
+					listaRutas=this.caminos(pA, pB);
+					for (Ruta ruta : listaRutas) {
+						ruta.duracionRuta();
+					}
+					mat[i][j]=this.rutaMasCortaTiempo(listaRutas).get(0).getDuracionTotal();
+				}
+			}
+		}
+		return mat;}
 	
 	
 }

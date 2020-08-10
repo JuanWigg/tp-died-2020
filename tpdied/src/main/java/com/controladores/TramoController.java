@@ -27,7 +27,7 @@ public class TramoController {
 					new Planta(datosLista.get(1)),
 					Integer.parseInt(datosLista.get(4)),
 					Double.parseDouble(datosLista.get(3)),
-					Integer.parseInt(datosLista.get(2)),
+					Double.parseDouble(datosLista.get(2)),
 					"kg"));
 		
 	}
