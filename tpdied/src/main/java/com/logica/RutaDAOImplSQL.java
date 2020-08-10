@@ -35,7 +35,7 @@ public class RutaDAOImplSQL implements RutaDAO{
 			
 			stmt.setDouble(1,ruta.getDuracionTotal());
 			stmt.setDouble(2, ruta.getDistanciaTotal());
-			stmt.setInt(3, ruta.getMenorPesoMax());
+			stmt.setDouble(3, ruta.getMenorPesoMax());
 			stmt.setString(4, "kg");
 			stmt.execute();
 			

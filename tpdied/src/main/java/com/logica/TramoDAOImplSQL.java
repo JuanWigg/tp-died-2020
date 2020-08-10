@@ -72,7 +72,7 @@ public class TramoDAOImplSQL implements TramoDAO {
 			 PlantaD = new Planta(res.getString(7));
 			 t=Optional.of(new Tramo(Integer.valueOf(res.getInt(1)),
 					 PlantaO,PlantaD,Integer.valueOf(res.getInt(2)),Double.valueOf(res.getDouble(3)),
-			 Integer.valueOf(res.getInt(4)),res.getString(5)));
+			 Double.valueOf(res.getDouble(4)),res.getString(5)));
 			 return t;
 			 }
 		 
@@ -103,7 +103,7 @@ public class TramoDAOImplSQL implements TramoDAO {
 				 PlantaD = new Planta(res.getString(7));
 				 t= new Tramo(Integer.valueOf(res.getInt(1)),
 						 PlantaO,PlantaD,Integer.valueOf(res.getInt(2)),Double.valueOf(res.getDouble(3)),
-				 Integer.valueOf(res.getInt(4)),res.getString(5));
+				 Double.valueOf(res.getDouble(4)),res.getString(5));
 				 listaTramos.add(t);
 			 }
 			 pstm.close();

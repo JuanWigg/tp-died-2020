@@ -2,8 +2,10 @@ package com.logica;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalDouble;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 public class Grafo {
 	private List<Tramo> tramos;
@@ -46,7 +48,7 @@ public class Grafo {
 		return tramos;
 	}
 
-	public void conectar(Planta p1,Planta p2,Integer dist,double tEstimado,Integer pesoM,Integer idT,String uPmax) {
+	public void conectar(Planta p1,Planta p2,Integer dist,double tEstimado,Double pesoM,Integer idT,String uPmax) {
 		Tramo t1 = new Tramo(idT,p1,p2,dist,tEstimado,pesoM,uPmax);
 		this.tramos.add(t1);
 	}
@@ -234,6 +236,36 @@ public class Grafo {
 	}
 		
 		return;
+	}
+	
+	public Double flujoMax(Planta fuente,Planta sumidero) {
+		List<Ruta> listaCaminos = new ArrayList<Ruta>();
+		listaCaminos=this.caminos(fuente, sumidero);
+		List<Ruta> listaCaminosNoLlenos=new ArrayList<Ruta>();
+		listaCaminosNoLlenos.addAll(listaCaminos);
+		Double flujoMax =0d;
+		for (Ruta ruta : listaCaminos) {
+			ruta.calcularMenorPesoMax();
+			
+		}
+		OptionalDouble menorPmaxGrafo= listaCaminos.stream().flatMapToDouble(c -> DoubleStream.of(c.getMenorPesoMax())).min();
+		while(!(listaCaminosNoLlenos.isEmpty())) {
+		for (Ruta ruta : listaCaminosNoLlenos) {
+			flujoMax+=menorPmaxGrafo.getAsDouble();
+		}
+		for (Ruta ruta : listaCaminosNoLlenos) {
+			ruta.aumentarCapacidad(menorPmaxGrafo.getAsDouble());
+		}
+		for (Ruta ruta : listaCaminos) {
+			if(ruta.hayTramoLleno())
+				listaCaminosNoLlenos.remove(ruta);
+		}
+		for (Ruta ruta : listaCaminosNoLlenos) {
+			if(ruta.capacidadMinRestante()<menorPmaxGrafo.getAsDouble())
+				menorPmaxGrafo=OptionalDouble.of(ruta.capacidadMinRestante());
+			}
+		}
+		return flujoMax;
 	}
 	
 	
