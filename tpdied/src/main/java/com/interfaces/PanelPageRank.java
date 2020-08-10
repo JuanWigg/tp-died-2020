@@ -9,6 +9,9 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -101,6 +104,9 @@ public class PanelPageRank extends JPanel {
 			informacion[i][0] = plantas.get(i).getNombre() + "";
 			informacion[i][1] = pageRanks.get(plantas.get(i).getNombre()) + "";
 		}
+		Arrays.sort(informacion, Comparator.comparing(o -> o[1]));
+		Collections.reverse(Arrays.asList(informacion));
+		
 		return informacion;
 	}
 	public void construirTabla(String[] columnas, Object[][] data) {

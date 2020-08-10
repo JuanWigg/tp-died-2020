@@ -43,27 +43,39 @@ public class PanelAlgoritmos extends JPanel {
 			}
 		});
 		botonMatriz.setPreferredSize(new Dimension(300, 70));
-	/*	botonMatriz.addActionListener(new ActionListener() {
+		botonMatriz.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				Window ventana = SwingUtilities.windowForComponent(((JButton) e.getSource()).getParent());
-				((JFrame) ventana).setContentPane(new ());
+				((JFrame) ventana).setContentPane(new PanelMatrizCaminos());
 				ventana.revalidate();
 				ventana.repaint();
 			}
-		});*/
+		});
 		botonFlujo.setPreferredSize(new Dimension(300, 70));
-	/*	botonFlujo.addActionListener(new ActionListener() {
+		botonFlujo.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				Window ventana = SwingUtilities.windowForComponent(((JButton) e.getSource()).getParent());
-				((JFrame) ventana).setContentPane(new ());
+				((JFrame) ventana).setContentPane(new PanelFlujoMax());
 				ventana.revalidate();
 				ventana.repaint();
 			}
-		});*/
+		});
 		
 		botonAtras.setPreferredSize(new Dimension(90, 30));
+		botonAtras.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Window ventana = SwingUtilities.windowForComponent(((JButton) e.getSource()).getParent());
+				((JFrame) ventana).setContentPane(new PanelPrincipal());
+				ventana.revalidate();
+				ventana.repaint();
+			}
+			
+		});
 		
 	}
 	
