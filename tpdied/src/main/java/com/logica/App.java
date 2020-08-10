@@ -29,7 +29,7 @@ public class App {
 			e.printStackTrace();
 		}
 		
-		JFrame ventana = new JFrame("Mi app");
+		JFrame ventana = new JFrame("Apps de Gestion de Insumos y Pedidos");
 		
 		ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		ventana.pack();
