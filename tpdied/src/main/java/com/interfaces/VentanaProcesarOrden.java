@@ -181,11 +181,22 @@ public class VentanaProcesarOrden extends JDialog{
 			caminosPosibles.addAll(g.caminos(p, ordenPedido.getPlantaDestino()));
 		}
 		if(plantasConStock.size()==0) {
-			JOptionPane.showMessageDialog(this, "No hay ninguna planta con stock suficiente para el pedido");
+			JOptionPane.showMessageDialog(this, "No hay ninguna planta con stock suficiente para el pedido. Pedido cancelado");
 			OrdenPedido nuevaOrden = new OrdenPedido(ordenPedido.getNroOrden(), ordenPedido.getFechaSolicitud(),
 					ordenPedido.getFechaEntrega(), EstadoOrden.CANCELADA, ordenPedido.getDetalleEnvio(), ordenPedido.getDetalleItems()
 					, ordenPedido.getPlantaDestino());
 			(new OrdenPedidoDAOImplSQL()).update(nuevaOrden, ordenPedido);
+			JDialog frame = (JDialog) SwingUtilities.getWindowAncestor(panel);
+			frame.dispose();
+		}
+		if(caminosPosibles.size()==0) {
+			JOptionPane.showMessageDialog(this, "No existe ningun camino para llevar su pedido. Pedido cancelado");
+			OrdenPedido nuevaOrden = new OrdenPedido(ordenPedido.getNroOrden(), ordenPedido.getFechaSolicitud(),
+					ordenPedido.getFechaEntrega(), EstadoOrden.CANCELADA, ordenPedido.getDetalleEnvio(), ordenPedido.getDetalleItems()
+					, ordenPedido.getPlantaDestino());
+			(new OrdenPedidoDAOImplSQL()).update(nuevaOrden, ordenPedido);
+			JDialog frame = (JDialog) SwingUtilities.getWindowAncestor(panel);
+			frame.dispose();
 		}
 		
 		if(tipo == 0) {
