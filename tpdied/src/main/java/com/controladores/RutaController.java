@@ -28,4 +28,8 @@ public class RutaController {
 		rutasMasRapidas = g.rutaMasCortaTiempo(rutasDisponibles);
 		return rutasMasRapidas;
 	}
+	
+	public int altaRuta(Ruta r) {
+		return (new RutaDAOImplSQL()).altaRuta(r);
+	}
 }

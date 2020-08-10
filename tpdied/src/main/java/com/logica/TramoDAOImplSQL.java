@@ -116,4 +116,25 @@ public class TramoDAOImplSQL implements TramoDAO {
 		
 		return listaTramos;
 	}
+	
+	public void altaTramoDeRuta(int id_ruta, int id_tramo, int orden) {
+		Connection conn = null;
+		try{
+			Class.forName("org.postgresql.Driver");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
+			 PreparedStatement pstm  = conn.prepareStatement("INSERT INTO tpdied.tramos_de_ruta VALUES (?,?,?);");
+			 pstm.setInt(1, id_ruta);
+			 pstm.setInt(2, id_tramo);
+			 pstm.setInt(3, orden);
+			 
+			
+			 
+			 pstm.close();
+			 conn.close();
+			} catch(ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+	}
 }

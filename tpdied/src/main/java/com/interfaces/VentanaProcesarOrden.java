@@ -7,6 +7,8 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -15,15 +17,22 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import com.controladores.CamionController;
+import com.controladores.RutaController;
 import com.controladores.StockInsumoController;
+import com.logica.Camion;
+import com.logica.DetalleEnvio;
+import com.logica.DetalleEnvioDAOImplSQL;
 import com.logica.Grafo;
 import com.logica.OrdenPedido;
 import com.logica.Planta;
@@ -71,8 +80,57 @@ public class VentanaProcesarOrden extends JDialog{
 		 rutaRapida.setHorizontalAlignment(SwingConstants.CENTER);
 		 atras = new JButton("Atrás");
 		 atras.setPreferredSize(new Dimension(120, 40));
+		 atras.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JDialog frame = (JDialog) SwingUtilities.getWindowAncestor(panel);
+				frame.dispose();
+			}
+			 
+		 });
 		 aceptar = new JButton("Aceptar");
 		 aceptar.setPreferredSize(new Dimension(120, 40));
+		 aceptar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Camion camionAsignado = (new CamionController()).colaPrioridadCamiones();
+				Ruta rutaElegida;
+				if(camionAsignado == null) {
+					JOptionPane.showMessageDialog(new JFrame(), "No hay ningun camion disponible para el envio, intente mas tarde");
+				}
+				else {
+					if(tablaCortas.getSelectedRow()==-1 && tablaRapidas.getSelectedRow()==-1) {
+						JOptionPane.showMessageDialog(new JFrame(), "Debe seleccionar una ruta");
+					}
+					else {
+						if(tablaCortas.getSelectedRow()!=-1)
+							rutaElegida = listaRutasCortas.get(tablaCortas.getSelectedRow());
+						else
+							rutaElegida = listaRutasRapidas.get(tablaRapidas.getSelectedRow());
+						int id_ruta = (new RutaController()).altaRuta(rutaElegida);
+						rutaElegida.setId(id_ruta);
+						DetalleEnvio de = new DetalleEnvio(camionAsignado, rutaElegida, ordenPedido.getNroOrden());
+						
+						(new DetalleEnvioDAOImplSQL()).altaDetalleEnvio(de);;
+						
+						JOptionPane.showMessageDialog(new JFrame(), "Pedido procesado con exito");
+						JDialog frame = (JDialog) SwingUtilities.getWindowAncestor(panel);
+						frame.dispose();
+						
+					}
+				}
+				
+				
+				
+				
+				
+			}
+			 
+		 });
 		 tablaCortas = new JTable();
 		 tablaRapidas = new JTable();
 		 tablaCortas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {

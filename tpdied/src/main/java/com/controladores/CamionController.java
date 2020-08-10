@@ -6,9 +6,11 @@ package com.controladores;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Vector;
 
 import com.logica.Camion;
+import com.logica.CamionComparator;
 import com.logica.CamionDAOImplSQL;
 import com.logica.Modelo;
 
@@ -53,5 +55,13 @@ public class CamionController {
 				new Modelo(datos.get(5), datos.get(6))
 				);
 		(new CamionDAOImplSQL()).altaCamion(camion);
+	}
+	
+	public Camion colaPrioridadCamiones() {
+		PriorityQueue<Camion> cola = new PriorityQueue<Camion>(11, new CamionComparator());
+		ArrayList<Camion> camiones = (new CamionDAOImplSQL().consultarCamionesDisponibles());
+		cola.addAll(camiones);
+		
+		return cola.peek();
 	}
 } 

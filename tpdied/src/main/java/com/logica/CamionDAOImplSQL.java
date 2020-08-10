@@ -134,5 +134,46 @@ public class CamionDAOImplSQL implements CamionDAO{
 		
 		
 	}
+	
+	public ArrayList<Camion> consultarCamionesDisponibles(){
+		Connection conn = null;
+		ArrayList<Camion> camiones = new ArrayList<Camion>();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		try {
+			Class.forName("org.postgresql.Driver");
+			conn = DriverManager.getConnection("jdbc:postgresql://" + dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PSW"));
+			PreparedStatement stmt = conn.prepareStatement("SELECT * from tpdied.camion CM LEFT JOIN " + 
+					"(SELECT patente_camion FROM tpdied.detalle_envio DI " + 
+					"LEFT JOIN (SELECT nro_orden FROM tpdied.orden_pedido WHERE estado='PROCESADA') as foo ON DI.nro_orden=foo.nro_orden) as bar ON bar.patente_camion = CM.patente;");
+			ResultSet res = stmt.executeQuery();
+			stmt.close();
+			conn.close();
+			if(!res.next()) {
+				return camiones;
+			}
+			else {
+				
+				do {
+					Camion c = new Camion();
+					c.setPatente(res.getString(1));
+					c.setKilometrosRecorridos(res.getInt(2));
+					c.setCostoPorKilometro(res.getDouble(3));
+					c.setCostoPorHora(res.getDouble(4));
+					c.setFechaCompra(LocalDate.parse(res.getString(5), formatter));
+					Modelo m = new Modelo(res.getString(6), res.getString(7));
+					c.setModelo(m);
+					camiones.add(c);
+					
+				} while (res.next());
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return camiones;
+	}
 
 }

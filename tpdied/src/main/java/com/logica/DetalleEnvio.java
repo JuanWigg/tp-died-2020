@@ -5,11 +5,17 @@ public class DetalleEnvio {
 	private double costo;
 	private Camion camion;
 	private Ruta ruta;
+	private int nro_orden;
 	
 	public DetalleEnvio(Camion camion, Ruta ruta) {
 		this.camion = camion;
 		this.ruta = ruta;
-		//costo = (ruta.getDistanciaTotal()*camion.getCostoPorKilometro()) + ruta.getDuracionTotal()*camion.getCostoPorHora();
+		costo = (ruta.getDistanciaTotal()*camion.getCostoPorKilometro()) + ruta.getDuracionTotal()*camion.getCostoPorHora();
+	}
+	
+	public DetalleEnvio(Camion camion, Ruta ruta, int nro_orden) {
+		this(camion,ruta);
+		this.nro_orden = nro_orden;
 	}
 	
 	
@@ -27,6 +33,10 @@ public class DetalleEnvio {
 	
 	public int getId() {
 		return this.id_envio;
+	}
+
+	public int getNroOrden() {
+		return nro_orden;
 	}
 }
 
